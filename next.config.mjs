@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  // Empty config is fine for Netlify
 };
 
 export default nextConfig;
