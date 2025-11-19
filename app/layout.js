@@ -14,6 +14,11 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Kinect B2B",
   description: "Faith-Driven Business Growth - Lead Generation, Appointment Setting, Website Development & Automations",
+  icons: {
+    icon: '/my-logo.png',
+    shortcut: '/my-logo.png',
+    apple: '/my-logo.png',
+  },
 };
 
 export default function RootLayout({ children }) {
