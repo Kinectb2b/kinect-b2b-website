@@ -12,13 +12,16 @@ export async function POST(request) {
       .from('leads')
       .insert([
         {
-          name: body.full_name,
+          name: body.name || body.full_name,
           business_name: body.business_name,
           phone: body.phone,
           email: body.email,
+          industry: body.industry || null,
+          budget: body.budget || null,
           selected_plan: body.selected_plan || null,
           questions: body.questions || null,
-          source: body.lead_type || body.source || 'website',
+          source: body.source || body.lead_type || 'website',
+          status: body.status || 'new',
           created_at: new Date().toISOString()
         }
       ])

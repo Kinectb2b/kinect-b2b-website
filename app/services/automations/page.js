@@ -22,6 +22,17 @@ export default function AutomationsPage() {
     selected_plan: '',
   });
 
+  // Chatbot States
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatStep, setChatStep] = useState('greeting');
+  const [isTyping, setIsTyping] = useState(false);
+  const [chatFormData, setChatFormData] = useState({
+    name: '',
+    business_name: '',
+    phone: '',
+    email: '',
+  });
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const refCode = params.get('ref');
@@ -45,6 +56,58 @@ export default function AutomationsPage() {
       }
     }
   }, []);
+
+  // Auto-open chatbot after 3 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setChatOpen(true);
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+        setChatStep('greeting');
+      }, 2000);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Handle chatbot form submission (for call scheduling)
+  const handleChatCallSubmit = async () => {
+    try {
+      const response = await fetch('/api/leads/service-inquiry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: chatFormData.name,
+          business_name: chatFormData.business_name,
+          phone: chatFormData.phone,
+          email: chatFormData.email,
+          service_type: 'Automations',
+          lead_source: 'Chatbot - Ryan - Call Request',
+          referral_code: referralCode
+        }),
+      });
+
+      if (response.ok) {
+        setChatStep('callSuccess');
+      } else {
+        throw new Error('Failed to submit');
+      }
+    } catch (error) {
+      console.error('Error submitting lead:', error);
+      alert('Something went wrong. Please try again or call us at (219) 270-7863');
+    }
+  };
+
+  // Typing animation helper
+  const showTypingThenNext = (nextStep, delay = 2000) => {
+    setIsTyping(true);
+    setTimeout(() => {
+      setIsTyping(false);
+      setChatStep(nextStep);
+    }, delay);
+  };
 
   const packages = [
     {
@@ -172,12 +235,12 @@ export default function AutomationsPage() {
         });
       } else {
         setFormStatus('error');
-        alert('Something went wrong. Please try again or call us at (219) 207-7863');
+        alert('Something went wrong. Please try again or call us at (219) 270-7863');
       }
     } catch (error) {
       console.error('Error:', error);
       setFormStatus('error');
-      alert('Something went wrong. Please try again or call us at (219) 207-7863');
+      alert('Something went wrong. Please try again or call us at (219) 270-7863');
     }
   };
 
@@ -296,10 +359,10 @@ export default function AutomationsPage() {
           </p>
 
           <button
-            onClick={() => setShowContactForm(true)}
+            onClick={() => setChatOpen(true)}
             className="w-full sm:w-auto px-6 md:px-12 py-4 md:py-6 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 rounded-full text-white font-black text-base md:text-2xl transition-all duration-300 shadow-2xl hover:shadow-orange-500/50 hover:scale-105"
           >
-            Get Your Free Automation Audit 🚀
+            Schedule a Growth Call 🚀
           </button>
         </div>
       </section>
@@ -353,6 +416,7 @@ export default function AutomationsPage() {
                     <div className="text-center mb-6 md:mb-8">
                       <h3 className="text-2xl md:text-3xl font-black text-white mb-2 md:mb-3">{pkg.name}</h3>
                       <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6">{pkg.description}</p>
+                      <p className="text-sm md:text-base font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-2">STARTING AT</p>
                       <div className="text-4xl md:text-5xl font-black text-white">
                         ${pkg.price.toLocaleString()}<span className="text-base md:text-lg text-gray-400">/one-time</span>
                       </div>
@@ -406,13 +470,14 @@ export default function AutomationsPage() {
                   <div className="bg-slate-900 rounded-3xl p-6 md:p-8">
                     <div className="text-center mb-6 md:mb-8">
                       <h3 className="text-2xl md:text-3xl font-black text-white mb-2 md:mb-3">{plan.name}</h3>
+                      <p className="text-sm md:text-base font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-2">STARTING AT</p>
                       <div className="text-3xl md:text-4xl font-black text-white">
                         ${plan.price}<span className="text-base md:text-lg text-gray-400">/mo</span>
                       </div>
                       <p className="text-orange-400 font-bold mt-2 md:mt-3 text-sm md:text-base">{plan.workflows}</p>
                     </div>
 
-                    <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+                    <div className="space-y-3 md:space-y-4">
                       {plan.features.map((feature, fidx) => (
                         <div key={fidx} className="flex items-center gap-3 text-gray-300">
                           <span className="text-orange-400 text-lg md:text-xl">✓</span>
@@ -420,17 +485,6 @@ export default function AutomationsPage() {
                         </div>
                       ))}
                     </div>
-
-                    <button
-                      onClick={() => {
-                        setSelectedPackage(plan);
-                        setFormData({ ...formData, selected_plan: plan.name });
-                        setShowContactForm(true);
-                      }}
-                      className="w-full py-3 md:py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 rounded-xl text-white font-black text-base md:text-lg transition-all duration-300 hover:scale-105"
-                    >
-                      Get Started
-                    </button>
                   </div>
                 </div>
               </div>
@@ -483,12 +537,12 @@ export default function AutomationsPage() {
                 Stop wasting time on repetitive tasks. Let's build custom automations that work for you 24/7.
               </p>
               <button
-                onClick={() => setShowContactForm(true)}
+                onClick={() => setChatOpen(true)}
                 className="group relative inline-block"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur-xl opacity-75 group-hover:opacity-100 transition duration-500 animate-pulse"></div>
                 <div className="relative px-8 md:px-12 py-4 md:py-6 bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl text-white font-black text-lg md:text-2xl hover:scale-110 transition-all duration-300">
-                  Schedule Discovery Call →
+                  Talk to Ryan (Our AI) →
                 </div>
               </button>
             </div>
@@ -615,6 +669,162 @@ export default function AutomationsPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Ryan Chatbot */}
+      {chatOpen && (
+        <div className="fixed inset-0 md:inset-auto md:bottom-8 md:right-8 z-50 md:w-[420px]">
+          <div 
+            className="hidden md:block fixed inset-0 bg-transparent"
+            onClick={() => setChatOpen(false)}
+          ></div>
+
+          <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-red-500 to-orange-600 rounded-3xl blur-xl opacity-75"></div>
+          
+          <div className="relative h-full md:h-auto bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-red-500/50 rounded-3xl shadow-2xl flex flex-col max-h-screen md:max-h-[600px]">
+            <div className="flex items-center justify-between p-4 md:p-6 border-b border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-red-600 to-orange-600 rounded-full flex items-center justify-center text-xl md:text-2xl">
+                  🤖
+                </div>
+                <div>
+                  <h3 className="text-base md:text-lg font-black text-white">Ryan (AI)</h3>
+                  <p className="text-xs md:text-sm text-orange-400">● Online</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setChatOpen(false)}
+                className="text-gray-400 hover:text-white hover:bg-white/10 rounded-full p-2 transition"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 md:p-6">
+              {/* Typing Animation */}
+              {isTyping && (
+                <div className="bg-red-600/20 border border-red-500/30 rounded-2xl p-4 mb-4 animate-fadeIn">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    </div>
+                    <span className="text-white text-sm">Ryan is typing...</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Greeting */}
+              {chatStep === 'greeting' && !isTyping && (
+                <div className="animate-fadeIn space-y-4">
+                  <div className="bg-red-600/20 border border-red-500/30 rounded-2xl p-4 md:p-6">
+                    <h3 className="text-xl md:text-2xl font-black text-white mb-3 md:mb-4">
+                      👋 Hey there! I'm Ryan!
+                    </h3>
+                    <p className="text-sm md:text-base text-gray-300 mb-4">
+                      I'm here to help you automate your business and save hours every week. Ready to streamline your workflows?
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => showTypingThenNext('wantCall')}
+                    className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:scale-105 transition duration-300 rounded-2xl p-4 text-left"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl md:text-3xl">📞</span>
+                      <div>
+                        <div className="font-black text-white text-sm md:text-base">Schedule a Growth Call</div>
+                        <div className="text-xs md:text-sm text-gray-300">Let's discuss your automation needs (15 mins)</div>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              )}
+
+              {/* Want Call Form */}
+              {chatStep === 'wantCall' && !isTyping && (
+                <div className="animate-fadeIn space-y-3">
+                  <div className="bg-red-600/20 border border-red-500/30 rounded-2xl p-4 mb-4">
+                    <p className="text-white font-bold text-sm md:text-base">📋 Awesome! Let me grab your details:</p>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    value={chatFormData.name}
+                    onChange={(e) => setChatFormData({ ...chatFormData, name: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Business Name"
+                    value={chatFormData.business_name}
+                    onChange={(e) => setChatFormData({ ...chatFormData, business_name: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={chatFormData.phone}
+                    onChange={(e) => setChatFormData({ ...chatFormData, phone: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={chatFormData.email}
+                    onChange={(e) => setChatFormData({ ...chatFormData, email: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
+                  />
+                  <button
+                    onClick={handleChatCallSubmit}
+                    disabled={!chatFormData.name || !chatFormData.business_name || !chatFormData.phone || !chatFormData.email}
+                    className="w-full py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:scale-105 transition duration-300 rounded-xl text-white font-black text-sm md:text-base disabled:opacity-50"
+                  >
+                    Schedule My Call! 🚀
+                  </button>
+                </div>
+              )}
+
+              {/* Call Scheduled Success */}
+              {chatStep === 'callSuccess' && (
+                <div className="text-center animate-fadeIn">
+                  <div className="text-5xl md:text-6xl mb-4">🎉</div>
+                  <div className="bg-red-600/30 border-2 border-red-500/50 rounded-2xl p-4 md:p-6 mb-4">
+                    <p className="text-orange-400 font-black text-xl md:text-2xl mb-3">Perfect!</p>
+                    <p className="text-white font-bold mb-4 text-sm md:text-base">We'll be reaching out shortly to schedule your automation consultation!</p>
+                    <div className="space-y-2 text-orange-400 text-xs md:text-sm">
+                      <div>📞 <a href="tel:2192707863" className="font-bold hover:text-orange-300">219-270-7863</a></div>
+                      <div>📧 <a href="mailto:accounts@kinectb2b.com" className="font-bold hover:text-orange-300">accounts@kinectb2b.com</a></div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setChatStep('greeting');
+                      setChatFormData({ name: '', business_name: '', phone: '', email: '' });
+                    }}
+                    className="px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 rounded-xl text-white font-bold hover:scale-105 transition text-sm md:text-base"
+                  >
+                    Start Over
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Chat Button */}
+      {!chatOpen && (
+        <button
+          onClick={() => setChatOpen(true)}
+          className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 group"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-600 rounded-full blur-xl opacity-75 group-hover:opacity-100 animate-pulse"></div>
+          <div className="relative w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-red-600 to-orange-600 rounded-full flex items-center justify-center text-2xl md:text-3xl hover:scale-110 transition duration-300 shadow-2xl">
+            💬
+          </div>
+        </button>
       )}
 
       <style jsx>{`

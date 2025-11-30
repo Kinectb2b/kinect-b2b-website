@@ -2,12 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
 
 export default function PortalsPage() {
   const [showContactForm, setShowContactForm] = useState(false);
@@ -77,66 +71,33 @@ export default function PortalsPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Generate discount code
-  const generateDiscountCode = () => {
-    const prefix = 'PORTAL10';
-    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return `${prefix}-${random}`;
-  };
-
   // Handle chatbot form submission (for call scheduling)
   const handleChatCallSubmit = async () => {
     try {
-      const { data, error } = await supabase
-        .from('leads')
-        .insert([
-          {
-            name: chatFormData.name,
-            business_name: chatFormData.business_name,
-            phone: chatFormData.phone,
-            email: chatFormData.email,
-            service_type: 'Client Portal',
-            lead_source: 'Chatbot - Abigail - Call Request',
-            status: 'new'
-          }
-        ]);
+      const response = await fetch('/api/leads/service-inquiry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: chatFormData.name,
+          business_name: chatFormData.business_name,
+          phone: chatFormData.phone,
+          email: chatFormData.email,
+          service_type: 'Client Portal',
+          lead_source: 'Chatbot - Abigail - Call Request',
+          referral_code: referralCode
+        }),
+      });
 
-      if (error) throw error;
-
-      setChatStep('callSuccess');
+      if (response.ok) {
+        setChatStep('callSuccess');
+      } else {
+        throw new Error('Failed to submit');
+      }
     } catch (error) {
       console.error('Error submitting lead:', error);
-      alert('Something went wrong. Please try again or call us at (219) 207-7863');
-    }
-  };
-
-  // Handle discount code request
-  const handleDiscountRequest = async () => {
-    const discountCode = generateDiscountCode();
-    
-    try {
-      const { data, error } = await supabase
-        .from('leads')
-        .insert([
-          {
-            name: chatFormData.name,
-            business_name: chatFormData.business_name,
-            phone: chatFormData.phone,
-            email: chatFormData.email,
-            service_type: 'Client Portal',
-            lead_source: 'Chatbot - Abigail - Discount Request',
-            discount_code: discountCode,
-            status: 'new'
-          }
-        ]);
-
-      if (error) throw error;
-
-      setChatFormData({ ...chatFormData, discount_code: discountCode });
-      setChatStep('discountSuccess');
-    } catch (error) {
-      console.error('Error submitting lead:', error);
-      alert('Something went wrong. Please try again or call us at (219) 207-7863');
+      alert('Something went wrong. Please try again or call us at (219) 270-7863');
     }
   };
 
@@ -256,12 +217,12 @@ export default function PortalsPage() {
         });
       } else {
         setFormStatus('error');
-        alert('Something went wrong. Please try again or call us at (219) 207-7863');
+        alert('Something went wrong. Please try again or call us at (219) 270-7863');
       }
     } catch (error) {
       console.error('Error:', error);
       setFormStatus('error');
-      alert('Something went wrong. Please try again or call us at (219) 207-7863');
+      alert('Something went wrong. Please try again or call us at (219) 270-7863');
     }
   };
 
@@ -383,7 +344,7 @@ export default function PortalsPage() {
             onClick={() => setChatOpen(true)}
             className="w-full sm:w-auto px-6 md:px-12 py-4 md:py-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 rounded-full text-white font-black text-base md:text-2xl transition-all duration-300 shadow-2xl hover:shadow-emerald-500/50 hover:scale-105"
           >
-            Get 10% Off Your Portal 🎁
+            Schedule a Growth Call 🚀
           </button>
         </div>
       </section>
@@ -437,11 +398,12 @@ export default function PortalsPage() {
                     <div className="text-center mb-6 md:mb-8">
                       <h3 className="text-2xl md:text-3xl font-black text-white mb-2 md:mb-3">{pkg.name}</h3>
                       <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6">{pkg.description}</p>
+                      <p className="text-sm md:text-base font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent mb-2">STARTING AT</p>
                       <div className="text-4xl md:text-5xl font-black text-white mb-2">
                         ${pkg.price.toLocaleString()}<span className="text-base md:text-lg text-gray-400">/setup</span>
                       </div>
                       <div className="text-emerald-400 font-bold text-sm md:text-base">
-                        + ${pkg.hosting}/mo hosting
+                        + <span className="text-gray-400 font-normal text-xs">Starting at</span> ${pkg.hosting}/mo hosting
                       </div>
                       <p className="text-gray-400 mt-2 text-xs md:text-sm">{pkg.clients}</p>
                     </div>
@@ -609,21 +571,8 @@ export default function PortalsPage() {
                       <div className="flex items-center gap-3">
                         <span className="text-2xl md:text-3xl">📞</span>
                         <div>
-                          <div className="font-black text-white text-sm md:text-base">Schedule a Quick Call</div>
+                          <div className="font-black text-white text-sm md:text-base">Schedule a Growth Call</div>
                           <div className="text-xs md:text-sm text-gray-300">Let's discuss your needs (15 mins)</div>
-                        </div>
-                      </div>
-                    </button>
-
-                    <button
-                      onClick={() => showTypingThenNext('wantDiscount')}
-                      className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:scale-105 transition duration-300 rounded-2xl p-4 text-left"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl md:text-3xl">🎁</span>
-                        <div>
-                          <div className="font-black text-white text-sm md:text-base">Get 10% Discount Code</div>
-                          <div className="text-xs md:text-sm text-gray-300">Save on your portal setup</div>
                         </div>
                       </div>
                     </button>
@@ -726,7 +675,7 @@ export default function PortalsPage() {
                       <p className="text-emerald-400 font-black text-xl md:text-2xl mb-3">Perfect!</p>
                       <p className="text-white font-bold mb-4 text-sm md:text-base">We'll be reaching out shortly to schedule your consultation call!</p>
                       <div className="space-y-2 text-emerald-400 text-xs md:text-sm">
-                        <div>📞 <a href="tel:2192077863" className="font-bold hover:text-emerald-300">219-207-7863</a></div>
+                        <div>📞 <a href="tel:2192707863" className="font-bold hover:text-emerald-300">219-270-7863</a></div>
                         <div>📧 <a href="mailto:accounts@kinectb2b.com" className="font-bold hover:text-emerald-300">accounts@kinectb2b.com</a></div>
                       </div>
                     </div>
@@ -758,7 +707,7 @@ export default function PortalsPage() {
                         Save this code! Use it when you're ready to get started.
                       </p>
                       <div className="space-y-2 text-emerald-400 text-xs md:text-sm">
-                        <div>📞 <a href="tel:2192077863" className="font-bold hover:text-emerald-300">219-207-7863</a></div>
+                        <div>📞 <a href="tel:2192707863" className="font-bold hover:text-emerald-300">219-270-7863</a></div>
                         <div>📧 <a href="mailto:accounts@kinectb2b.com" className="font-bold hover:text-emerald-300">accounts@kinectb2b.com</a></div>
                       </div>
                     </div>

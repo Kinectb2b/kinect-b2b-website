@@ -79,10 +79,12 @@ export default function Home() {
   ];
 
   const budgets = [
-    { value: 'under-1k', label: 'Under $1,000/month' },
-    { value: '1k-3k', label: '$1,000 - $3,000/month' },
-    { value: '3k-5k', label: '$3,000 - $5,000/month' },
-    { value: '5k-plus', label: '$5,000+/month' }
+    { value: 'under-1500', label: 'Under $1,500/month' },
+    { value: '1500-3500', label: '$1,500 - $3,500/month' },
+    { value: '3500-7500', label: '$3,500 - $7,500/month' },
+    { value: '7500-15000', label: '$7,500 - $15,000/month' },
+    { value: '15000-25000', label: '$15,000 - $25,000/month' },
+    { value: '30k-plus', label: '$30,000+/month' }
   ];
 
   const timelines = [
@@ -398,10 +400,10 @@ export default function Home() {
                 </button>
 
                 <a
-                  href="tel:219-207-7863"
+                  href="tel:219-270-7863"
                   className="w-full sm:w-auto px-8 md:px-12 py-4 md:py-6 border-2 border-cyan-500 hover:bg-cyan-500/10 rounded-full text-cyan-400 font-black text-lg md:text-2xl transition-all duration-300 hover:scale-105"
                 >
-                  Call: 219-207-7863 📞
+                  Call: 219-270-7863 📞
                 </a>
               </div>
             </div>
@@ -493,6 +495,13 @@ export default function Home() {
                         </button>
                       ))}
                     </div>
+
+                    <button
+                      onClick={() => setChatStep('initial')}
+                      className="w-full py-3 text-gray-400 hover:text-white text-sm font-medium transition flex items-center justify-center gap-2"
+                    >
+                      ← Go Back
+                    </button>
                   </div>
                 )}
 
@@ -517,6 +526,13 @@ export default function Home() {
                         </button>
                       ))}
                     </div>
+
+                    <button
+                      onClick={() => setChatStep('budget')}
+                      className="w-full py-3 text-gray-400 hover:text-white text-sm font-medium transition flex items-center justify-center gap-2"
+                    >
+                      ← Go Back
+                    </button>
                   </div>
                 )}
 
@@ -595,6 +611,14 @@ export default function Home() {
                         className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-600 disabled:to-gray-700 rounded-xl text-white font-black text-base md:text-lg transition-all duration-300 hover:scale-105 disabled:scale-100"
                       >
                         {isSubmitting ? 'Submitting...' : 'Get Started 🚀'}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setChatStep('timeline')}
+                        className="w-full py-3 text-gray-400 hover:text-white text-sm font-medium transition flex items-center justify-center gap-2"
+                      >
+                        ← Go Back
                       </button>
                     </form>
                   </div>
@@ -689,7 +713,7 @@ export default function Home() {
                     throw new Error('Failed to submit');
                   }
                 } catch (error) {
-                  alert('Something went wrong. Please try again or call us at 219-207-7863.');
+                  alert('Something went wrong. Please try again or call us at 219-270-7863.');
                 }
               }} className="space-y-4">
                 
