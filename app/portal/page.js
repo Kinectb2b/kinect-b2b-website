@@ -165,7 +165,7 @@ export default function ClientLogin() {
                 </a>
               </p>
               <p className="text-sm">
-                <a href="tel:2192077863" className="text-cyan-400 hover:text-cyan-300 transition">
+                <a href="tel:2192707863" className="text-cyan-400 hover:text-cyan-300 transition">
                   (219) 207-7863
                 </a>
               </p>

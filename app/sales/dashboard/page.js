@@ -15,6 +15,8 @@ export default function SalesDashboard() {
   const [selectedClient, setSelectedClient] = useState(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [isTestMode, setIsTestMode] = useState(true);
+  const [togglingMode, setTogglingMode] = useState(false);
 
   useEffect(() => {
     const verifyAuth = async () => {
@@ -30,6 +32,7 @@ export default function SalesDashboard() {
 
         setCurrentUser(data.salesUser);
         fetchActiveClients(data.salesUser.email);
+        fetchStripeMode();
       } catch (error) {
         console.error('Auth verification failed:', error);
         localStorage.removeItem('sales_user');
@@ -39,6 +42,35 @@ export default function SalesDashboard() {
 
     verifyAuth();
   }, []);
+
+  const fetchStripeMode = async () => {
+    try {
+      const res = await fetch('/api/settings/stripe-mode');
+      const data = await res.json();
+      setIsTestMode(data.testMode);
+    } catch (err) {
+      console.error('Failed to fetch stripe mode:', err);
+    }
+  };
+
+  const toggleStripeMode = async () => {
+    setTogglingMode(true);
+    try {
+      const res = await fetch('/api/settings/stripe-mode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ testMode: !isTestMode })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setIsTestMode(data.testMode);
+      }
+    } catch (err) {
+      console.error('Failed to toggle stripe mode:', err);
+    } finally {
+      setTogglingMode(false);
+    }
+  };
 
   const fetchActiveClients = async (userEmail) => {
     try {
@@ -123,12 +155,33 @@ export default function SalesDashboard() {
               <p className="text-gray-600">Welcome, {currentUser?.full_name || currentUser?.username}</p>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition"
-          >
-            Logout
-          </button>
+          <div className="flex items-center gap-4">
+            {/* Stripe Mode Toggle */}
+            <div className="flex items-center gap-2">
+              <span className={`text-sm font-bold ${isTestMode ? 'text-orange-600' : 'text-green-600'}`}>
+                {isTestMode ? '🧪 Test' : '🔴 Live'}
+              </span>
+              <button
+                onClick={toggleStripeMode}
+                disabled={togglingMode}
+                className={`relative w-14 h-7 rounded-full transition-colors ${
+                  isTestMode ? 'bg-orange-500' : 'bg-green-600'
+                } ${togglingMode ? 'opacity-50' : ''}`}
+              >
+                <span
+                  className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-transform ${
+                    isTestMode ? 'left-1' : 'left-8'
+                  }`}
+                />
+              </button>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 

@@ -59,7 +59,7 @@ export default function ClientDashboard() {
   const companyFileInputRef = useRef(null);
 
   useEffect(() => {
-    const clientData = localStorage.getItem('client');
+    const clientData = localStorage.getItem('client') || sessionStorage.getItem('client');
     if (!clientData) {
       router.push('/portal');
       return;
@@ -435,7 +435,7 @@ export default function ClientDashboard() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-black text-white">KinectB2B Client Portal</h1>
-              <p className="text-blue-300 mt-1">Welcome back, {client.name}!</p>
+              <p className="text-blue-300 mt-1">{client.company_name}!</p>
             </div>
             <button
               onClick={handleLogout}

@@ -1,9 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-
-const stripePromise = loadStripe('pk_live_51QhYNvB1XLx1C2PM4D3fxJcih8qqFnDCnfC5gs8KCft9pK3rpDuscxa2btjy0ZjvYOHBQyzBWynkFXmOSF0dcgoj00ANxIpebD');
 
 const CARD_ELEMENT_OPTIONS = {
   style: {
@@ -18,10 +16,9 @@ const CARD_ELEMENT_OPTIONS = {
   }
 };
 
-// Your Pipedrive "Active" stage ID - update this!
-const ACTIVE_STAGE_ID = 84; // Change this to your actual Active stage ID
+const ACTIVE_STAGE_ID = 84;
 
-function PaymentForm({ client, onClose, onSuccess }) {
+function PaymentForm({ client, onClose, onSuccess, isTestMode }) {
   const stripe = useStripe();
   const elements = useElements();
   
@@ -43,7 +40,7 @@ function PaymentForm({ client, onClose, onSuccess }) {
       const { error: cardError, paymentMethod } = await stripe.createPaymentMethod({
         type: 'card',
         card: elements.getElement(CardElement),
-        billing_details: { name: client.full_name, email: client.email }
+        billing_details: { name: client.full_name, email: client.email, phone: client.phone }
       });
 
       if (cardError) throw new Error(cardError.message);
@@ -56,11 +53,13 @@ function PaymentForm({ client, onClose, onSuccess }) {
           paymentMethodId: paymentMethod.id,
           customerEmail: client.email,
           customerName: client.full_name,
+          customerPhone: client.phone,
           businessName: client.name,
           planName: client.plan,
           planPrice: client.plan_price,
           setupFee: chargeSetupFee ? setupFee : 0,
-          chargeSetupFee
+          chargeSetupFee,
+          salesRepEmail: client.sales_rep_email
         })
       });
 
@@ -82,6 +81,28 @@ function PaymentForm({ client, onClose, onSuccess }) {
           body: JSON.stringify({ dealId, stageId: ACTIVE_STAGE_ID })
         });
       }
+
+      // Trigger Make.com webhook for payment collected
+      await fetch('https://hook.us2.make.com/hzdkq6s1ze5sp31jh14bvio2419imi8j', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id: client.id,
+          business_name: client.name,
+          customer_name: client.full_name,
+          email: client.email,
+          phone: client.phone,
+          plan: client.plan,
+          plan_price: client.plan_price,
+          setup_fee: chargeSetupFee ? setupFee : 0,
+          sales_rep_email: client.sales_rep_email,
+          pipedrive_deal_id: client.pipedrive_deal_id,
+          stripe_customer_id: data.customerId,
+          stripe_subscription_id: data.subscriptionId,
+          status: 'Payment Collected',
+          collected_at: new Date().toISOString()
+        })
+      });
 
       setSuccess(true);
       
@@ -210,16 +231,55 @@ function PaymentForm({ client, onClose, onSuccess }) {
 }
 
 export default function PaymentModal({ client, onClose, onSuccess }) {
+  const [isTestMode, setIsTestMode] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [stripePromise, setStripePromise] = useState(null);
+
+  useEffect(() => {
+    const fetchMode = async () => {
+      try {
+        const res = await fetch('/api/settings/stripe-mode');
+        const data = await res.json();
+        setIsTestMode(data.testMode);
+        const key = data.testMode 
+          ? process.env.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY 
+          : process.env.NEXT_PUBLIC_STRIPE_LIVE_PUBLISHABLE_KEY;
+        setStripePromise(loadStripe(key));
+      } catch (err) {
+        setStripePromise(loadStripe(process.env.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMode();
+  }, []);
+
+  if (loading || !stripePromise) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-2xl p-8">
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        {isTestMode && (
+          <div className="bg-orange-500 text-white text-center py-2 font-bold text-sm">
+            ⚠️ TEST MODE — No real charges will be made
+          </div>
+        )}
+        
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
           <h2 className="text-2xl font-black text-gray-900">💳 Collect Payment</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
         </div>
         <div className="p-6">
           <Elements stripe={stripePromise}>
-            <PaymentForm client={client} onClose={onClose} onSuccess={onSuccess} />
+            <PaymentForm client={client} onClose={onClose} onSuccess={onSuccess} isTestMode={isTestMode} />
           </Elements>
         </div>
       </div>
