@@ -50,12 +50,12 @@ function ReferralContent() {
         setShowSignupForm(false);
       } else {
         setFormStatus('error');
-        alert('Something went wrong. Please try again or call us at (219) 207-7863');
+        alert('Something went wrong. Please try again or call us at (219) 270-7863');
       }
     } catch (error) {
       console.error('Error:', error);
       setFormStatus('error');
-      alert('Something went wrong. Please try again or call us at (219) 207-7863');
+      alert('Something went wrong. Please try again or call us at (219) 270-7863');
     }
   };
 
@@ -289,8 +289,8 @@ function ReferralContent() {
             <a href="mailto:accounts@kinectb2b.com" className="hover:text-cyan-400 transition">
               accounts@kinectb2b.com
             </a>
-            <a href="tel:2192077863" className="hover:text-cyan-400 transition">
-              (219) 207-7863
+            <a href="tel:2192707863" className="hover:text-cyan-400 transition">
+              (219) 270-7863
             </a>
           </div>
         </div>

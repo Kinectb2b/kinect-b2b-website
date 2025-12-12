@@ -13,98 +13,125 @@ export default function MasterAdminLogin() {
     setError('');
     setLoading(true);
 
-    // For now, hardcoded master admin credentials
-    // Later we'll connect to Supabase
-    if (credentials.username === 'admin' && credentials.password === 'admin123') {
-      // Store session
-      localStorage.setItem('masterAdminAuth', 'true');
-      router.push('/master-admin/dashboard');
-    } else {
-      setError('Invalid credentials');
+    try {
+      const response = await fetch('/api/master-admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials)
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        router.push('/master-admin/dashboard');
+      } else {
+        setError(data.message || 'Invalid credentials');
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Login failed. Please try again.');
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        {/* Logo/Title */}
-        <div className="text-center mb-8">
-          <div className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-4 mb-4">
-            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-2">Master Admin</h1>
-          <p className="text-purple-300">Complete System Access</p>
-        </div>
-
-        {/* Login Card */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
-          <form onSubmit={handleLogin} className="space-y-6">
-            {/* Username */}
-            <div>
-              <label className="block text-white font-medium mb-2">Username</label>
-              <input
-                type="text"
-                value={credentials.username}
-                onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
-                placeholder="Enter username"
-                required
-              />
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="block text-white font-medium mb-2">Password</label>
-              <input
-                type="password"
-                value={credentials.password}
-                onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
-                placeholder="Enter password"
-                required
-              />
-            </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-500/20 border border-red-500 rounded-lg p-3">
-                <p className="text-red-300 text-sm">{error}</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
+      {/* Main Content */}
+      <div className="flex-1 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-10">
+            {/* Logo */}
+            <div className="flex justify-center mb-6">
+              <div className="flex items-center gap-3">
+                <img src="/icon.png" alt="Kinect B2B" className="w-12 h-12 rounded-xl shadow-lg" />
+                <div>
+                  <h1 className="text-2xl font-black text-slate-900">Kinect B2B</h1>
+                  <p className="text-slate-500 text-sm font-medium">Master Admin</p>
+                </div>
               </div>
-            )}
+            </div>
 
-            {/* Login Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50"
-            >
-              {loading ? 'Logging in...' : 'Access Master Dashboard'}
-            </button>
-          </form>
+            <form onSubmit={handleLogin} className="space-y-5">
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-2">
+                  <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm font-medium">{error}</span>
+                </div>
+              )}
 
-          {/* Info */}
-          <div className="mt-6 pt-6 border-t border-white/10">
-            <p className="text-gray-400 text-sm text-center">
-              Restricted access - Authorized personnel only
-            </p>
+              <div>
+                <label className="block text-slate-700 font-semibold mb-2 text-sm">Username</label>
+                <input
+                  type="text"
+                  value={credentials.username}
+                  onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  placeholder="Enter username"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-700 font-semibold mb-2 text-sm">Password</label>
+                <input
+                  type="password"
+                  value={credentials.password}
+                  onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  placeholder="Enter password"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-white font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <span>Logging in...</span>
+                  </>
+                ) : (
+                  'Access Dashboard'
+                )}
+              </button>
+            </form>
+
+            <div className="mt-6 pt-6 border-t border-slate-100">
+              <p className="text-slate-400 text-xs text-center">
+                🔒 Restricted access - Authorized personnel only
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* Access Info */}
-        <div className="mt-6 text-center">
-          <p className="text-gray-400 text-sm">
-            This dashboard provides access to:
-          </p>
-          <div className="flex justify-center gap-4 mt-3">
-            <span className="text-blue-400 text-sm">Client Portal</span>
-            <span className="text-purple-400 text-sm">Affiliate Portal</span>
-            <span className="text-green-400 text-sm">Sales Portal</span>
+          {/* Access Info */}
+          <div className="mt-6 text-center">
+            <p className="text-slate-400 text-sm mb-3">Full access to all portals:</p>
+            <div className="flex justify-center gap-3 flex-wrap">
+              <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-medium rounded-full">Client Portal</span>
+              <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs font-medium rounded-full">Affiliate Portal</span>
+              <span className="px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-medium rounded-full">Sales Portal</span>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="py-6 text-center">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <img src="/icon.png" alt="Kinect B2B" className="w-5 h-5 rounded" />
+          <span className="text-slate-400 text-sm">Powered by <span className="font-semibold text-slate-300">Kinect B2B</span></span>
+        </div>
+        <p className="text-slate-500 text-xs">© {new Date().getFullYear()} Kinect B2B. All rights reserved.</p>
+      </footer>
     </div>
   );
 }

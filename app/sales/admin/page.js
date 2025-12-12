@@ -13,6 +13,7 @@ export default function SalesAdminDashboard() {
   const [adminUser, setAdminUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mainView, setMainView] = useState('sales');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const [dashboardView, setDashboardView] = useState('clients');
   const [myClients, setMyClients] = useState([]);
@@ -457,21 +458,31 @@ export default function SalesAdminDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-100 flex">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white flex flex-col fixed h-full">
+      <aside className={`w-64 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white flex flex-col fixed h-full z-50 transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
         <div className="p-6">
-          <div className="flex items-center gap-3 mb-8">
-            <img src="/icon.png" alt="Kinect B2B" className="w-10 h-10 rounded-xl shadow-lg" />
-            <div>
-              <h1 className="font-bold text-lg leading-tight">Kinect B2B</h1>
-              <p className="text-xs text-slate-400">Admin Portal</p>
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <img src="/icon.png" alt="Kinect B2B" className="w-10 h-10 rounded-xl shadow-lg" />
+              <div>
+                <h1 className="font-bold text-lg leading-tight">Kinect B2B</h1>
+                <p className="text-xs text-slate-400">Admin Portal</p>
+              </div>
             </div>
+            <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-2 hover:bg-white/10 rounded-lg">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
           </div>
 
           <nav className="space-y-1">
             <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-3 px-3">Navigation</p>
             <button
-              onClick={() => setMainView('sales')}
+              onClick={() => { setMainView('sales'); setSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 mainView === 'sales' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
@@ -480,7 +491,7 @@ export default function SalesAdminDashboard() {
               Dashboard
             </button>
             <button
-              onClick={() => setMainView('admin')}
+              onClick={() => { setMainView('admin'); setSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 mainView === 'admin' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
@@ -513,59 +524,64 @@ export default function SalesAdminDashboard() {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 ml-64">
+      <div className="flex-1 lg:ml-64">
         <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-          <div className="px-8 py-5 flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-slate-900">{mainView === 'sales' ? 'Dashboard Overview' : 'Admin Panel'}</h2>
-              <p className="text-sm text-slate-500 mt-0.5">{mainView === 'sales' ? 'Monitor clients and earnings across your team' : 'Manage team, clients, and payments'}</p>
+          <div className="px-4 md:px-8 py-4 md:py-5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+                <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+              </button>
+              <div>
+                <h2 className="text-lg md:text-xl font-semibold text-slate-900">{mainView === 'sales' ? 'Dashboard Overview' : 'Admin Panel'}</h2>
+                <p className="text-xs md:text-sm text-slate-500 mt-0.5 hidden sm:block">{mainView === 'sales' ? 'Monitor clients and earnings across your team' : 'Manage team, clients, and payments'}</p>
+              </div>
             </div>
-            <div className="text-right">
+            <div className="text-right hidden sm:block">
               <p className="text-xs text-slate-400">Today</p>
               <p className="text-sm font-medium text-slate-700">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</p>
             </div>
           </div>
         </header>
 
-        <main className="p-8">
+        <main className="p-4 md:p-8">
           {mainView === 'sales' ? (
             <>
               {/* Stats Grid */}
-              <div className="grid grid-cols-4 gap-5 mb-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 mb-6 md:mb-8">
                 {[
                   { label: 'Total Clients', value: allClients.length, icon: '👥', color: 'from-blue-500 to-blue-600' },
                   { label: 'Needs Attention', value: needsAttentionClients.length, icon: '⚠️', color: 'from-amber-500 to-orange-500' },
                   { label: 'Active Clients', value: activeStatusClients.length, icon: '✅', color: 'from-emerald-500 to-green-600' },
                   { label: 'Monthly Commission', value: `$${monthlyRecurring.toFixed(2)}`, icon: '💰', color: 'from-blue-500 to-cyan-500' },
                 ].map((stat, i) => (
-                  <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-slate-200/60 hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className={`w-10 h-10 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center text-white text-lg shadow-sm`}>{stat.icon}</span>
+                  <div key={i} className="bg-white rounded-xl p-4 md:p-5 shadow-sm border border-slate-200/60 hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-between mb-2 md:mb-3">
+                      <span className={`w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center text-white text-sm md:text-lg shadow-sm`}>{stat.icon}</span>
                     </div>
-                    <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
-                    <p className="text-sm text-slate-500">{stat.label}</p>
+                    <p className="text-xl md:text-2xl font-bold text-slate-900">{stat.value}</p>
+                    <p className="text-xs md:text-sm text-slate-500">{stat.label}</p>
                   </div>
                 ))}
               </div>
 
               {/* View Toggle */}
-              <div className="flex gap-2 mb-6">
+              <div className="flex gap-2 mb-4 md:mb-6 overflow-x-auto pb-2">
                 {['clients', 'earnings'].map(view => (
-                  <button key={view} onClick={() => setDashboardView(view)} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${dashboardView === view ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}`}>
+                  <button key={view} onClick={() => setDashboardView(view)} className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition whitespace-nowrap ${dashboardView === view ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}`}>
                     {view === 'clients' ? '👥 Client Overview' : '💵 Earnings Report'}
                   </button>
                 ))}
               </div>
 
               {dashboardView === 'clients' ? (
-                <div className="space-y-5">
+                <div className="space-y-4 md:space-y-5">
                   {/* Needs Attention */}
                   <div className="bg-white rounded-xl shadow-sm border border-slate-200/60 overflow-hidden">
-                    <button onClick={() => toggleSection('needsAttention')} className="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition">
+                    <button onClick={() => toggleSection('needsAttention')} className="w-full px-4 md:px-5 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition">
                       <div className="flex items-center gap-3">
                         <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white text-sm">⚠️</span>
                         <div className="text-left">
-                          <h3 className="font-semibold text-slate-900">Needs Attention</h3>
+                          <h3 className="font-semibold text-slate-900 text-sm md:text-base">Needs Attention</h3>
                           <p className="text-xs text-slate-500">{needsAttentionClients.length} clients require action</p>
                         </div>
                       </div>
@@ -574,28 +590,56 @@ export default function SalesAdminDashboard() {
                     {expandedSections.needsAttention && (
                       <div className="border-t border-slate-100">
                         {needsAttentionClients.length === 0 ? (
-                          <div className="p-10 text-center"><p className="text-slate-500">🎉 All caught up! No clients need attention.</p></div>
+                          <div className="p-6 md:p-10 text-center"><p className="text-slate-500">🎉 All caught up! No clients need attention.</p></div>
                         ) : (
-                          <table className="w-full">
-                            <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Business</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Plan</th><th className="px-5 py-3 text-left font-medium">Monthly</th><th className="px-5 py-3 text-left font-medium">Status</th><th className="px-5 py-3 text-left font-medium">Actions</th></tr></thead>
-                            <tbody className="divide-y divide-slate-100">
+                          <>
+                            {/* Mobile Card View */}
+                            <div className="md:hidden divide-y divide-slate-100">
                               {needsAttentionClients.map(client => (
-                                <tr key={client.id} className="hover:bg-slate-50/50">
-                                  <td className="px-5 py-3"><p className="font-medium text-slate-900">{client.name}</p><p className="text-xs text-slate-500">{client.email}</p></td>
-                                  <td className="px-5 py-3 text-sm text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</td>
-                                  <td className="px-5 py-3 text-sm font-medium text-slate-900">{client.plan}</td>
-                                  <td className="px-5 py-3 text-sm font-semibold text-emerald-600">${client.plan_price}</td>
-                                  <td className="px-5 py-3"><button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }}>{getStatusBadge(client.status)}</button></td>
-                                  <td className="px-5 py-3">
-                                    <div className="flex items-center gap-2">
-                                      {!client.stripe_subscription_id && <button onClick={() => handleCollectPayment(client)} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition">Collect</button>}
-                                      <button onClick={() => { setClientToDelete(client); setShowDeleteModal(true); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                                <div key={client.id} className="p-4 space-y-3">
+                                  <div className="flex items-start justify-between">
+                                    <div>
+                                      <p className="font-medium text-slate-900">{client.name}</p>
+                                      <p className="text-xs text-slate-500">{client.email}</p>
                                     </div>
-                                  </td>
-                                </tr>
+                                    <button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }}>{getStatusBadge(client.status)}</button>
+                                  </div>
+                                  <div className="flex items-center justify-between text-sm">
+                                    <span className="text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</span>
+                                    <span className="font-medium text-slate-900">{client.plan}</span>
+                                    <span className="font-semibold text-emerald-600">${client.plan_price}</span>
+                                  </div>
+                                  <div className="flex gap-2">
+                                    {!client.stripe_subscription_id && <button onClick={() => handleCollectPayment(client)} className="flex-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition">Collect Payment</button>}
+                                    <button onClick={() => { setClientToDelete(client); setShowDeleteModal(true); }} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                                  </div>
+                                </div>
                               ))}
-                            </tbody>
-                          </table>
+                            </div>
+                            {/* Desktop Table View */}
+                            <div className="hidden md:block overflow-x-auto">
+                              <table className="w-full">
+                                <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Business</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Plan</th><th className="px-5 py-3 text-left font-medium">Monthly</th><th className="px-5 py-3 text-left font-medium">Status</th><th className="px-5 py-3 text-left font-medium">Actions</th></tr></thead>
+                                <tbody className="divide-y divide-slate-100">
+                                  {needsAttentionClients.map(client => (
+                                    <tr key={client.id} className="hover:bg-slate-50/50">
+                                      <td className="px-5 py-3"><p className="font-medium text-slate-900">{client.name}</p><p className="text-xs text-slate-500">{client.email}</p></td>
+                                      <td className="px-5 py-3 text-sm text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</td>
+                                      <td className="px-5 py-3 text-sm font-medium text-slate-900">{client.plan}</td>
+                                      <td className="px-5 py-3 text-sm font-semibold text-emerald-600">${client.plan_price}</td>
+                                      <td className="px-5 py-3"><button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }}>{getStatusBadge(client.status)}</button></td>
+                                      <td className="px-5 py-3">
+                                        <div className="flex items-center gap-2">
+                                          {!client.stripe_subscription_id && <button onClick={() => handleCollectPayment(client)} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition">Collect</button>}
+                                          <button onClick={() => { setClientToDelete(client); setShowDeleteModal(true); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </>
                         )}
                       </div>
                     )}
@@ -603,11 +647,11 @@ export default function SalesAdminDashboard() {
 
                   {/* Active Clients */}
                   <div className="bg-white rounded-xl shadow-sm border border-slate-200/60 overflow-hidden">
-                    <button onClick={() => toggleSection('active')} className="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition">
+                    <button onClick={() => toggleSection('active')} className="w-full px-4 md:px-5 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition">
                       <div className="flex items-center gap-3">
                         <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-white text-sm">✅</span>
                         <div className="text-left">
-                          <h3 className="font-semibold text-slate-900">Active Clients</h3>
+                          <h3 className="font-semibold text-slate-900 text-sm md:text-base">Active Clients</h3>
                           <p className="text-xs text-slate-500">{activeStatusClients.length} currently active</p>
                         </div>
                       </div>
@@ -616,24 +660,52 @@ export default function SalesAdminDashboard() {
                     {expandedSections.active && (
                       <div className="border-t border-slate-100">
                         {activeStatusClients.length === 0 ? (
-                          <div className="p-10 text-center"><p className="text-slate-500">No active clients yet.</p></div>
+                          <div className="p-6 md:p-10 text-center"><p className="text-slate-500">No active clients yet.</p></div>
                         ) : (
-                          <table className="w-full">
-                            <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Business</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Plan</th><th className="px-5 py-3 text-left font-medium">Monthly</th><th className="px-5 py-3 text-left font-medium">Contract End</th><th className="px-5 py-3 text-left font-medium">Status</th><th className="px-5 py-3 text-left font-medium">Actions</th></tr></thead>
-                            <tbody className="divide-y divide-slate-100">
+                          <>
+                            {/* Mobile Card View */}
+                            <div className="md:hidden divide-y divide-slate-100">
                               {activeStatusClients.map(client => (
-                                <tr key={client.id} className="hover:bg-slate-50/50">
-                                  <td className="px-5 py-3"><p className="font-medium text-slate-900">{client.name}</p><p className="text-xs text-slate-500">{client.email}</p></td>
-                                  <td className="px-5 py-3 text-sm text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</td>
-                                  <td className="px-5 py-3 text-sm font-medium text-slate-900">{client.plan}</td>
-                                  <td className="px-5 py-3 text-sm font-semibold text-emerald-600">${client.plan_price}</td>
-                                  <td className="px-5 py-3 text-sm text-slate-600">{client.contract_end_date ? new Date(client.contract_end_date).toLocaleDateString() : '—'}</td>
-                                  <td className="px-5 py-3"><button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }}>{getStatusBadge(client.status)}</button></td>
-                                  <td className="px-5 py-3"><button onClick={() => { setClientToDelete(client); setShowDeleteModal(true); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></td>
-                                </tr>
+                                <div key={client.id} className="p-4 space-y-3">
+                                  <div className="flex items-start justify-between">
+                                    <div>
+                                      <p className="font-medium text-slate-900">{client.name}</p>
+                                      <p className="text-xs text-slate-500">{client.email}</p>
+                                    </div>
+                                    <button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }}>{getStatusBadge(client.status)}</button>
+                                  </div>
+                                  <div className="flex items-center justify-between text-sm">
+                                    <span className="text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</span>
+                                    <span className="font-medium text-slate-900">{client.plan}</span>
+                                    <span className="font-semibold text-emerald-600">${client.plan_price}/mo</span>
+                                  </div>
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-xs text-slate-500">Ends: {client.contract_end_date ? new Date(client.contract_end_date).toLocaleDateString() : '—'}</span>
+                                    <button onClick={() => { setClientToDelete(client); setShowDeleteModal(true); }} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                                  </div>
+                                </div>
                               ))}
-                            </tbody>
-                          </table>
+                            </div>
+                            {/* Desktop Table View */}
+                            <div className="hidden md:block overflow-x-auto">
+                              <table className="w-full">
+                                <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Business</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Plan</th><th className="px-5 py-3 text-left font-medium">Monthly</th><th className="px-5 py-3 text-left font-medium">Contract End</th><th className="px-5 py-3 text-left font-medium">Status</th><th className="px-5 py-3 text-left font-medium">Actions</th></tr></thead>
+                                <tbody className="divide-y divide-slate-100">
+                                  {activeStatusClients.map(client => (
+                                    <tr key={client.id} className="hover:bg-slate-50/50">
+                                      <td className="px-5 py-3"><p className="font-medium text-slate-900">{client.name}</p><p className="text-xs text-slate-500">{client.email}</p></td>
+                                      <td className="px-5 py-3 text-sm text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</td>
+                                      <td className="px-5 py-3 text-sm font-medium text-slate-900">{client.plan}</td>
+                                      <td className="px-5 py-3 text-sm font-semibold text-emerald-600">${client.plan_price}</td>
+                                      <td className="px-5 py-3 text-sm text-slate-600">{client.contract_end_date ? new Date(client.contract_end_date).toLocaleDateString() : '—'}</td>
+                                      <td className="px-5 py-3"><button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }}>{getStatusBadge(client.status)}</button></td>
+                                      <td className="px-5 py-3"><button onClick={() => { setClientToDelete(client); setShowDeleteModal(true); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </>
                         )}
                       </div>
                     )}
@@ -641,11 +713,11 @@ export default function SalesAdminDashboard() {
 
                   {/* Inactive Clients */}
                   <div className="bg-white rounded-xl shadow-sm border border-slate-200/60 overflow-hidden">
-                    <button onClick={() => toggleSection('inactive')} className="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition">
+                    <button onClick={() => toggleSection('inactive')} className="w-full px-4 md:px-5 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition">
                       <div className="flex items-center gap-3">
                         <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-400 to-slate-500 flex items-center justify-center text-white text-sm">📁</span>
                         <div className="text-left">
-                          <h3 className="font-semibold text-slate-900">Inactive Clients</h3>
+                          <h3 className="font-semibold text-slate-900 text-sm md:text-base">Inactive Clients</h3>
                           <p className="text-xs text-slate-500">{inactiveClients.length} on hold or cancelled</p>
                         </div>
                       </div>
@@ -654,89 +726,139 @@ export default function SalesAdminDashboard() {
                     {expandedSections.inactive && (
                       <div className="border-t border-slate-100">
                         {inactiveClients.length === 0 ? (
-                          <div className="p-10 text-center"><p className="text-slate-500">No inactive clients.</p></div>
+                          <div className="p-6 md:p-10 text-center"><p className="text-slate-500">No inactive clients.</p></div>
                         ) : (
-                          <table className="w-full">
-                            <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Business</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Plan</th><th className="px-5 py-3 text-left font-medium">Monthly</th><th className="px-5 py-3 text-left font-medium">Status</th><th className="px-5 py-3 text-left font-medium">Actions</th></tr></thead>
-                            <tbody className="divide-y divide-slate-100">
+                          <>
+                            {/* Mobile Card View */}
+                            <div className="md:hidden divide-y divide-slate-100">
                               {inactiveClients.map(client => (
-                                <tr key={client.id} className="hover:bg-slate-50/50 opacity-60">
-                                  <td className="px-5 py-3"><p className="font-medium text-slate-900">{client.name}</p><p className="text-xs text-slate-500">{client.email}</p></td>
-                                  <td className="px-5 py-3 text-sm text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</td>
-                                  <td className="px-5 py-3 text-sm font-medium text-slate-900">{client.plan}</td>
-                                  <td className="px-5 py-3 text-sm text-slate-500">${client.plan_price}</td>
-                                  <td className="px-5 py-3"><button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }}>{getStatusBadge(client.status)}</button></td>
-                                  <td className="px-5 py-3">
-                                    <div className="flex items-center gap-2">
-                                      <button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }} className="px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium rounded-lg transition">Reactivate</button>
-                                      <button onClick={() => { setClientToDelete(client); setShowDeleteModal(true); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                                <div key={client.id} className="p-4 space-y-3 opacity-60">
+                                  <div className="flex items-start justify-between">
+                                    <div>
+                                      <p className="font-medium text-slate-900">{client.name}</p>
+                                      <p className="text-xs text-slate-500">{client.email}</p>
                                     </div>
-                                  </td>
-                                </tr>
+                                    <button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }}>{getStatusBadge(client.status)}</button>
+                                  </div>
+                                  <div className="flex items-center justify-between text-sm">
+                                    <span className="text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</span>
+                                    <span className="font-medium text-slate-900">{client.plan}</span>
+                                    <span className="text-slate-500">${client.plan_price}</span>
+                                  </div>
+                                  <div className="flex gap-2">
+                                    <button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }} className="flex-1 px-3 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium rounded-lg transition">Reactivate</button>
+                                    <button onClick={() => { setClientToDelete(client); setShowDeleteModal(true); }} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                                  </div>
+                                </div>
                               ))}
-                            </tbody>
-                          </table>
+                            </div>
+                            {/* Desktop Table View */}
+                            <div className="hidden md:block overflow-x-auto">
+                              <table className="w-full">
+                                <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Business</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Plan</th><th className="px-5 py-3 text-left font-medium">Monthly</th><th className="px-5 py-3 text-left font-medium">Status</th><th className="px-5 py-3 text-left font-medium">Actions</th></tr></thead>
+                                <tbody className="divide-y divide-slate-100">
+                                  {inactiveClients.map(client => (
+                                    <tr key={client.id} className="hover:bg-slate-50/50 opacity-60">
+                                      <td className="px-5 py-3"><p className="font-medium text-slate-900">{client.name}</p><p className="text-xs text-slate-500">{client.email}</p></td>
+                                      <td className="px-5 py-3 text-sm text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</td>
+                                      <td className="px-5 py-3 text-sm font-medium text-slate-900">{client.plan}</td>
+                                      <td className="px-5 py-3 text-sm text-slate-500">${client.plan_price}</td>
+                                      <td className="px-5 py-3"><button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }}>{getStatusBadge(client.status)}</button></td>
+                                      <td className="px-5 py-3">
+                                        <div className="flex items-center gap-2">
+                                          <button onClick={() => { setClientToUpdate(client); setShowStatusModal(true); }} className="px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium rounded-lg transition">Reactivate</button>
+                                          <button onClick={() => { setClientToDelete(client); setShowDeleteModal(true); }} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </>
                         )}
                       </div>
                     )}
                   </div>
                 </div>
               ) : (
-                <div className="space-y-5">
-                  <div className="grid grid-cols-3 gap-5">
-                    <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-5 text-white shadow-lg">
-                      <p className="text-emerald-100 text-sm">Total Commission Paid</p>
-                      <p className="text-3xl font-bold mt-1">${totalCommission.toFixed(2)}</p>
+                <div className="space-y-4 md:space-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-5">
+                    <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-4 md:p-5 text-white shadow-lg">
+                      <p className="text-emerald-100 text-xs md:text-sm">Total Commission Paid</p>
+                      <p className="text-2xl md:text-3xl font-bold mt-1">${totalCommission.toFixed(2)}</p>
                     </div>
-                    <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-5 text-white shadow-lg">
-                      <p className="text-blue-100 text-sm">Monthly Commission</p>
-                      <p className="text-3xl font-bold mt-1">${monthlyRecurring.toFixed(2)}</p>
+                    <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-4 md:p-5 text-white shadow-lg">
+                      <p className="text-blue-100 text-xs md:text-sm">Monthly Commission</p>
+                      <p className="text-2xl md:text-3xl font-bold mt-1">${monthlyRecurring.toFixed(2)}</p>
                     </div>
-                    <div className="bg-blue-600 rounded-xl p-5 text-white shadow-lg">
-                      <p className="text-blue-100 text-sm">Total Payments</p>
-                      <p className="text-3xl font-bold mt-1">{allPayments.length}</p>
+                    <div className="bg-blue-600 rounded-xl p-4 md:p-5 text-white shadow-lg">
+                      <p className="text-blue-100 text-xs md:text-sm">Total Payments</p>
+                      <p className="text-2xl md:text-3xl font-bold mt-1">{allPayments.length}</p>
                     </div>
                   </div>
                   <div className="bg-white rounded-xl shadow-sm border border-slate-200/60 overflow-hidden">
-                    <div className="px-5 py-4 border-b border-slate-100"><h3 className="font-semibold text-slate-900">Earnings by Client</h3></div>
-                    <table className="w-full">
-                      <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Business</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Plan</th><th className="px-5 py-3 text-left font-medium">Payments</th><th className="px-5 py-3 text-left font-medium">Commission</th><th className="px-5 py-3 text-left font-medium">Status</th></tr></thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {allClients.map(client => (
-                          <tr key={client.id} className="hover:bg-slate-50/50">
-                            <td className="px-5 py-3 font-medium text-slate-900">{client.name}</td>
-                            <td className="px-5 py-3 text-sm text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</td>
-                            <td className="px-5 py-3 text-sm font-medium text-slate-900">{client.plan}</td>
-                            <td className="px-5 py-3"><span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">{paymentsByClient[client.id] || 0} of 12</span></td>
-                            <td className="px-5 py-3 font-semibold text-emerald-600">${(commissionByClient[client.id] || 0).toFixed(2)}</td>
-                            <td className="px-5 py-3">{getStatusBadge(client.status)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <div className="px-4 md:px-5 py-3 md:py-4 border-b border-slate-100"><h3 className="font-semibold text-slate-900 text-sm md:text-base">Earnings by Client</h3></div>
+                    {/* Mobile Card View */}
+                    <div className="md:hidden divide-y divide-slate-100">
+                      {allClients.map(client => (
+                        <div key={client.id} className="p-4 space-y-2">
+                          <div className="flex items-start justify-between">
+                            <p className="font-medium text-slate-900">{client.name}</p>
+                            {getStatusBadge(client.status)}
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</span>
+                            <span className="font-medium text-slate-900">{client.plan}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">{paymentsByClient[client.id] || 0} of 12</span>
+                            <span className="font-semibold text-emerald-600">${(commissionByClient[client.id] || 0).toFixed(2)}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Desktop Table View */}
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Business</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Plan</th><th className="px-5 py-3 text-left font-medium">Payments</th><th className="px-5 py-3 text-left font-medium">Commission</th><th className="px-5 py-3 text-left font-medium">Status</th></tr></thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {allClients.map(client => (
+                            <tr key={client.id} className="hover:bg-slate-50/50">
+                              <td className="px-5 py-3 font-medium text-slate-900">{client.name}</td>
+                              <td className="px-5 py-3 text-sm text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</td>
+                              <td className="px-5 py-3 text-sm font-medium text-slate-900">{client.plan}</td>
+                              <td className="px-5 py-3"><span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">{paymentsByClient[client.id] || 0} of 12</span></td>
+                              <td className="px-5 py-3 font-semibold text-emerald-600">${(commissionByClient[client.id] || 0).toFixed(2)}</td>
+                              <td className="px-5 py-3">{getStatusBadge(client.status)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               )}
             </>
           ) : (
             <>
-              <div className="flex flex-wrap gap-2 mb-6">
+              <div className="flex flex-wrap gap-2 mb-4 md:mb-6 overflow-x-auto pb-2">
                 {[{ id: 'team', label: 'Sales Team', icon: '👥' }, { id: 'clients', label: 'All Clients', icon: '📋' }, { id: 'payments', label: 'Payments', icon: '💳' }, { id: 'earnings', label: 'Team Earnings', icon: '📊' }].map(tab => (
-                  <button key={tab.id} onClick={() => setAdminTab(tab.id)} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${adminTab === tab.id ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}`}>
-                    {tab.icon} {tab.label}
+                  <button key={tab.id} onClick={() => setAdminTab(tab.id)} className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition whitespace-nowrap ${adminTab === tab.id ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}`}>
+                    {tab.icon} <span className="hidden sm:inline">{tab.label}</span><span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                   </button>
                 ))}
               </div>
 
               {adminTab === 'team' && (
                 <>
-                  <div className="flex justify-end mb-6">
-                    <button onClick={() => setShowAddUserModal(true)} className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm hover:shadow-md transition">
+                  <div className="flex justify-end mb-4 md:mb-6">
+                    <button onClick={() => setShowAddUserModal(true)} className="flex items-center gap-2 px-3 md:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-                      Add Sales User
+                      <span className="hidden sm:inline">Add Sales User</span><span className="sm:hidden">Add</span>
                     </button>
                   </div>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
                     {salesUsers.map(user => {
                       const userClients = allClients.filter(c => c.sales_rep_email?.toLowerCase() === user.email?.toLowerCase());
                       const userPayments = allPayments.filter(p => p.sales_rep_email?.toLowerCase() === user.email?.toLowerCase());
@@ -773,123 +895,151 @@ export default function SalesAdminDashboard() {
                 </>
               )}
 
-              {adminTab === 'clients' && (
-                <>
-                  <div className="bg-white rounded-xl shadow-sm border border-slate-200/60 p-4 mb-6 flex items-center gap-4">
-                    <label className="text-sm font-medium text-slate-700">Filter by Rep:</label>
-                    <select value={selectedSalesperson} onChange={(e) => setSelectedSalesperson(e.target.value)} className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                      <option value="all">All Sales Reps</option>
-                      {salesUsers.map(user => <option key={user.id} value={user.email}>{user.full_name || user.username}</option>)}
-                    </select>
-                    <span className="text-sm text-slate-500">{filteredAllClients.length} clients</span>
-                  </div>
-                  <div className="bg-white rounded-xl shadow-sm border border-slate-200/60 overflow-hidden">
-                    <table className="w-full">
-                      <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Business</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Plan</th><th className="px-5 py-3 text-left font-medium">Monthly</th><th className="px-5 py-3 text-left font-medium">Payments</th><th className="px-5 py-3 text-left font-medium">Status</th><th className="px-5 py-3 text-left font-medium">Actions</th></tr></thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {filteredAllClients.map(client => (
-                          <tr key={client.id} className="hover:bg-slate-50/50">
-                            <td className="px-5 py-3"><p className="font-medium text-slate-900">{client.name}</p><p className="text-xs text-slate-500">{client.email}</p></td>
-                            <td className="px-5 py-3 text-sm text-slate-600">{client.sales_rep_email?.split('@')[0] || '—'}</td>
-                            <td className="px-5 py-3 text-sm font-medium text-slate-900">{client.plan}</td>
-                            <td className="px-5 py-3 text-sm font-semibold text-emerald-600">${client.plan_price}</td>
-                            <td className="px-5 py-3"><span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">{getClientPaymentCount(client.id)} of 12</span></td>
-                            <td className="px-5 py-3">
-                              <select value={client.status || 'awaiting_payment'} onChange={(e) => handleStatusChange(client.id, e.target.value)} className="px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                {Object.entries(STATUS_CONFIG).map(([key, config]) => <option key={key} value={key}>{config.emoji} {config.label}</option>)}
-                              </select>
-                            </td>
-                            <td className="px-5 py-3">
-                              <button onClick={() => {
-                                const paymentCount = getClientPaymentCount(client.id);
-                                const salesRep = salesUsers.find(u => u.email?.toLowerCase() === client.sales_rep_email?.toLowerCase());
-                                setSelectedClientForPayment(client);
-                                setNewPayment({ month_number: paymentCount + 1, amount: client.plan_price || '', commission_percent: paymentCount === 0 ? (parseFloat(salesRep?.first_month_commission) || 50) : (parseFloat(salesRep?.recurring_commission) || 10), paid_date: new Date().toISOString().split('T')[0], notes: '' });
-                                setShowRecordPaymentModal(true);
-                              }} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition">Add Payment</button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </>
-              )}
-
               {adminTab === 'payments' && (
                 <>
-                  <div className="grid grid-cols-3 gap-5 mb-6">
-                    <div className="bg-blue-600 rounded-xl p-5 text-white shadow-lg"><p className="text-blue-100 text-sm">Total Revenue</p><p className="text-3xl font-bold mt-1">${teamTotalRevenue.toFixed(2)}</p></div>
-                    <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-5 text-white shadow-lg"><p className="text-emerald-100 text-sm">Commission Paid</p><p className="text-3xl font-bold mt-1">${teamTotalCommission.toFixed(2)}</p></div>
-                    <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-5 text-white shadow-lg"><p className="text-blue-100 text-sm">Total Payments</p><p className="text-3xl font-bold mt-1">{allPayments.length}</p></div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-5 mb-4 md:mb-6">
+                    <div className="bg-blue-600 rounded-xl p-4 md:p-5 text-white shadow-lg"><p className="text-blue-100 text-xs md:text-sm">Total Revenue</p><p className="text-2xl md:text-3xl font-bold mt-1">${teamTotalRevenue.toFixed(2)}</p></div>
+                    <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-4 md:p-5 text-white shadow-lg"><p className="text-emerald-100 text-xs md:text-sm">Commission Paid</p><p className="text-2xl md:text-3xl font-bold mt-1">${teamTotalCommission.toFixed(2)}</p></div>
+                    <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-4 md:p-5 text-white shadow-lg"><p className="text-blue-100 text-xs md:text-sm">Total Payments</p><p className="text-2xl md:text-3xl font-bold mt-1">{allPayments.length}</p></div>
                   </div>
                   <div className="bg-white rounded-xl shadow-sm border border-slate-200/60 overflow-hidden">
-                    <div className="px-5 py-4 border-b border-slate-100"><h3 className="font-semibold text-slate-900">All Payment Records</h3></div>
-                    <table className="w-full">
-                      <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Date</th><th className="px-5 py-3 text-left font-medium">Client</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Month</th><th className="px-5 py-3 text-left font-medium">Amount</th><th className="px-5 py-3 text-left font-medium">Commission</th><th className="px-5 py-3 text-left font-medium">Actions</th></tr></thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {allPayments.map(payment => {
-                          const client = allClients.find(c => c.id === payment.client_id);
-                          return (
-                            <tr key={payment.id} className="hover:bg-slate-50/50">
-                              <td className="px-5 py-3 text-sm text-slate-600">{new Date(payment.paid_date).toLocaleDateString()}</td>
-                              <td className="px-5 py-3 font-medium text-slate-900">{client?.name || 'Unknown'}</td>
-                              <td className="px-5 py-3 text-sm text-slate-600">{payment.sales_rep_email?.split('@')[0]}</td>
-                              <td className="px-5 py-3"><span className="px-2 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded-full">Month {payment.month_number}</span></td>
-                              <td className="px-5 py-3 font-medium text-slate-900">${parseFloat(payment.amount).toFixed(2)}</td>
-                              <td className="px-5 py-3 font-semibold text-emerald-600">${parseFloat(payment.commission_amount).toFixed(2)}</td>
-                              <td className="px-5 py-3">
-                                <div className="flex items-center gap-1">
-                                  <button onClick={() => { setPaymentToEdit({ ...payment, paid_date: payment.paid_date?.split('T')[0] || payment.paid_date }); setShowEditPaymentModal(true); }} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
-                                  <button onClick={() => { setPaymentToDelete({ ...payment, clientName: client?.name || 'Unknown' }); setShowDeletePaymentModal(true); }} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                    <div className="px-4 md:px-5 py-3 md:py-4 border-b border-slate-100"><h3 className="font-semibold text-slate-900 text-sm md:text-base">All Payment Records</h3></div>
+                    {/* Mobile Card View */}
+                    <div className="md:hidden divide-y divide-slate-100">
+                      {allPayments.map(payment => {
+                        const client = allClients.find(c => c.id === payment.client_id);
+                        return (
+                          <div key={payment.id} className="p-4 space-y-2">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <p className="font-medium text-slate-900">{client?.name || 'Unknown'}</p>
+                                <p className="text-xs text-slate-500">{payment.sales_rep_email?.split('@')[0]}</p>
+                              </div>
+                              <span className="px-2 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded-full">Month {payment.month_number}</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-slate-500">{new Date(payment.paid_date).toLocaleDateString()}</span>
+                              <span className="font-medium text-slate-900">${parseFloat(payment.amount).toFixed(2)}</span>
+                              <span className="font-semibold text-emerald-600">${parseFloat(payment.commission_amount).toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-end gap-2">
+                              <button onClick={() => { setPaymentToEdit({ ...payment, paid_date: payment.paid_date?.split('T')[0] || payment.paid_date }); setShowEditPaymentModal(true); }} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
+                              <button onClick={() => { setPaymentToDelete({ ...payment, clientName: client?.name || 'Unknown' }); setShowDeletePaymentModal(true); }} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {/* Desktop Table View */}
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Date</th><th className="px-5 py-3 text-left font-medium">Client</th><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Month</th><th className="px-5 py-3 text-left font-medium">Amount</th><th className="px-5 py-3 text-left font-medium">Commission</th><th className="px-5 py-3 text-left font-medium">Actions</th></tr></thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {allPayments.map(payment => {
+                            const client = allClients.find(c => c.id === payment.client_id);
+                            return (
+                              <tr key={payment.id} className="hover:bg-slate-50/50">
+                                <td className="px-5 py-3 text-sm text-slate-600">{new Date(payment.paid_date).toLocaleDateString()}</td>
+                                <td className="px-5 py-3 font-medium text-slate-900">{client?.name || 'Unknown'}</td>
+                                <td className="px-5 py-3 text-sm text-slate-600">{payment.sales_rep_email?.split('@')[0]}</td>
+                                <td className="px-5 py-3"><span className="px-2 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded-full">Month {payment.month_number}</span></td>
+                                <td className="px-5 py-3 font-medium text-slate-900">${parseFloat(payment.amount).toFixed(2)}</td>
+                                <td className="px-5 py-3 font-semibold text-emerald-600">${parseFloat(payment.commission_amount).toFixed(2)}</td>
+                                <td className="px-5 py-3">
+                                  <div className="flex items-center gap-1">
+                                    <button onClick={() => { setPaymentToEdit({ ...payment, paid_date: payment.paid_date?.split('T')[0] || payment.paid_date }); setShowEditPaymentModal(true); }} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
+                                    <button onClick={() => { setPaymentToDelete({ ...payment, clientName: client?.name || 'Unknown' }); setShowDeletePaymentModal(true); }} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </>
               )}
 
               {adminTab === 'earnings' && (
                 <>
-                  <div className="grid grid-cols-4 gap-5 mb-6">
-                    <div className="bg-blue-600 rounded-xl p-5 text-white shadow-lg"><p className="text-blue-100 text-sm">Total Revenue</p><p className="text-2xl font-bold mt-1">${teamTotalRevenue.toFixed(2)}</p></div>
-                    <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-5 text-white shadow-lg"><p className="text-emerald-100 text-sm">Commission Paid</p><p className="text-2xl font-bold mt-1">${teamTotalCommission.toFixed(2)}</p></div>
-                    <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-5 text-white shadow-lg"><p className="text-blue-100 text-sm">Monthly Revenue</p><p className="text-2xl font-bold mt-1">${teamMonthlyRevenue.toFixed(2)}</p><p className="text-xs text-blue-200 mt-1">${teamMonthlyCommission.toFixed(2)} commission</p></div>
-                    <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-5 text-white shadow-lg"><p className="text-orange-100 text-sm">Active Clients</p><p className="text-2xl font-bold mt-1">{activeStatusClients.length}</p></div>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 mb-4 md:mb-6">
+                    <div className="bg-blue-600 rounded-xl p-4 md:p-5 text-white shadow-lg"><p className="text-blue-100 text-xs md:text-sm">Total Revenue</p><p className="text-xl md:text-2xl font-bold mt-1">${teamTotalRevenue.toFixed(2)}</p></div>
+                    <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-4 md:p-5 text-white shadow-lg"><p className="text-emerald-100 text-xs md:text-sm">Commission Paid</p><p className="text-xl md:text-2xl font-bold mt-1">${teamTotalCommission.toFixed(2)}</p></div>
+                    <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-4 md:p-5 text-white shadow-lg"><p className="text-blue-100 text-xs md:text-sm">Monthly Revenue</p><p className="text-xl md:text-2xl font-bold mt-1">${teamMonthlyRevenue.toFixed(2)}</p><p className="text-xs text-blue-200 mt-1">${teamMonthlyCommission.toFixed(2)} commission</p></div>
+                    <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-4 md:p-5 text-white shadow-lg"><p className="text-orange-100 text-xs md:text-sm">Active Clients</p><p className="text-xl md:text-2xl font-bold mt-1">{activeStatusClients.length}</p></div>
                   </div>
                   <div className="bg-white rounded-xl shadow-sm border border-slate-200/60 overflow-hidden">
-                    <div className="px-5 py-4 border-b border-slate-100"><h3 className="font-semibold text-slate-900">Earnings by Sales Rep</h3></div>
-                    <table className="w-full">
-                      <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Clients</th><th className="px-5 py-3 text-left font-medium">Active</th><th className="px-5 py-3 text-left font-medium">Payments</th><th className="px-5 py-3 text-left font-medium">Revenue</th><th className="px-5 py-3 text-left font-medium">Commission</th></tr></thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {salesUsers.map(user => {
-                          const userClients = allClients.filter(c => c.sales_rep_email?.toLowerCase() === user.email?.toLowerCase());
-                          const userPayments = allPayments.filter(p => p.sales_rep_email?.toLowerCase() === user.email?.toLowerCase());
-                          const userRevenue = userPayments.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
-                          const userCommission = userPayments.reduce((sum, p) => sum + (parseFloat(p.commission_amount) || 0), 0);
-                          return (
-                            <tr key={user.id} className="hover:bg-slate-50/50">
-                              <td className="px-5 py-3"><div className="flex items-center gap-3">{user.profile_photo_url ? (<img src={user.profile_photo_url} alt={user.full_name || user.username} className="w-9 h-9 rounded-full object-cover" />) : (<div className="w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">{user.full_name?.charAt(0) || user.username?.charAt(0)}</div>)}<div><p className="font-medium text-slate-900">{user.full_name || user.username}</p><p className="text-xs text-slate-500">{user.email}</p></div></div></td>
-                              <td className="px-5 py-3 font-medium text-slate-900">{userClients.length}</td>
-                              <td className="px-5 py-3 font-medium text-emerald-600">{userClients.filter(c => c.status === 'active').length}</td>
-                              <td className="px-5 py-3 font-medium text-blue-600">{userPayments.length}</td>
-                              <td className="px-5 py-3 font-medium text-slate-900">${userRevenue.toFixed(2)}</td>
-                              <td className="px-5 py-3 font-bold text-emerald-600 text-lg">${userCommission.toFixed(2)}</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                    <div className="px-4 md:px-5 py-3 md:py-4 border-b border-slate-100"><h3 className="font-semibold text-slate-900 text-sm md:text-base">Earnings by Sales Rep</h3></div>
+                    {/* Mobile Card View */}
+                    <div className="md:hidden divide-y divide-slate-100">
+                      {salesUsers.map(user => {
+                        const userClients = allClients.filter(c => c.sales_rep_email?.toLowerCase() === user.email?.toLowerCase());
+                        const userPayments = allPayments.filter(p => p.sales_rep_email?.toLowerCase() === user.email?.toLowerCase());
+                        const userRevenue = userPayments.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
+                        const userCommission = userPayments.reduce((sum, p) => sum + (parseFloat(p.commission_amount) || 0), 0);
+                        return (
+                          <div key={user.id} className="p-4 space-y-3">
+                            <div className="flex items-center gap-3">
+                              {user.profile_photo_url ? (
+                                <img src={user.profile_photo_url} alt={user.full_name || user.username} className="w-10 h-10 rounded-full object-cover" />
+                              ) : (
+                                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">{user.full_name?.charAt(0) || user.username?.charAt(0)}</div>
+                              )}
+                              <div>
+                                <p className="font-medium text-slate-900">{user.full_name || user.username}</p>
+                                <p className="text-xs text-slate-500">{user.email}</p>
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-4 gap-2 text-center text-sm">
+                              <div><p className="font-medium text-slate-900">{userClients.length}</p><p className="text-xs text-slate-500">Clients</p></div>
+                              <div><p className="font-medium text-emerald-600">{userClients.filter(c => c.status === 'active').length}</p><p className="text-xs text-slate-500">Active</p></div>
+                              <div><p className="font-medium text-slate-900">${userRevenue.toFixed(0)}</p><p className="text-xs text-slate-500">Revenue</p></div>
+                              <div><p className="font-bold text-emerald-600">${userCommission.toFixed(0)}</p><p className="text-xs text-slate-500">Commission</p></div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {/* Desktop Table View */}
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-slate-50 text-xs text-slate-500 uppercase"><tr><th className="px-5 py-3 text-left font-medium">Sales Rep</th><th className="px-5 py-3 text-left font-medium">Clients</th><th className="px-5 py-3 text-left font-medium">Active</th><th className="px-5 py-3 text-left font-medium">Payments</th><th className="px-5 py-3 text-left font-medium">Revenue</th><th className="px-5 py-3 text-left font-medium">Commission</th></tr></thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {salesUsers.map(user => {
+                            const userClients = allClients.filter(c => c.sales_rep_email?.toLowerCase() === user.email?.toLowerCase());
+                            const userPayments = allPayments.filter(p => p.sales_rep_email?.toLowerCase() === user.email?.toLowerCase());
+                            const userRevenue = userPayments.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
+                            const userCommission = userPayments.reduce((sum, p) => sum + (parseFloat(p.commission_amount) || 0), 0);
+                            return (
+                              <tr key={user.id} className="hover:bg-slate-50/50">
+                                <td className="px-5 py-3"><div className="flex items-center gap-3">{user.profile_photo_url ? (<img src={user.profile_photo_url} alt={user.full_name || user.username} className="w-9 h-9 rounded-full object-cover" />) : (<div className="w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">{user.full_name?.charAt(0) || user.username?.charAt(0)}</div>)}<div><p className="font-medium text-slate-900">{user.full_name || user.username}</p><p className="text-xs text-slate-500">{user.email}</p></div></div></td>
+                                <td className="px-5 py-3 font-medium text-slate-900">{userClients.length}</td>
+                                <td className="px-5 py-3 font-medium text-emerald-600">{userClients.filter(c => c.status === 'active').length}</td>
+                                <td className="px-5 py-3 font-medium text-blue-600">{userPayments.length}</td>
+                                <td className="px-5 py-3 font-medium text-slate-900">${userRevenue.toFixed(2)}</td>
+                                <td className="px-5 py-3 font-bold text-emerald-600 text-lg">${userCommission.toFixed(2)}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </>
               )}
             </>
           )}
         </main>
+
+        {/* Footer */}
+        <footer className="py-6 text-center border-t border-slate-200 mt-8 bg-white">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <img src="/icon.png" alt="Kinect B2B" className="w-5 h-5 rounded" />
+            <span className="text-slate-500 text-sm">Powered by <span className="font-semibold text-slate-700">Kinect B2B</span></span>
+          </div>
+          <p className="text-slate-400 text-xs">© {new Date().getFullYear()} Kinect B2B. All rights reserved.</p>
+        </footer>
       </div>
 
       {/* MODALS */}
@@ -994,21 +1144,21 @@ export default function SalesAdminDashboard() {
 
       {/* Sales User Profile Modal */}
       {showUserModal && editingUser && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-3xl w-full shadow-2xl my-8">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 md:p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-3xl w-full shadow-2xl my-4 md:my-8">
             {/* Header */}
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <div className="p-4 md:p-6 border-b border-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-3 md:gap-4">
                 {editingUser.profile_photo_url ? (
-                  <img src={editingUser.profile_photo_url} alt={editingUser.full_name} className="w-16 h-16 rounded-xl object-cover" />
+                  <img src={editingUser.profile_photo_url} alt={editingUser.full_name} className="w-12 h-12 md:w-16 md:h-16 rounded-xl object-cover" />
                 ) : (
-                  <div className="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold">
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-600 rounded-xl flex items-center justify-center text-white text-xl md:text-2xl font-bold">
                     {editingUser.full_name?.charAt(0) || editingUser.username?.charAt(0)}
                   </div>
                 )}
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900">{editingUser.full_name || editingUser.username}</h2>
-                  <p className="text-slate-500">{editingUser.email}</p>
+                <div className="min-w-0">
+                  <h2 className="text-lg md:text-xl font-bold text-slate-900 truncate">{editingUser.full_name || editingUser.username}</h2>
+                  <p className="text-sm text-slate-500 truncate">{editingUser.email}</p>
                 </div>
               </div>
               <button onClick={() => { setShowUserModal(false); setEditingUser(null); }} className="p-2 hover:bg-slate-100 rounded-lg transition">
@@ -1016,11 +1166,11 @@ export default function SalesAdminDashboard() {
               </button>
             </div>
 
-            <div className="p-6 max-h-[70vh] overflow-y-auto">
+            <div className="p-4 md:p-6 max-h-[70vh] overflow-y-auto">
               {/* Basic Info */}
-              <div className="mb-8">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Basic Information</h3>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="mb-6 md:mb-8">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3 md:mb-4">Basic Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
                     <input type="text" value={editingUser.full_name || ''} onChange={(e) => setEditingUser({ ...editingUser, full_name: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -1045,9 +1195,9 @@ export default function SalesAdminDashboard() {
               </div>
 
               {/* Commission Settings */}
-              <div className="mb-8">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Commission Settings</h3>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="mb-6 md:mb-8">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3 md:mb-4">Commission Settings</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">First Month Commission (%)</label>
                     <input type="number" min="0" max="100" value={editingUser.first_month_commission || 50} onChange={(e) => setEditingUser({ ...editingUser, first_month_commission: parseInt(e.target.value) })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -1060,9 +1210,9 @@ export default function SalesAdminDashboard() {
               </div>
 
               {/* Password Change */}
-              <div className="mb-8">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Change Password</h3>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="mb-6 md:mb-8">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3 md:mb-4">Change Password</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">New Password</label>
                     <input type="password" value={editingUser.new_password || ''} onChange={(e) => setEditingUser({ ...editingUser, new_password: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Leave blank to keep current" />
@@ -1078,8 +1228,8 @@ export default function SalesAdminDashboard() {
               </div>
 
               {/* Payment Method */}
-              <div className="mb-8">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Payment Method</h3>
+              <div className="mb-6 md:mb-8">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3 md:mb-4">Payment Method</h3>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Payment Method</label>
@@ -1097,7 +1247,7 @@ export default function SalesAdminDashboard() {
                     </div>
                   )}
                   {editingUser.payment_method === 'direct_deposit' && (
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                       <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Routing Number</label>
                         <input type="text" value={editingUser.routing_number || ''} onChange={(e) => setEditingUser({ ...editingUser, routing_number: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -1112,10 +1262,10 @@ export default function SalesAdminDashboard() {
               </div>
 
               {/* Tax Information */}
-              <div className="mb-8">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Tax Information</h3>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+              <div className="mb-6 md:mb-8">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3 md:mb-4">Tax Information</h3>
+                <div className="space-y-3 md:space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">Legal Name (for taxes)</label>
                       <input type="text" value={editingUser.tax_legal_name || ''} onChange={(e) => setEditingUser({ ...editingUser, tax_legal_name: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -1125,7 +1275,7 @@ export default function SalesAdminDashboard() {
                       <input type="text" value={editingUser.tax_business_name || ''} onChange={(e) => setEditingUser({ ...editingUser, tax_business_name: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">Tax ID Type</label>
                       <select value={editingUser.tax_id_type || ''} onChange={(e) => setEditingUser({ ...editingUser, tax_id_type: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -1143,7 +1293,7 @@ export default function SalesAdminDashboard() {
                     <label className="block text-sm font-medium text-slate-700 mb-1">Street Address</label>
                     <input type="text" value={editingUser.tax_street1 || ''} onChange={(e) => setEditingUser({ ...editingUser, tax_street1: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">Street Address 2</label>
                       <input type="text" value={editingUser.tax_street2 || ''} onChange={(e) => setEditingUser({ ...editingUser, tax_street2: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Apt, Suite, etc." />
@@ -1153,7 +1303,7 @@ export default function SalesAdminDashboard() {
                       <input type="text" value={editingUser.tax_suite || ''} onChange={(e) => setEditingUser({ ...editingUser, tax_suite: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-2 md:gap-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">City</label>
                       <input type="text" value={editingUser.tax_city || ''} onChange={(e) => setEditingUser({ ...editingUser, tax_city: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -1163,7 +1313,7 @@ export default function SalesAdminDashboard() {
                       <input type="text" value={editingUser.tax_state || ''} onChange={(e) => setEditingUser({ ...editingUser, tax_state: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" maxLength="2" placeholder="IN" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">ZIP Code</label>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">ZIP</label>
                       <input type="text" value={editingUser.tax_zip || ''} onChange={(e) => setEditingUser({ ...editingUser, tax_zip: e.target.value })} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" maxLength="10" />
                     </div>
                   </div>
@@ -1177,9 +1327,9 @@ export default function SalesAdminDashboard() {
               </div>
 
               {/* Driver's License */}
-              <div className="mb-8">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Driver's License</h3>
-                <div className="grid grid-cols-2 gap-6">
+              <div className="mb-6 md:mb-8">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3 md:mb-4">Driver's License</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   {/* Front */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Front of License</label>
@@ -1223,8 +1373,8 @@ export default function SalesAdminDashboard() {
 
               {/* Performance Stats */}
               <div>
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Performance Stats</h3>
-                <div className="grid grid-cols-4 gap-4">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3 md:mb-4">Performance Stats</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                   {(() => {
                     const userClients = allClients.filter(c => c.sales_rep_email?.toLowerCase() === editingUser.email?.toLowerCase());
                     const userPayments = allPayments.filter(p => p.sales_rep_email?.toLowerCase() === editingUser.email?.toLowerCase());
@@ -1256,11 +1406,11 @@ export default function SalesAdminDashboard() {
             </div>
 
             {/* Footer */}
-            <div className="p-6 border-t border-slate-100 flex justify-between items-center">
-              <button onClick={() => { if (confirm('Delete this user?')) { handleDeleteUser(editingUser.id); setShowUserModal(false); } }} className="px-4 py-2 text-red-600 hover:bg-red-50 font-medium rounded-lg transition">Delete User</button>
-              <div className="flex gap-3">
-                <button onClick={() => { setShowUserModal(false); setEditingUser(null); }} className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg transition">Cancel</button>
-                <button onClick={handleSaveUser} disabled={savingUser || (editingUser.new_password && editingUser.new_password !== editingUser.confirm_password)} className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition disabled:opacity-50">{savingUser ? 'Saving...' : 'Save Changes'}</button>
+            <div className="p-4 md:p-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-3">
+              <button onClick={() => { if (confirm('Delete this user?')) { handleDeleteUser(editingUser.id); setShowUserModal(false); } }} className="w-full sm:w-auto px-4 py-2 text-red-600 hover:bg-red-50 font-medium rounded-lg transition">Delete User</button>
+              <div className="flex gap-3 w-full sm:w-auto">
+                <button onClick={() => { setShowUserModal(false); setEditingUser(null); }} className="flex-1 sm:flex-none px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg transition">Cancel</button>
+                <button onClick={handleSaveUser} disabled={savingUser || (editingUser.new_password && editingUser.new_password !== editingUser.confirm_password)} className="flex-1 sm:flex-none px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition disabled:opacity-50">{savingUser ? 'Saving...' : 'Save Changes'}</button>
               </div>
             </div>
           </div>

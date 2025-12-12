@@ -752,7 +752,7 @@ export default function AffiliateAdminDashboard() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-2xl text-gray-600">Loading...</div>
+        <div className="text-2xl text-slate-600">Loading...</div>
       </div>
     );
   }
@@ -762,16 +762,16 @@ export default function AffiliateAdminDashboard() {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-3xl p-8 max-w-lg w-full">
-          <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-2">Add Manual Payment</h2>
-          <p className="text-gray-600 mb-6">For {selectedClient.client_name}</p>
+          <h2 className="text-lg md:text-2xl font-bold text-slate-800 mb-2">Add Manual Payment</h2>
+          <p className="text-slate-600 mb-6">For {selectedClient.client_name}</p>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Service Type</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Service Type</label>
               <select
                 value={newPayment.serviceType}
                 onChange={(e) => setNewPayment({...newPayment, serviceType: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               >
                 <option value="pro_plan">Pro Plan</option>
                 <option value="website">Website</option>
@@ -781,25 +781,25 @@ export default function AffiliateAdminDashboard() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Payment Number</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Payment Number</label>
               <input
                 type="number"
                 min="1"
                 value={newPayment.paymentNumber}
                 onChange={(e) => setNewPayment({...newPayment, paymentNumber: parseInt(e.target.value)})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Amount ($)</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Amount ($)</label>
               <input
                 type="number"
                 step="0.01"
                 min="0"
                 value={newPayment.amount}
                 onChange={(e) => setNewPayment({...newPayment, amount: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               />
             </div>
           </div>
@@ -821,7 +821,7 @@ export default function AffiliateAdminDashboard() {
                 });
                 setShowClientPaymentHistory(true);
               }}
-              className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-all"
+              className="flex-1 bg-slate-200 text-slate-700 px-6 py-3 rounded-xl font-semibold hover:bg-slate-300 transition-all"
             >
               Cancel
             </button>
@@ -836,15 +836,15 @@ export default function AffiliateAdminDashboard() {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-3xl p-8 max-w-lg w-full">
-          <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-6">Edit Payment</h2>
+          <h2 className="text-lg md:text-2xl font-bold text-slate-800 mb-6">Edit Payment</h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Service Type</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Service Type</label>
               <select
                 value={selectedPayment.service_type}
                 onChange={(e) => setSelectedPayment({...selectedPayment, service_type: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               >
                 <option value="pro_plan">Pro Plan</option>
                 <option value="website">Website</option>
@@ -854,31 +854,31 @@ export default function AffiliateAdminDashboard() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Payment Number</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Payment Number</label>
               <input
                 type="number"
                 min="1"
                 value={selectedPayment.payment_number}
                 onChange={(e) => setSelectedPayment({...selectedPayment, payment_number: parseInt(e.target.value)})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Amount ($)</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Amount ($)</label>
               <input
                 type="number"
                 step="0.01"
                 min="0"
                 value={selectedPayment.amount}
                 onChange={(e) => setSelectedPayment({...selectedPayment, amount: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-              <div className="px-4 py-3 bg-gray-100 rounded-xl">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Status</label>
+              <div className="px-4 py-3 bg-slate-100 rounded-xl">
                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                   selectedPayment.status === 'paid' 
                     ? 'bg-green-100 text-green-700' 
@@ -893,7 +893,7 @@ export default function AffiliateAdminDashboard() {
           <div className="flex gap-4 mt-6">
             <button
               onClick={handleUpdatePayment}
-              className="flex-1 bg-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-all"
+              className="flex-1 bg-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-700 transition-all"
             >
               Save Changes
             </button>
@@ -903,7 +903,7 @@ export default function AffiliateAdminDashboard() {
                 setSelectedPayment(null);
                 setShowClientPaymentHistory(true);
               }}
-              className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-all"
+              className="flex-1 bg-slate-200 text-slate-700 px-6 py-3 rounded-xl font-semibold hover:bg-slate-300 transition-all"
             >
               Cancel
             </button>
@@ -931,9 +931,9 @@ export default function AffiliateAdminDashboard() {
         <div className="bg-white rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h2 className="text-lg md:text-2xl font-bold text-gray-800">{selectedClient.client_name}</h2>
-              <p className="text-gray-600 text-sm">{selectedClient.business_name}</p>
-              <p className="text-xs text-gray-500">{selectedClient.email} • {selectedClient.phone}</p>
+              <h2 className="text-lg md:text-2xl font-bold text-slate-800">{selectedClient.client_name}</h2>
+              <p className="text-slate-600 text-sm">{selectedClient.business_name}</p>
+              <p className="text-xs text-slate-500">{selectedClient.email} • {selectedClient.phone}</p>
             </div>
             <button
               onClick={() => {
@@ -941,14 +941,14 @@ export default function AffiliateAdminDashboard() {
                 setIsEditingServices(false);
                 setShowClientPaymentHistory(false);
               }}
-              className="text-gray-500 hover:text-gray-700 text-2xl"
+              className="text-slate-500 hover:text-slate-700 text-2xl"
             >
               ✕
             </button>
           </div>
 
           {!isEditingServices ? (
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-4 mb-4">
+            <div className="bg-gradient-to-br from-teal-50 to-teal-50 rounded-2xl p-4 mb-4">
               <div className="flex justify-between items-center">
                 <div className="space-y-1 flex-1">
                   {selectedClient.pro_plan && selectedClient.pro_plan !== 'none' && (
@@ -966,20 +966,20 @@ export default function AffiliateAdminDashboard() {
                 </div>
                 <button
                   onClick={() => setIsEditingServices(true)}
-                  className="bg-purple-600 text-white px-3 py-1 rounded-lg hover:bg-purple-700 transition-all text-sm"
+                  className="bg-teal-600 text-white px-3 py-1 rounded-lg hover:bg-teal-700 transition-all text-sm"
                 >
                   Modify
                 </button>
               </div>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-4 mb-4">
-              <h3 className="font-bold text-gray-800 mb-3">Modify Services</h3>
+            <div className="bg-gradient-to-br from-teal-50 to-teal-50 rounded-2xl p-4 mb-4">
+              <h3 className="font-bold text-slate-800 mb-3">Modify Services</h3>
               <div className="space-y-3">
                 <select
                   value={activationData.proPlan}
                   onChange={(e) => setActivationData({...activationData, proPlan: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
                 >
                   <option value="">No Pro Plan</option>
                   <option value="pro-100">Pro 100 - $250/mo</option>
@@ -999,7 +999,7 @@ export default function AffiliateAdminDashboard() {
                 <select
                   value={activationData.websitePackage}
                   onChange={(e) => setActivationData({...activationData, websitePackage: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
                 >
                   <option value="none">No Website</option>
                   <option value="website-starter">Starter - $500</option>
@@ -1010,7 +1010,7 @@ export default function AffiliateAdminDashboard() {
                 <select
                   value={activationData.automationPackage}
                   onChange={(e) => setActivationData({...activationData, automationPackage: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
                 >
                   <option value="none">No Automation</option>
                   <option value="automation-starter">Starter - $500</option>
@@ -1021,7 +1021,7 @@ export default function AffiliateAdminDashboard() {
                 <select
                   value={activationData.portalPackage}
                   onChange={(e) => setActivationData({...activationData, portalPackage: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
                 >
                   <option value="none">No Portal</option>
                   <option value="portal-starter">Starter - $750</option>
@@ -1046,7 +1046,7 @@ export default function AffiliateAdminDashboard() {
                         portalPackage: selectedClient.portal_package || 'none'
                       });
                     }}
-                    className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-all text-sm font-semibold"
+                    className="flex-1 bg-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-300 transition-all text-sm font-semibold"
                   >
                     Cancel
                   </button>
@@ -1067,29 +1067,29 @@ export default function AffiliateAdminDashboard() {
           {!showClientPaymentHistory ? (
             <>
               {nextPendingPayment ? (
-                <div className="bg-white border-2 border-purple-200 rounded-2xl p-6 mb-4">
+                <div className="bg-white border-2 border-teal-200 rounded-2xl p-6 mb-4">
                   <div className="text-center mb-4">
-                    <div className="text-xs md:text-sm text-gray-500 mb-1">Next Payment</div>
-                    <div className="text-2xl md:text-3xl font-bold text-purple-600">
+                    <div className="text-xs md:text-sm text-slate-500 mb-1">Next Payment</div>
+                    <div className="text-2xl md:text-3xl font-bold text-teal-600">
                       {serviceLabels[nextPendingPayment.service_type]}
                     </div>
-                    <div className="text-lg text-gray-700 mt-1">
+                    <div className="text-lg text-slate-700 mt-1">
                       {nextPendingPayment.service_type === 'pro_plan' 
                         ? `Payment ${nextPendingPayment.payment_number}/12` 
                         : 'One-time Payment'}
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 mb-4">
+                  <div className="bg-gradient-to-br from-teal-50 to-teal-50 rounded-xl p-4 mb-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700 font-medium">Commission Amount:</span>
-                      <span className="text-2xl font-bold text-purple-600">${nextPendingPayment.amount.toFixed(2)}</span>
+                      <span className="text-slate-700 font-medium">Commission Amount:</span>
+                      <span className="text-2xl font-bold text-teal-600">${nextPendingPayment.amount.toFixed(2)}</span>
                     </div>
                   </div>
 
                   <button
                     onClick={() => markPaymentSent(nextPendingPayment)}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all"
+                    className="w-full bg-gradient-to-r from-teal-600 to-teal-600 text-white py-3 rounded-xl font-bold hover:from-teal-700 hover:to-teal-700 transition-all"
                   >
                     Mark Payment as Sent
                   </button>
@@ -1103,9 +1103,9 @@ export default function AffiliateAdminDashboard() {
             </>
           ) : (
             <>
-              <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 mb-4">
+              <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 mb-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-bold text-gray-800">Payment History</h3>
+                  <h3 className="text-lg font-bold text-slate-800">Payment History</h3>
                   <button
                     onClick={() => {
                       setShowClientPaymentHistory(false);
@@ -1119,14 +1119,14 @@ export default function AffiliateAdminDashboard() {
 
                 <div className="space-y-2 max-h-64 overflow-y-auto">
                   {clientPayments.map((payment) => (
-                    <div key={payment.id} className="bg-gray-50 rounded-lg p-3">
+                    <div key={payment.id} className="bg-slate-50 rounded-lg p-3">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <div className="font-semibold text-sm text-gray-800">
+                          <div className="font-semibold text-sm text-slate-800">
                             {serviceLabels[payment.service_type]} 
                             {payment.service_type === 'pro_plan' ? ` ${payment.payment_number}/12` : ''}
                           </div>
-                          <div className="text-lg font-bold text-purple-600">
+                          <div className="text-lg font-bold text-teal-600">
                             ${payment.amount.toFixed(2)}
                           </div>
                         </div>
@@ -1139,7 +1139,7 @@ export default function AffiliateAdminDashboard() {
                         </span>
                       </div>
                       {payment.status === 'paid' && payment.sent_date && (
-                        <div className="text-xs text-gray-500 mb-2">
+                        <div className="text-xs text-slate-500 mb-2">
                           Sent: {new Date(payment.sent_date).toLocaleDateString()}
                         </div>
                       )}
@@ -1186,7 +1186,7 @@ export default function AffiliateAdminDashboard() {
             </>
           )}
 
-          <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl p-4 mb-4">
+          <div className="bg-gradient-to-r from-teal-600 to-teal-600 text-white rounded-2xl p-4 mb-4">
             <div className="flex justify-between items-center">
               <div>
                 <div className="text-sm opacity-90">Total Paid to Affiliate</div>
@@ -1221,16 +1221,16 @@ export default function AffiliateAdminDashboard() {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-3xl p-8 max-w-2xl w-full">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">Activate Client</h2>
-          <p className="text-gray-600 mb-6">{selectedReferral.client_name} - {selectedReferral.business_name}</p>
+          <h2 className="text-3xl font-bold text-slate-800 mb-2">Activate Client</h2>
+          <p className="text-slate-600 mb-6">{selectedReferral.client_name} - {selectedReferral.business_name}</p>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Pro Plan</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Pro Plan</label>
               <select
                 value={activationData.proPlan}
                 onChange={(e) => setActivationData({...activationData, proPlan: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               >
                 <option value="">Select a Pro Plan (Optional)</option>
                 <option value="pro-100">Pro 100 - $250/month</option>
@@ -1249,11 +1249,11 @@ export default function AffiliateAdminDashboard() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Website Package (Optional)</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Website Package (Optional)</label>
               <select
                 value={activationData.websitePackage}
                 onChange={(e) => setActivationData({...activationData, websitePackage: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               >
                 <option value="none">No Website Package</option>
                 <option value="website-starter">Starter Website - $500</option>
@@ -1263,11 +1263,11 @@ export default function AffiliateAdminDashboard() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Automation Package (Optional)</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Automation Package (Optional)</label>
               <select
                 value={activationData.automationPackage}
                 onChange={(e) => setActivationData({...activationData, automationPackage: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               >
                 <option value="none">No Automation Package</option>
                 <option value="automation-starter">Starter Automation - $500</option>
@@ -1277,11 +1277,11 @@ export default function AffiliateAdminDashboard() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Portal Package (Optional)</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Portal Package (Optional)</label>
               <select
                 value={activationData.portalPackage}
                 onChange={(e) => setActivationData({...activationData, portalPackage: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:border-teal-600"
               >
                 <option value="none">No Portal Package</option>
                 <option value="portal-starter">Starter Portal - $750</option>
@@ -1294,7 +1294,7 @@ export default function AffiliateAdminDashboard() {
           <div className="flex gap-4 mt-8">
             <button
               onClick={activateClient}
-              className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all"
+              className="flex-1 bg-gradient-to-r from-teal-600 to-teal-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-teal-700 hover:to-teal-700 transition-all"
             >
               Activate Client
             </button>
@@ -1308,7 +1308,7 @@ export default function AffiliateAdminDashboard() {
                   portalPackage: 'none'
                 });
               }}
-              className="flex-1 bg-gray-200 text-gray-700 px-8 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-all"
+              className="flex-1 bg-slate-200 text-slate-700 px-8 py-3 rounded-xl font-semibold hover:bg-slate-300 transition-all"
             >
               Cancel
             </button>
@@ -1321,30 +1321,30 @@ export default function AffiliateAdminDashboard() {
   // Detailed Affiliate View
   if (selectedAffiliate) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 shadow-lg">
+      <div className="min-h-screen bg-gradient-to-br from-teal-50 to-teal-50">
+        <div className="bg-gradient-to-r from-teal-600 to-teal-600 text-white p-6 shadow-lg">
           <div className="max-w-7xl mx-auto">
             <button
               onClick={handleBackToList}
-              className="mb-4 bg-white text-purple-600 px-4 py-2 rounded-xl font-semibold hover:bg-purple-50 transition-all"
+              className="mb-4 bg-white text-teal-600 px-4 py-2 rounded-xl font-semibold hover:bg-teal-50 transition-all"
             >
               ← Back to All Affiliates
             </button>
             <h1 className="text-3xl font-bold">Affiliate Details</h1>
-            <p className="text-purple-100">Viewing {selectedAffiliate.full_name}</p>
+            <p className="text-teal-100">Viewing {selectedAffiliate.full_name}</p>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto p-6 space-y-6">
           <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl">
             <div className="flex items-start gap-4 mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+              <div className="w-20 h-20 bg-gradient-to-br from-teal-600 to-teal-600 rounded-full flex items-center justify-center text-white text-3xl font-bold">
                 {selectedAffiliate.full_name.charAt(0)}
               </div>
               <div className="flex-1">
-                <h2 className="text-3xl font-bold text-gray-800">{selectedAffiliate.full_name}</h2>
-                <p className="text-gray-600">{selectedAffiliate.email}</p>
-                <p className="text-sm text-gray-500">Referral Code: {selectedAffiliate.referral_code}</p>
+                <h2 className="text-3xl font-bold text-slate-800">{selectedAffiliate.full_name}</h2>
+                <p className="text-slate-600">{selectedAffiliate.email}</p>
+                <p className="text-sm text-slate-500">Referral Code: {selectedAffiliate.referral_code}</p>
               </div>
               <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
                 selectedAffiliate.status === 'active' 
@@ -1356,20 +1356,20 @@ export default function AffiliateAdminDashboard() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6">
-                <div className="text-sm text-gray-600 mb-1">Total Referrals</div>
-                <div className="text-2xl md:text-3xl font-bold text-purple-600">{selectedAffiliate.total_referrals || 0}</div>
+              <div className="bg-gradient-to-br from-teal-50 to-teal-50 rounded-2xl p-6">
+                <div className="text-sm text-slate-600 mb-1">Total Referrals</div>
+                <div className="text-2xl md:text-3xl font-bold text-teal-600">{selectedAffiliate.total_referrals || 0}</div>
               </div>
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6">
-                <div className="text-sm text-gray-600 mb-1">Active Clients</div>
+              <div className="bg-gradient-to-br from-teal-50 to-teal-50 rounded-2xl p-6">
+                <div className="text-sm text-slate-600 mb-1">Active Clients</div>
                 <div className="text-2xl md:text-3xl font-bold text-green-600">{selectedAffiliate.active_clients || 0}</div>
               </div>
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6">
-                <div className="text-sm text-gray-600 mb-1">Total Earned</div>
-                <div className="text-2xl md:text-3xl font-bold text-purple-600">${selectedAffiliate.total_earned?.toFixed(2) || '0.00'}</div>
+              <div className="bg-gradient-to-br from-teal-50 to-teal-50 rounded-2xl p-6">
+                <div className="text-sm text-slate-600 mb-1">Total Earned</div>
+                <div className="text-2xl md:text-3xl font-bold text-teal-600">${selectedAffiliate.total_earned?.toFixed(2) || '0.00'}</div>
               </div>
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6">
-                <div className="text-sm text-gray-600 mb-1">Pending Payout</div>
+              <div className="bg-gradient-to-br from-teal-50 to-teal-50 rounded-2xl p-6">
+                <div className="text-sm text-slate-600 mb-1">Pending Payout</div>
                 <div className="text-2xl md:text-3xl font-bold text-orange-600">${selectedAffiliate.pending_payout?.toFixed(2) || '0.00'}</div>
               </div>
             </div>
@@ -1377,21 +1377,21 @@ export default function AffiliateAdminDashboard() {
 
           {activeClients.length > 0 && (
             <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl">
-              <h3 className="text-lg md:text-2xl font-bold text-gray-800 mb-6">Active Clients</h3>
+              <h3 className="text-lg md:text-2xl font-bold text-slate-800 mb-6">Active Clients</h3>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {activeClients.map((client) => (
                   <div key={client.id} className="border border-green-200 bg-green-50 rounded-2xl p-6 hover:shadow-lg transition-all">
-                    <h4 className="text-lg font-bold text-gray-800 mb-2">{client.client_name}</h4>
-                    <p className="text-sm text-gray-600 mb-1">{client.business_name}</p>
-                    <p className="text-sm text-gray-500 mb-4">{client.email}</p>
+                    <h4 className="text-lg font-bold text-slate-800 mb-2">{client.client_name}</h4>
+                    <p className="text-sm text-slate-600 mb-1">{client.business_name}</p>
+                    <p className="text-sm text-slate-500 mb-4">{client.email}</p>
                     <div className="space-y-1 text-sm mb-4">
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Monthly Value:</span>
+                        <span className="text-slate-600">Monthly Value:</span>
                         <span className="font-bold text-green-600">${client.monthly_value?.toFixed(2) || '0.00'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Commission Earned:</span>
-                        <span className="font-bold text-purple-600">${client.commission_earned?.toFixed(2) || '0.00'}</span>
+                        <span className="text-slate-600">Commission Earned:</span>
+                        <span className="font-bold text-teal-600">${client.commission_earned?.toFixed(2) || '0.00'}</span>
                       </div>
                     </div>
                     <button
@@ -1407,34 +1407,34 @@ export default function AffiliateAdminDashboard() {
           )}
 
           <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl">
-            <h3 className="text-lg md:text-2xl font-bold text-gray-800 mb-6">Pending Referrals</h3>
+            <h3 className="text-lg md:text-2xl font-bold text-slate-800 mb-6">Pending Referrals</h3>
             
             {affiliateReferrals.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-slate-500">
                 <p className="text-lg">No pending referrals.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <div className="overflow-x-auto"><table className="w-full min-w-[640px]">
-                  <thead className="bg-purple-50">
+                  <thead className="bg-teal-50">
                     <tr>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Client Name</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Company</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Contact</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Signup Date</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Client Name</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Company</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Contact</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Signup Date</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {affiliateReferrals.map((referral) => (
-                      <tr key={referral.id} className="hover:bg-purple-50 transition-all">
-                        <td className="px-6 py-4 text-gray-800 font-medium">{referral.client_name}</td>
-                        <td className="px-6 py-4 text-gray-600">{referral.business_name}</td>
+                      <tr key={referral.id} className="hover:bg-teal-50 transition-all">
+                        <td className="px-6 py-4 text-slate-800 font-medium">{referral.client_name}</td>
+                        <td className="px-6 py-4 text-slate-600">{referral.business_name}</td>
                         <td className="px-6 py-4">
-                          <div className="text-sm text-gray-600">{referral.email}</div>
-                          <div className="text-sm text-gray-500">{referral.phone}</div>
+                          <div className="text-sm text-slate-600">{referral.email}</div>
+                          <div className="text-sm text-slate-500">{referral.phone}</div>
                         </td>
-                        <td className="px-6 py-4 text-gray-600">
+                        <td className="px-6 py-4 text-slate-600">
                           {new Date(referral.signup_date).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
@@ -1466,145 +1466,84 @@ export default function AffiliateAdminDashboard() {
 
   // All Affiliates List View
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-lg sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 md:gap-3">
-              <Image
-                src="/logo.png"
-                alt="Kinect B2B"
-                width={40}
-                height={40}
-                className="w-8 h-8 md:w-10 md:h-10"
-              />
-              <div>
-                <h1 className="text-lg md:text-2xl font-bold text-purple-600">Kinect B2B Admin</h1>
-                <p className="text-xs md:text-sm text-gray-600 hidden sm:block">Affiliate Management</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2 md:gap-4">
-              <button
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="lg:hidden p-2 text-gray-600 hover:text-purple-600"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-              <button
-                onClick={handleLogout}
-                className="hidden md:block bg-red-500 text-white px-3 md:px-4 py-2 rounded-lg hover:bg-red-600 transition-all text-sm md:text-base"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-slate-100">
+      {/* Mobile Overlay */}
       {showMobileMenu && (
-        <div className="lg:hidden bg-white border-t border-gray-200 shadow-lg">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <nav className="flex flex-col gap-2">
-              <button
-                onClick={() => {
-                  setActiveView('affiliates');
-                  setShowMobileMenu(false);
-                }}
-                className={`px-4 py-3 rounded-lg font-semibold text-left transition-all ${
-                  activeView === 'affiliates'
-                    ? 'bg-purple-600 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                Affiliates
-              </button>
-              <button
-                onClick={() => {
-                  setActiveView('payouts');
-                  setShowMobileMenu(false);
-                }}
-                className={`px-4 py-3 rounded-lg font-semibold text-left transition-all relative ${
-                  activeView === 'payouts'
-                    ? 'bg-purple-600 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                Payouts
-                {unreadPayoutCount > 0 && (
-                  <span className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                    {unreadPayoutCount}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-3 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-all"
-              >
-                Logout
-              </button>
-            </nav>
-          </div>
-        </div>
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setShowMobileMenu(false)}
+        />
       )}
 
-      <div className="hidden lg:block bg-white shadow-md border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex gap-3">
-            <button
-              onClick={() => setActiveView('affiliates')}
-              className={`px-6 py-2 rounded-xl font-semibold transition-all ${
-                activeView === 'affiliates'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Affiliates
+      {/* Sidebar */}
+      <aside className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 z-50 transform transition-transform duration-300 ease-in-out ${showMobileMenu ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+        <div className="flex flex-col h-full">
+          <div className="p-5 border-b border-slate-700/50">
+            <div className="flex items-center gap-3">
+              <img src="/icon.png" alt="Kinect B2B" className="w-10 h-10 rounded-xl" />
+              <div>
+                <h1 className="text-white font-bold text-lg">Kinect B2B</h1>
+                <p className="text-teal-400 text-xs">Admin Portal</p>
+              </div>
+            </div>
+          </div>
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+            <button onClick={() => { setActiveView('affiliates'); setShowMobileMenu(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeView === 'affiliates' ? 'bg-teal-600 text-white' : 'text-slate-300 hover:bg-slate-700/50'}`}>
+              <span className="text-xl">👥</span><span className="font-medium">Affiliates</span>
             </button>
-            <button
-              onClick={() => setActiveView('payouts')}
-              className={`px-6 py-2 rounded-xl font-semibold transition-all relative ${
-                activeView === 'payouts'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Payouts
-              {unreadPayoutCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">
-                  {unreadPayoutCount}
-                </span>
-              )}
+            <button onClick={() => { setActiveView('payouts'); setShowMobileMenu(false); }} className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${activeView === 'payouts' ? 'bg-teal-600 text-white' : 'text-slate-300 hover:bg-slate-700/50'}`}>
+              <span className="flex items-center gap-3"><span className="text-xl">💰</span><span className="font-medium">Payouts</span></span>
+              {unreadPayoutCount > 0 && <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{unreadPayoutCount}</span>}
+            </button>
+          </nav>
+          <div className="p-4 border-t border-slate-700/50">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center text-white font-bold">A</div>
+              <div><p className="text-white font-medium text-sm">Admin</p><p className="text-slate-400 text-xs">Affiliate Manager</p></div>
+            </div>
+            <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-700/50 hover:bg-red-600 text-slate-300 hover:text-white rounded-xl transition-all text-sm font-medium">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+              Sign Out
             </button>
           </div>
         </div>
-      </div>
+      </aside>
 
-      <main className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
+      <div className="lg:ml-64 min-h-screen flex flex-col">
+        <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 md:px-8 py-4">
+          <div className="flex items-center gap-4">
+            <button onClick={() => setShowMobileMenu(true)} className="lg:hidden p-2 hover:bg-slate-100 rounded-xl">
+              <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-slate-800">{activeView === 'affiliates' ? 'Affiliates' : 'Payouts'}</h2>
+              <p className="text-slate-500 text-sm hidden md:block">{activeView === 'affiliates' ? 'Manage your affiliate partners' : 'Process affiliate payouts'}</p>
+            </div>
+          </div>
+        </header>
+
+        <main className="flex-1 p-4 md:p-8">
         {activeView === 'affiliates' ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
               <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-xl">
-                <div className="text-xs md:text-sm text-gray-500 mb-1">Total Affiliates</div>
-                <div className="text-2xl md:text-3xl font-bold text-purple-600">{affiliates.length}</div>
+                <div className="text-xs md:text-sm text-slate-500 mb-1">Total Affiliates</div>
+                <div className="text-2xl md:text-3xl font-bold text-teal-600">{affiliates.length}</div>
               </div>
               <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-xl">
-                <div className="text-xs md:text-sm text-gray-500 mb-1">Active Clients</div>
+                <div className="text-xs md:text-sm text-slate-500 mb-1">Active Clients</div>
                 <div className="text-2xl md:text-3xl font-bold text-green-600">
                   {affiliates.reduce((sum, a) => sum + (a.active_clients || 0), 0)}
                 </div>
               </div>
               <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-xl">
-                <div className="text-xs md:text-sm text-gray-500 mb-1">Total Commissions Paid</div>
-                <div className="text-2xl md:text-3xl font-bold text-purple-600">
+                <div className="text-xs md:text-sm text-slate-500 mb-1">Total Commissions Paid</div>
+                <div className="text-2xl md:text-3xl font-bold text-teal-600">
                   ${affiliates.reduce((sum, a) => sum + (parseFloat(a.total_earned) || 0), 0).toFixed(2)}
                 </div>
               </div>
               <div className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-xl">
-                <div className="text-xs md:text-sm text-gray-500 mb-1">Pending Payouts</div>
+                <div className="text-xs md:text-sm text-slate-500 mb-1">Pending Payouts</div>
                 <div className="text-2xl md:text-3xl font-bold text-orange-600">
                   ${affiliates.reduce((sum, a) => sum + (parseFloat(a.pending_payout) || 0), 0).toFixed(2)}
                 </div>
@@ -1612,24 +1551,24 @@ export default function AffiliateAdminDashboard() {
             </div>
 
             <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-6">All Affiliates</h2>
+              <h2 className="text-lg md:text-2xl font-bold text-slate-800 mb-6">All Affiliates</h2>
 
               {affiliates.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-slate-500">
                   <p className="text-lg">No affiliates found.</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {affiliates.map((affiliate) => (
-                    <div key={affiliate.id} className="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all">
+                    <div key={affiliate.id} className="border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition-all">
                       <div className="flex items-start gap-3 mb-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                        <div className="w-12 h-12 bg-gradient-to-br from-teal-600 to-teal-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
                           {affiliate.full_name.charAt(0)}
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-lg font-bold text-gray-800">{affiliate.full_name}</h3>
-                          <p className="text-sm text-gray-600">{affiliate.email}</p>
-                          <p className="text-xs text-gray-500">
+                          <h3 className="text-lg font-bold text-slate-800">{affiliate.full_name}</h3>
+                          <p className="text-sm text-slate-600">{affiliate.email}</p>
+                          <p className="text-xs text-slate-500">
                             Joined {new Date(affiliate.created_at).toLocaleDateString('en-US', {
                               month: 'short',
                               year: 'numeric'
@@ -1640,22 +1579,22 @@ export default function AffiliateAdminDashboard() {
 
                       <div className="space-y-2 text-sm mb-4">
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Total Referrals:</span>
-                          <span className="font-bold text-purple-600">{affiliate.total_referrals || 0}</span>
+                          <span className="text-slate-600">Total Referrals:</span>
+                          <span className="font-bold text-teal-600">{affiliate.total_referrals || 0}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Active Clients:</span>
+                          <span className="text-slate-600">Active Clients:</span>
                           <span className="font-bold text-green-600">{affiliate.active_clients || 0}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Total Earned:</span>
-                          <span className="font-bold text-purple-600">${affiliate.total_earned?.toFixed(2) || '0.00'}</span>
+                          <span className="text-slate-600">Total Earned:</span>
+                          <span className="font-bold text-teal-600">${affiliate.total_earned?.toFixed(2) || '0.00'}</span>
                         </div>
                       </div>
 
                       <button
                         onClick={() => handleViewDetails(affiliate)}
-                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all"
+                        className="w-full bg-gradient-to-r from-teal-600 to-teal-600 text-white py-2 rounded-xl font-semibold hover:from-teal-700 hover:to-teal-700 transition-all"
                       >
                         View Details
                       </button>
@@ -1683,26 +1622,26 @@ export default function AffiliateAdminDashboard() {
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white rounded-xl p-6 shadow-lg">
-                <div className="text-sm text-gray-500 mb-2">Pending Payouts</div>
+                <div className="text-sm text-slate-500 mb-2">Pending Payouts</div>
                 <div className="text-2xl md:text-3xl font-bold text-orange-600">{pendingPayouts.length}</div>
               </div>
               <div className="bg-white rounded-xl p-6 shadow-lg">
-                <div className="text-sm text-gray-500 mb-2">Total Pending Amount</div>
+                <div className="text-sm text-slate-500 mb-2">Total Pending Amount</div>
                 <div className="text-2xl md:text-3xl font-bold text-orange-600">
                   ${pendingPayouts.reduce((sum, p) => sum + p.amount, 0).toFixed(2)}
                 </div>
               </div>
               <div className="bg-white rounded-xl p-6 shadow-lg">
-                <div className="text-sm text-gray-500 mb-2">Completed This Month</div>
+                <div className="text-sm text-slate-500 mb-2">Completed This Month</div>
                 <div className="text-2xl md:text-3xl font-bold text-green-600">{completedPayouts.length}</div>
               </div>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-              <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-6">Pending Payout Requests</h2>
+              <h2 className="text-lg md:text-2xl font-bold text-slate-800 mb-6">Pending Payout Requests</h2>
               
               {pendingPayouts.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-slate-500">
                   <p className="text-lg">No pending payout requests</p>
                 </div>
               ) : (
@@ -1711,27 +1650,27 @@ export default function AffiliateAdminDashboard() {
                     <div key={payout.id} className="border-2 border-orange-200 rounded-xl p-6 bg-orange-50">
                       <div className="flex justify-between items-start mb-4">
                         <div>
-                          <h3 className="text-xl font-bold text-gray-800">
+                          <h3 className="text-xl font-bold text-slate-800">
                             {payout.affiliates.full_name}
                           </h3>
-                          <p className="text-sm text-gray-600">{payout.affiliates.email}</p>
+                          <p className="text-sm text-slate-600">{payout.affiliates.email}</p>
                           {payout.affiliates.phone && (
-                            <p className="text-sm text-gray-600">{payout.affiliates.phone}</p>
+                            <p className="text-sm text-slate-600">{payout.affiliates.phone}</p>
                           )}
                         </div>
                         <div className="text-right">
                           <div className="text-2xl md:text-3xl font-bold text-orange-600">
                             ${payout.amount.toFixed(2)}
                           </div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-slate-600">
                             Requested {new Date(payout.requested_at).toLocaleDateString()}
                           </div>
                         </div>
                       </div>
 
                       <div className="bg-white rounded-lg p-4 mb-4">
-                        <p className="text-sm font-semibold text-gray-700 mb-2">Payment Details:</p>
-                        <p className="text-gray-800">{getPaymentDetails(payout)}</p>
+                        <p className="text-sm font-semibold text-slate-700 mb-2">Payment Details:</p>
+                        <p className="text-slate-800">{getPaymentDetails(payout)}</p>
                       </div>
 
                       <button
@@ -1752,38 +1691,38 @@ export default function AffiliateAdminDashboard() {
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-6">Completed Payouts</h2>
+              <h2 className="text-lg md:text-2xl font-bold text-slate-800 mb-6">Completed Payouts</h2>
               
               {completedPayouts.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-slate-500">
                   <p className="text-lg">No completed payouts yet</p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <div className="overflow-x-auto"><table className="w-full min-w-[640px]">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-slate-50">
                       <tr>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Affiliate</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Amount</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Payment Method</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Requested</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Paid</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Affiliate</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Amount</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Payment Method</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Requested</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Paid</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {completedPayouts.map((payout) => (
-                        <tr key={payout.id} className="hover:bg-gray-50">
+                        <tr key={payout.id} className="hover:bg-slate-50">
                           <td className="px-6 py-4">
-                            <div className="font-medium text-gray-800">{payout.affiliates.full_name}</div>
-                            <div className="text-sm text-gray-600">{payout.affiliates.email}</div>
+                            <div className="font-medium text-slate-800">{payout.affiliates.full_name}</div>
+                            <div className="text-sm text-slate-600">{payout.affiliates.email}</div>
                           </td>
-                          <td className="px-6 py-4 text-gray-800 font-bold">
+                          <td className="px-6 py-4 text-slate-800 font-bold">
                             ${payout.amount.toFixed(2)}
                           </td>
-                          <td className="px-6 py-4 text-gray-600">
+                          <td className="px-6 py-4 text-slate-600">
                             {getPaymentDetails(payout)}
                           </td>
-                          <td className="px-6 py-4 text-gray-600">
+                          <td className="px-6 py-4 text-slate-600">
                             {new Date(payout.requested_at).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4">
@@ -1800,7 +1739,16 @@ export default function AffiliateAdminDashboard() {
             </div>
           </>
         )}
-      </main>
+        </main>
+
+        <footer className="py-6 text-center border-t border-slate-200 bg-white">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <img src="/icon.png" alt="Kinect B2B" className="w-5 h-5 rounded" />
+            <span className="text-slate-500 text-sm">Powered by <span className="font-semibold text-slate-700">Kinect B2B</span></span>
+          </div>
+          <p className="text-slate-400 text-xs">© {new Date().getFullYear()} Kinect B2B. All rights reserved.</p>
+        </footer>
+      </div>
     </div>
   );
 }
