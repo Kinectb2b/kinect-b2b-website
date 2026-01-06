@@ -163,12 +163,12 @@ export default function Plans() {
 
       {/* Pricing Cards */}
       <section className="py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative bg-white rounded-2xl p-6 sm:p-8 ${
+                className={`relative bg-white rounded-2xl p-6 sm:p-8 max-w-md mx-auto lg:max-w-none ${
                   plan.popular
                     ? 'border-2 border-teal-500 shadow-xl'
                     : 'border border-gray-200 shadow-lg'
