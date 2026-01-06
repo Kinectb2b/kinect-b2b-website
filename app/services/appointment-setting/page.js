@@ -67,21 +67,30 @@ export default function AppointmentSettingPage() {
       <Header currentPage="/services/appointment-setting" />
 
       {/* Hero Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-16 md:py-24 bg-slate-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             B2B Appointment Setting That Actually Works
           </h1>
-          <p className="text-xl md:text-2xl text-slate-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto">
             We find decision-makers, run the outreach, and book qualified meetings on your calendar. You just show up and close.
           </p>
-          <Link
-            href="/plans"
-            className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
-          >
-            See Pricing
-            <ChevronRight className="w-5 h-5" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/plans"
+              className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
+            >
+              See Pricing
+              <ChevronRight className="w-5 h-5" />
+            </Link>
+            <a
+              href="tel:2192707863"
+              className="inline-flex items-center justify-center gap-2 border-2 border-slate-600 hover:border-slate-500 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
+            >
+              <Phone className="w-5 h-5" />
+              (219) 270-7863
+            </a>
+          </div>
         </div>
       </section>
 
@@ -163,10 +172,10 @@ export default function AppointmentSettingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Industries We Serve
+              Built for Service Businesses
             </h2>
             <p className="text-lg text-slate-600">
-              We specialize in appointment setting for service-based B2B businesses.
+              We specialize in B2B appointment setting for trades and service companies.
             </p>
           </div>
 
@@ -193,24 +202,21 @@ export default function AppointmentSettingPage() {
             Ready to Stop Chasing Leads?
           </h2>
           <p className="text-xl text-slate-300 mb-8">
-            See our pricing and find the right plan for your business.
+            Let us fill your calendar with qualified appointments.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/plans"
-              className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
-            >
-              View Pricing
-              <ChevronRight className="w-5 h-5" />
-            </Link>
-            <a
-              href="tel:2192707863"
-              className="inline-flex items-center justify-center gap-2 border-2 border-slate-600 hover:border-slate-500 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
-            >
-              <Phone className="w-5 h-5" />
-              Call: (219) 270-7863
+          <Link
+            href="/plans"
+            className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition mb-4"
+          >
+            View Pricing
+            <ChevronRight className="w-5 h-5" />
+          </Link>
+          <p className="text-slate-400">
+            Or call{' '}
+            <a href="tel:2192707863" className="text-white hover:text-teal-400 transition">
+              (219) 270-7863
             </a>
-          </div>
+          </p>
         </div>
       </section>
 
