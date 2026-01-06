@@ -3,303 +3,286 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  Search,
+  Users,
+  Send,
+  Calendar,
+  Shield,
+  ChevronRight,
+  Menu,
+  X,
+  Phone,
+  Mail,
+  Linkedin,
+  Building2,
+  Flame,
+  Droplets,
+  Zap,
+  Home,
+  Trees,
+  Sparkles,
+  HardHat,
+  Key,
+  Target,
+  CheckCircle2,
+  ArrowRight
+} from 'lucide-react';
 
-export default function Home() {
+export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
-  const [showApplicationForm, setShowApplicationForm] = useState(false);
-  const [formStatus, setFormStatus] = useState('');
-  const [formData, setFormData] = useState({
-    businessName: '',
-    name: '',
-    phone: '',
-    email: '',
-    industry: '',
-    revenue: '',
-    goals: ''
-  });
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    setFormStatus('sending');
-
-    try {
-      const response = await fetch('/api/leads/service-inquiry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          service_type: 'Appointment Setting',
-          lead_source: 'Homepage Application'
-        }),
-      });
-
-      if (response.ok) {
-        setFormStatus('success');
-        setShowApplicationForm(false);
-        setFormData({
-          businessName: '',
-          name: '',
-          phone: '',
-          email: '',
-          industry: '',
-          revenue: '',
-          goals: ''
-        });
-        alert('Application submitted! We\'ll be in touch within 24 hours.');
-      } else {
-        throw new Error('Failed to submit');
-      }
-    } catch (error) {
-      setFormStatus('error');
-      alert('Something went wrong. Please call us at (219) 270-7863');
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  // Lucide-style SVG Icons
-  const Icons = {
-    phone: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-      </svg>
-    ),
-    target: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" />
-        <circle cx="12" cy="12" r="6" />
-        <circle cx="12" cy="12" r="2" />
-      </svg>
-    ),
-    settings: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    ),
-    send: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-      </svg>
-    ),
-    calendar: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    ),
-    shield: (
-      <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-      </svg>
-    ),
-    linkedin: (
-      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-      </svg>
-    ),
-    arrowRight: (
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-      </svg>
-    ),
-    check: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-      </svg>
-    ),
-    x: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    ),
-    menu: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    )
-  };
-
-  // Industry Icons
-  const IndustryIcon = ({ type }) => {
-    const icons = {
-      hvac: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-        </svg>
-      ),
-      plumbing: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
-        </svg>
-      ),
-      roofing: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-        </svg>
-      ),
-      electrical: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-        </svg>
-      ),
-      landscaping: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636" />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 12.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
-        </svg>
-      ),
-      cleaning: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-        </svg>
-      )
-    };
-    return icons[type] || icons.hvac;
-  };
-
-  const industries = [
-    { name: 'HVAC & Mechanical', icon: 'hvac' },
-    { name: 'Plumbing', icon: 'plumbing' },
-    { name: 'Roofing & Exteriors', icon: 'roofing' },
-    { name: 'Electrical', icon: 'electrical' },
-    { name: 'Landscaping & Lawn Care', icon: 'landscaping' },
-    { name: 'Commercial Cleaning', icon: 'cleaning' }
+  const processSteps = [
+    {
+      number: '01',
+      title: 'We Research Your Market',
+      description: 'We identify decision-makers in your territory who need your services.',
+      icon: Search
+    },
+    {
+      number: '02',
+      title: 'We Build Your List',
+      description: 'Verified contacts with direct phone numbers and email addresses.',
+      icon: Users
+    },
+    {
+      number: '03',
+      title: 'We Run Outreach',
+      description: 'Multi-touch campaigns across phone, email, and LinkedIn.',
+      icon: Send
+    },
+    {
+      number: '04',
+      title: 'You Take the Meeting',
+      description: 'Qualified appointments land directly on your calendar.',
+      icon: Calendar
+    }
   ];
 
-  const tools = ['Apollo.io', 'LinkedIn Sales Navigator', 'HubSpot', 'Calendly', 'Instantly', 'Clay'];
+  const industries = [
+    { name: 'HVAC', icon: Flame },
+    { name: 'Plumbing', icon: Droplets },
+    { name: 'Electrical', icon: Zap },
+    { name: 'Roofing', icon: Home },
+    { name: 'Landscaping', icon: Trees },
+    { name: 'Cleaning Services', icon: Sparkles },
+    { name: 'Construction', icon: HardHat },
+    { name: 'Property Management', icon: Key }
+  ];
+
+  const tools = [
+    'Apollo.io',
+    'HubSpot',
+    'LinkedIn Sales Navigator',
+    'ZoomInfo',
+    'Salesforce',
+    'Calendly'
+  ];
 
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-slate-900 border-b border-slate-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <Image src="/my-logo.png" alt="Kinect B2B" width={32} height={32} className="w-8 h-8" />
-              <span className="text-white font-bold text-lg">Kinect B2B</span>
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src="/my-logo.png"
+                alt="Kinect B2B"
+                width={40}
+                height={40}
+                className="w-8 h-8 md:w-10 md:h-10"
+              />
+              <span className="text-white font-bold text-lg md:text-xl tracking-tight">
+                Kinect B2B
+              </span>
             </Link>
 
-            {/* Desktop Nav */}
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-8">
-              <Link href="/services/appointment-setting" className="text-gray-300 hover:text-white text-sm font-medium transition">Services</Link>
-              <Link href="/plans" className="text-gray-300 hover:text-white text-sm font-medium transition">Pricing</Link>
-              <Link href="/about" className="text-gray-300 hover:text-white text-sm font-medium transition">About</Link>
-              <button
-                onClick={() => setShowApplicationForm(true)}
-                className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
+              <Link
+                href="/services/appointment-setting"
+                className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
+              >
+                Services
+              </Link>
+              <Link
+                href="/plans"
+                className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
+              >
+                Plans
+              </Link>
+              <Link
+                href="/about"
+                className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
+              >
+                About
+              </Link>
+              <Link
+                href="/plans"
+                className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
               >
                 Apply Now
-              </button>
+              </Link>
             </nav>
 
             {/* Mobile Menu Button */}
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white p-2">
-              {mobileMenuOpen ? Icons.x : Icons.menu}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden text-white p-2 -mr-2"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
-          {/* Mobile Nav */}
+          {/* Mobile Navigation */}
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-slate-800">
-              <div className="flex flex-col gap-4">
-                <Link href="/services/appointment-setting" className="text-gray-300 hover:text-white text-sm font-medium">Services</Link>
-                <Link href="/plans" className="text-gray-300 hover:text-white text-sm font-medium">Pricing</Link>
-                <Link href="/about" className="text-gray-300 hover:text-white text-sm font-medium">About</Link>
-                <button
-                  onClick={() => { setShowApplicationForm(true); setMobileMenuOpen(false); }}
-                  className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold w-full"
+              <nav className="flex flex-col gap-4">
+                <Link
+                  href="/services/appointment-setting"
+                  className="text-gray-300 hover:text-white text-base font-medium transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Services
+                </Link>
+                <Link
+                  href="/plans"
+                  className="text-gray-300 hover:text-white text-base font-medium transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Plans
+                </Link>
+                <Link
+                  href="/about"
+                  className="text-gray-300 hover:text-white text-base font-medium transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  About
+                </Link>
+                <Link
+                  href="/plans"
+                  className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-3 rounded-lg text-base font-semibold transition-colors text-center mt-2"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Apply Now
-                </button>
-              </div>
+                </Link>
+              </nav>
             </div>
           )}
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-slate-900 pt-16 pb-24 md:pt-24 md:pb-32">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-            We Book Qualified Appointments.
-            <br />
-            <span className="text-teal-400">You Close Deals.</span>
-          </h1>
+      <section className="relative bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 pt-32 pb-20 md:pt-40 md:pb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
+              We Book Qualified Appointments.
+              <br />
+              <span className="text-teal-400">You Close Deals.</span>
+            </h1>
 
-          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Boutique appointment setting for service businesses.
-            <br className="hidden sm:block" />
-            Founder-led campaigns. Performance guaranteed.
-          </p>
+            <p className="mt-6 md:mt-8 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+              Boutique B2B lead generation for service businesses.
+              <br className="hidden sm:block" />
+              Founder-led. Results-guaranteed.
+            </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button
-              onClick={() => setShowApplicationForm(true)}
-              className="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition shadow-lg shadow-teal-500/25"
-            >
-              Apply to Work With Us
-            </button>
-            <a
-              href="#how-it-works"
-              className="w-full sm:w-auto text-gray-400 hover:text-white px-6 py-4 font-medium text-lg transition flex items-center justify-center gap-2"
-            >
-              See How It Works
-              {Icons.arrowRight}
-            </a>
+            <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/plans"
+                className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-lg text-base md:text-lg font-semibold transition-all hover:shadow-lg hover:shadow-teal-500/25"
+              >
+                Apply to Work With Us
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <button
+                onClick={() => scrollToSection('how-it-works')}
+                className="inline-flex items-center justify-center gap-2 text-gray-300 hover:text-white px-8 py-4 text-base md:text-lg font-medium transition-colors"
+              >
+                See How It Works
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* Subtle gradient overlay at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
       </section>
 
       {/* How It Works */}
       <section id="how-it-works" className="py-20 md:py-28 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">How It Works</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              A proven process that delivers qualified appointments to your calendar.
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+              How It Works
+            </h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              A proven four-step process that fills your calendar with qualified appointments.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-8 md:gap-6">
-            {[
-              { icon: Icons.target, step: '1', title: 'Strategy Call', desc: 'We learn your ideal customer, market, and goals.' },
-              { icon: Icons.settings, step: '2', title: 'Campaign Build', desc: 'Custom outreach sequences, targeting, and messaging.' },
-              { icon: Icons.send, step: '3', title: 'Outreach Launch', desc: 'We contact prospects daily via email, phone, and LinkedIn.' },
-              { icon: Icons.calendar, step: '4', title: 'Appointments Booked', desc: 'Qualified meetings land directly on your calendar.' }
-            ].map((item, idx) => (
-              <div key={idx} className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 text-teal-600 mb-5">
-                  {item.icon}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {processSteps.map((step) => (
+              <div
+                key={step.number}
+                className="relative bg-slate-50 rounded-2xl p-8 hover:bg-slate-100 transition-colors group"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="text-4xl font-bold text-slate-200 group-hover:text-teal-200 transition-colors">
+                    {step.number}
+                  </span>
+                  <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center">
+                    <step.icon className="w-6 h-6 text-teal-600" />
+                  </div>
                 </div>
-                <div className="text-xs font-bold text-teal-600 tracking-wider mb-2">STEP {item.step}</div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {step.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Who We Work With */}
+      {/* Industries We Serve */}
       <section className="py-20 md:py-28 bg-slate-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Who We Work With</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              We specialize in service businesses ready to scale.
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+              Built for Service Businesses
+            </h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              We specialize in B2B lead generation for trades and service companies.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
-            {industries.map((industry, idx) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
+            {industries.map((industry) => (
               <div
-                key={idx}
-                className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:border-teal-300 hover:shadow-md transition"
+                key={industry.name}
+                className="bg-white rounded-xl p-5 md:p-6 text-center border border-gray-100 hover:border-teal-200 hover:shadow-md transition-all group"
               >
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 text-slate-600 mb-3">
-                  <IndustryIcon type={industry.icon} />
+                <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-slate-100 group-hover:bg-teal-50 flex items-center justify-center transition-colors">
+                  <industry.icon className="w-5 h-5 text-slate-600 group-hover:text-teal-600 transition-colors" />
                 </div>
-                <div className="text-slate-900 font-medium text-sm">{industry.name}</div>
+                <span className="text-slate-900 font-medium text-sm">
+                  {industry.name}
+                </span>
               </div>
             ))}
           </div>
@@ -307,44 +290,57 @@ export default function Home() {
       </section>
 
       {/* The Guarantee */}
-      <section className="py-20 md:py-28 bg-slate-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-teal-500/10 text-teal-400 mb-8">
-            {Icons.shield}
+      <section className="py-20 md:py-28 bg-slate-900 relative overflow-hidden">
+        {/* Accent border */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 via-cyan-500 to-teal-500" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="w-16 h-16 mx-auto mb-8 rounded-2xl bg-teal-500/10 flex items-center justify-center">
+              <Shield className="w-8 h-8 text-teal-400" />
+            </div>
+
+            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+              Results or You Don't Pay
+            </h2>
+
+            <p className="mt-6 text-lg md:text-xl text-gray-400 leading-relaxed">
+              We guarantee qualified appointments. If we don't deliver, you don't pay.
+              <br className="hidden md:block" />
+              Simple as that.
+            </p>
+
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/plans"
+                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-100 text-slate-900 px-6 py-3 rounded-lg text-base font-semibold transition-colors"
+              >
+                See Our Plans
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
-
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Results or You Don't Pay
-          </h2>
-
-          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 leading-relaxed">
-            We're so confident in our process that we guarantee qualified appointments within 90 days — or we work for free until you get them.
-          </p>
-
-          <p className="text-gray-500 mb-10">
-            No long-term contracts. No setup fees. Just results.
-          </p>
-
-          <Link
-            href="/plans"
-            className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-slate-900 px-6 py-3 rounded-lg font-semibold transition"
-          >
-            See Pricing
-            {Icons.arrowRight}
-          </Link>
         </div>
       </section>
 
       {/* Tools We Use */}
       <section className="py-16 md:py-20 bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-gray-500 text-sm font-medium tracking-wider uppercase mb-10">
-            Powered by industry-leading tools
-          </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-xl md:text-2xl font-semibold text-slate-900">
+              Powered By Industry-Leading Tools
+            </h2>
+            <p className="mt-2 text-sm text-gray-500">
+              Enterprise-grade tools. Boutique service.
+            </p>
+          </div>
 
-          <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-6">
-            {tools.map((tool, idx) => (
-              <div key={idx} className="text-gray-400 font-semibold text-sm md:text-base">
+          <div className="flex flex-wrap justify-center items-center gap-x-8 md:gap-x-12 gap-y-4">
+            {tools.map((tool) => (
+              <div
+                key={tool}
+                className="text-gray-400 hover:text-gray-600 font-medium text-sm md:text-base transition-colors"
+              >
                 {tool}
               </div>
             ))}
@@ -354,226 +350,140 @@ export default function Home() {
 
       {/* About the Founder */}
       <section className="py-20 md:py-28 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Photo Placeholder */}
-            <div className="flex justify-center md:justify-start">
-              <div className="w-64 h-64 md:w-80 md:h-80 bg-slate-100 rounded-2xl flex items-center justify-center">
-                <span className="text-gray-400 text-sm">Photo Coming Soon</span>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-                Founder-Led.
-                <br />
-                Hands-On.
-                <br />
-                Accountable.
-              </h2>
-
-              <blockquote className="text-gray-600 text-lg leading-relaxed mb-6">
-                "I started Kinect B2B because I saw service businesses getting burned by agencies that overpromise and underdeliver. Every campaign I take on gets my direct oversight. Your growth is my reputation."
-              </blockquote>
-
-              <div className="flex items-center gap-4">
-                <div>
-                  <div className="text-slate-900 font-semibold">Robert Cole</div>
-                  <div className="text-gray-500 text-sm">Founder, Kinect B2B</div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+              {/* Photo Placeholder */}
+              <div className="flex justify-center md:justify-start order-2 md:order-1">
+                <div className="w-48 h-48 md:w-64 md:h-64 bg-slate-100 rounded-2xl flex items-center justify-center">
+                  <span className="text-gray-400 text-sm font-medium">Photo</span>
                 </div>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-teal-600 transition"
-                >
-                  {Icons.linkedin}
-                </a>
+              </div>
+
+              {/* Content */}
+              <div className="order-1 md:order-2">
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+                  Founder-Led.
+                  <br />
+                  Not Outsourced.
+                </h2>
+
+                <div className="mt-6 space-y-4">
+                  <p className="text-gray-600 leading-relaxed">
+                    After scaling multiple service businesses, Robert built Kinect B2B to solve the #1 problem every owner faces: finding qualified leads without wasting time on tire-kickers.
+                  </p>
+                  <p className="text-gray-600 leading-relaxed">
+                    Every campaign gets direct oversight. Your growth isn't delegated to a junior rep in another country.
+                  </p>
+                </div>
+
+                <div className="mt-8 flex items-center gap-4">
+                  <div>
+                    <div className="font-semibold text-slate-900">Robert Cole</div>
+                    <div className="text-sm text-gray-500">Founder, Kinect B2B</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Banner */}
+      {/* Final CTA Banner */}
       <section className="py-20 md:py-24 bg-slate-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Fill Your Calendar?
-          </h2>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+              Ready to Fill Your Calendar?
+            </h2>
 
-          <p className="text-gray-400 text-lg mb-10 max-w-xl mx-auto">
-            We take on 3-5 new clients per quarter. Apply now to see if we're a fit.
-          </p>
+            <p className="mt-4 text-lg text-gray-400">
+              Limited availability. We only take on clients we know we can help.
+            </p>
 
-          <button
-            onClick={() => setShowApplicationForm(true)}
-            className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition shadow-lg shadow-teal-500/25"
-          >
-            Apply to Work With Us
-          </button>
+            <div className="mt-10">
+              <Link
+                href="/plans"
+                className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:shadow-lg hover:shadow-teal-500/25"
+              >
+                Apply Now
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-950 py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            {/* Logo */}
-            <div className="flex items-center gap-2">
-              <Image src="/my-logo.png" alt="Kinect B2B" width={24} height={24} className="w-6 h-6" />
-              <span className="text-white font-semibold">Kinect B2B</span>
+      <footer className="bg-slate-950 py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8 md:gap-12">
+            {/* Brand */}
+            <div className="md:col-span-2">
+              <Link href="/" className="flex items-center gap-3">
+                <Image
+                  src="/my-logo.png"
+                  alt="Kinect B2B"
+                  width={32}
+                  height={32}
+                  className="w-8 h-8"
+                />
+                <span className="text-white font-bold text-lg">Kinect B2B</span>
+              </Link>
+              <p className="mt-4 text-gray-400 text-sm max-w-xs">
+                Boutique B2B lead generation for service businesses. Founder-led campaigns that deliver results.
+              </p>
             </div>
 
             {/* Links */}
-            <nav className="flex flex-wrap justify-center gap-6 text-sm">
-              <Link href="/" className="text-gray-400 hover:text-white transition">Home</Link>
-              <Link href="/services/appointment-setting" className="text-gray-400 hover:text-white transition">Services</Link>
-              <Link href="/plans" className="text-gray-400 hover:text-white transition">Pricing</Link>
-              <Link href="/about" className="text-gray-400 hover:text-white transition">About</Link>
-              <a href="tel:2192707863" className="text-gray-400 hover:text-white transition">Contact</a>
-            </nav>
-
-            {/* Copyright */}
-            <div className="text-gray-500 text-sm">
-              © 2025 Kinect B2B
+            <div>
+              <h4 className="text-white font-semibold mb-4">Company</h4>
+              <nav className="space-y-3">
+                <Link href="/" className="block text-gray-400 hover:text-white text-sm transition-colors">
+                  Home
+                </Link>
+                <Link href="/services/appointment-setting" className="block text-gray-400 hover:text-white text-sm transition-colors">
+                  Services
+                </Link>
+                <Link href="/plans" className="block text-gray-400 hover:text-white text-sm transition-colors">
+                  Plans
+                </Link>
+                <Link href="/about" className="block text-gray-400 hover:text-white text-sm transition-colors">
+                  About
+                </Link>
+              </nav>
             </div>
+
+            {/* Contact */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Contact</h4>
+              <div className="space-y-3">
+                <a
+                  href="tel:2192707863"
+                  className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors"
+                >
+                  <Phone className="w-4 h-4" />
+                  (219) 270-7863
+                </a>
+                <a
+                  href="mailto:accounts@kinectb2b.com"
+                  className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors"
+                >
+                  <Mail className="w-4 h-4" />
+                  accounts@kinectb2b.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-500 text-sm">
+              © 2025 Kinect B2B. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
-
-      {/* Application Form Modal */}
-      {showApplicationForm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <div>
-                <h3 className="text-xl font-bold text-slate-900">Apply to Work With Us</h3>
-                <p className="text-gray-500 text-sm mt-1">Tell us about your business</p>
-              </div>
-              <button
-                onClick={() => setShowApplicationForm(false)}
-                className="text-gray-400 hover:text-gray-600 p-2 transition"
-              >
-                {Icons.x}
-              </button>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Business Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.businessName}
-                    onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
-                    placeholder="Acme HVAC"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Your Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
-                    placeholder="John Smith"
-                  />
-                </div>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Phone *</label>
-                  <input
-                    type="tel"
-                    required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
-                    placeholder="(555) 123-4567"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Email *</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
-                    placeholder="john@acmehvac.com"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Industry *</label>
-                <select
-                  required
-                  value={formData.industry}
-                  onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition bg-white"
-                >
-                  <option value="">Select your industry</option>
-                  <option value="HVAC">HVAC & Mechanical</option>
-                  <option value="Plumbing">Plumbing</option>
-                  <option value="Roofing">Roofing & Exteriors</option>
-                  <option value="Electrical">Electrical</option>
-                  <option value="Landscaping">Landscaping & Lawn Care</option>
-                  <option value="Cleaning">Commercial Cleaning</option>
-                  <option value="Other">Other Service Business</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Annual Revenue</label>
-                <select
-                  value={formData.revenue}
-                  onChange={(e) => setFormData({ ...formData, revenue: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition bg-white"
-                >
-                  <option value="">Select range</option>
-                  <option value="Under $500K">Under $500K</option>
-                  <option value="$500K - $1M">$500K - $1M</option>
-                  <option value="$1M - $3M">$1M - $3M</option>
-                  <option value="$3M - $5M">$3M - $5M</option>
-                  <option value="$5M+">$5M+</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">What are your growth goals?</label>
-                <textarea
-                  rows={3}
-                  value={formData.goals}
-                  onChange={(e) => setFormData({ ...formData, goals: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition resize-none"
-                  placeholder="Tell us about your ideal customer and what you're hoping to achieve..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={formStatus === 'sending'}
-                className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-teal-300 text-white py-4 rounded-lg font-semibold text-lg transition"
-              >
-                {formStatus === 'sending' ? 'Submitting...' : 'Submit Application'}
-              </button>
-
-              <p className="text-center text-gray-500 text-xs">
-                We'll respond within 24 hours to schedule a strategy call.
-              </p>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
