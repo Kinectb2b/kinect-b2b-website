@@ -71,9 +71,14 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-slate-800 pt-8 text-center">
-          <p className="text-slate-500 text-sm">
+          <p className="text-slate-500 text-sm mb-3">
             &copy; 2025 Kinect B2B. All rights reserved.
           </p>
+          <div className="text-sm text-slate-500">
+            <Link href="/portal/login" className="hover:text-white transition">Client Login</Link>
+            <span className="mx-2">|</span>
+            <Link href="/affiliate/login" className="hover:text-white transition">Affiliate Login</Link>
+          </div>
         </div>
       </div>
     </footer>
