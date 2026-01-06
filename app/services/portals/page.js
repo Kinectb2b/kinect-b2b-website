@@ -344,7 +344,7 @@ export default function PortalsPage() {
             onClick={() => setChatOpen(true)}
             className="w-full sm:w-auto px-6 md:px-12 py-4 md:py-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 rounded-full text-white font-black text-base md:text-2xl transition-all duration-300 shadow-2xl hover:shadow-emerald-500/50 hover:scale-105"
           >
-            Schedule a Growth Call 🚀
+            Schedule a Call
           </button>
         </div>
       </section>
@@ -503,7 +503,7 @@ export default function PortalsPage() {
               KINECT B2B
             </div>
           </div>
-          <p className="text-gray-500 text-sm md:text-base">© 2018 Kinect B2B. All rights reserved.</p>
+          <p className="text-gray-500 text-sm md:text-base">© 2025 Kinect B2B. All rights reserved.</p>
         </div>
       </footer>
 
@@ -618,7 +618,7 @@ export default function PortalsPage() {
                       disabled={!chatFormData.name || !chatFormData.business_name || !chatFormData.phone || !chatFormData.email}
                       className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:scale-105 transition duration-300 rounded-xl text-white font-black text-sm md:text-base disabled:opacity-50"
                     >
-                      Schedule My Call! 🚀
+                      Schedule My Call
                     </button>
                   </div>
                 )}
@@ -662,7 +662,7 @@ export default function PortalsPage() {
                       disabled={!chatFormData.name || !chatFormData.business_name || !chatFormData.phone || !chatFormData.email}
                       className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:scale-105 transition duration-300 rounded-xl text-white font-black text-sm md:text-base disabled:opacity-50"
                     >
-                      Get My Discount Code! 🎁
+                      Get My Discount Code
                     </button>
                   </div>
                 )}

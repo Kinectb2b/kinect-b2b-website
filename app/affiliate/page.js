@@ -263,7 +263,7 @@ export default function Affiliate() {
               KINECT B2B
             </div>
           </div>
-          <p className="text-gray-500 text-sm md:text-base">© 2018 KinectB2B Affiliates. All rights reserved.</p>
+          <p className="text-gray-500 text-sm md:text-base">© 2025 KinectB2B Affiliates. All rights reserved.</p>
         </div>
       </footer>
 

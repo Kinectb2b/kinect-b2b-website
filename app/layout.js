@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Kinect B2B",
-  description: "Faith-Driven Business Growth - Lead Generation, Appointment Setting, Website Development & Automations",
+  title: "Kinect B2B | Boutique Appointment Setting for Service Businesses",
+  description: "We fill your calendar with qualified appointments. Boutique appointment setting for HVAC, plumbing, roofing, and service businesses. Founder-led. Results-guaranteed.",
   icons: {
     icon: '/my-logo.png',
     shortcut: '/my-logo.png',

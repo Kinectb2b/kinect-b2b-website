@@ -543,7 +543,7 @@ export default function WebsitesPage() {
               KINECT B2B
             </div>
           </div>
-          <p className="text-gray-500 text-sm md:text-base">© 2018 Kinect B2B. All rights reserved.</p>
+          <p className="text-gray-500 text-sm md:text-base">© 2025 Kinect B2B. All rights reserved.</p>
         </div>
       </footer>
 

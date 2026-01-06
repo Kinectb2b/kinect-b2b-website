@@ -1,409 +1,394 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
-  // Add custom animations via inline styles
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes slideUp {
-        from {
-          transform: translateY(20px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-      @keyframes gentleBounce {
-        0%, 100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-10px);
-        }
-      }
-      .animate-slideUp {
-        animation: slideUp 0.5s ease-out;
-      }
-      .animate-gentleBounce {
-        animation: gentleBounce 2s ease-in-out infinite;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
-  const [chatOpen, setChatOpen] = useState(false);
-  const [chatExpanded, setChatExpanded] = useState(false);
-  const [chatStep, setChatStep] = useState('initial');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showGrowthCallForm, setShowGrowthCallForm] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [growthCallForm, setGrowthCallForm] = useState({
-    businessName: '',
-    name: '',
-    phone: '',
-    email: '',
-    painPoint: ''
-  });
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [showApplicationForm, setShowApplicationForm] = useState(false);
+  const [formStatus, setFormStatus] = useState('');
   const [formData, setFormData] = useState({
     businessName: '',
     name: '',
     phone: '',
     email: '',
-    city: '',
-    state: '',
     industry: '',
-    selectedService: '',
-    budget: '',
-    timeline: '',
-    painPoint: ''
+    revenue: '',
+    goals: ''
   });
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
 
-  // Auto-open chatbot preview after 10 seconds with gentle introduction
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setChatOpen(true);
-    }, 10000); // Changed from 3 to 10 seconds
-    return () => clearTimeout(timer);
-  }, []);
-
-  const services = [
-    { id: 'appointment', name: 'Appointment Setting', icon: '📅', color: 'from-blue-500 to-cyan-500' },
-    { id: 'websites', name: 'Website Building', icon: '🌐', color: 'from-purple-500 to-pink-500' },
-    { id: 'automations', name: 'Automations', icon: '⚙️', color: 'from-orange-500 to-red-500' },
-    { id: 'portals', name: 'Client Portals', icon: '👥', color: 'from-green-500 to-emerald-500' }
-  ];
-
-  const budgets = [
-    { value: 'under-1500', label: 'Under $1,500/month' },
-    { value: '1500-3500', label: '$1,500 - $3,500/month' },
-    { value: '3500-7500', label: '$3,500 - $7,500/month' },
-    { value: '7500-15000', label: '$7,500 - $15,000/month' },
-    { value: '15000-25000', label: '$15,000 - $25,000/month' },
-    { value: '30k-plus', label: '$30,000+/month' }
-  ];
-
-  const timelines = [
-    { value: 'asap', label: 'ASAP (Within 1 week)' },
-    { value: '1-month', label: 'Within 1 month' },
-    { value: '1-3-months', label: '1-3 months' },
-    { value: 'just-exploring', label: 'Just exploring' }
-  ];
-
-  const handleServiceSelect = (serviceId) => {
-    setFormData({ ...formData, selectedService: serviceId });
-    setChatStep('budget');
-  };
-
-  const handleBudgetSelect = (budget) => {
-    setFormData({ ...formData, budget: budget });
-    setChatStep('timeline');
-  };
-
-  const handleTimelineSelect = (timeline) => {
-    setFormData({ ...formData, timeline: timeline });
-    setChatStep('form');
-  };
-
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setFormStatus('sending');
 
     try {
-      const response = await fetch('/api/leads/chatbot', {
+      const response = await fetch('/api/leads/service-inquiry', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          service_type: 'Appointment Setting',
+          lead_source: 'Homepage Application'
+        }),
       });
 
       if (response.ok) {
-        setChatStep('success');
+        setFormStatus('success');
+        setShowApplicationForm(false);
+        setFormData({
+          businessName: '',
+          name: '',
+          phone: '',
+          email: '',
+          industry: '',
+          revenue: '',
+          goals: ''
+        });
+        alert('Application submitted! We\'ll be in touch within 24 hours.');
       } else {
-        alert('Something went wrong. Please try again or call us directly.');
+        throw new Error('Failed to submit');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Something went wrong. Please try again or call us directly.');
-    } finally {
-      setIsSubmitting(false);
+      setFormStatus('error');
+      alert('Something went wrong. Please call us at (219) 270-7863');
     }
   };
 
-  const testimonials = [
-    {
-      name: "Michael Torres",
-      company: "Torres HVAC Services",
-      text: "KinectB2B has helped us not only with multiple automations but they built us an amazing affiliate portal that generates leads daily!!",
-      rating: 5,
-      initials: "MT"
-    },
-    {
-      name: "Jennifer Wilson",
-      company: "Wilson Roofing Co",
-      text: "We have used Kinect for a while now and don't plan on leaving any time soon. The team is friendly and the results are actually there.",
-      rating: 5,
-      initials: "JW"
-    },
-    {
-      name: "David Martinez",
-      company: "Elite Plumbing Solutions",
-      text: "The automations alone have saved us 20+ hours a week. On top of that, we have grown our recurring work by 115% in 8 months. So I'm a happy client!",
-      rating: 5,
-      initials: "DM"
-    }
+  // Lucide-style SVG Icons
+  const Icons = {
+    phone: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+      </svg>
+    ),
+    target: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="6" />
+        <circle cx="12" cy="12" r="2" />
+      </svg>
+    ),
+    settings: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    ),
+    send: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+      </svg>
+    ),
+    calendar: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+    ),
+    shield: (
+      <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+    ),
+    linkedin: (
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+      </svg>
+    ),
+    arrowRight: (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    ),
+    check: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    ),
+    x: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    ),
+    menu: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    )
+  };
+
+  // Industry Icons
+  const IndustryIcon = ({ type }) => {
+    const icons = {
+      hvac: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+        </svg>
+      ),
+      plumbing: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+        </svg>
+      ),
+      roofing: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+        </svg>
+      ),
+      electrical: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+      ),
+      landscaping: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 12.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+        </svg>
+      ),
+      cleaning: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+        </svg>
+      )
+    };
+    return icons[type] || icons.hvac;
+  };
+
+  const industries = [
+    { name: 'HVAC & Mechanical', icon: 'hvac' },
+    { name: 'Plumbing', icon: 'plumbing' },
+    { name: 'Roofing & Exteriors', icon: 'roofing' },
+    { name: 'Electrical', icon: 'electrical' },
+    { name: 'Landscaping & Lawn Care', icon: 'landscaping' },
+    { name: 'Commercial Cleaning', icon: 'cleaning' }
   ];
-  
+
+  const tools = ['Apollo.io', 'LinkedIn Sales Navigator', 'HubSpot', 'Calendly', 'Instantly', 'Clay'];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      {/* Animated Background Blobs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-40 right-20 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="relative bg-gradient-to-r from-slate-900/80 to-blue-900/80 backdrop-blur-xl border-b border-white/10 z-[100]">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+      <header className="bg-slate-900 border-b border-slate-800">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex items-center gap-3">
-              <Image 
-                src="/my-logo.png" 
-                alt="Kinect B2B Logo" 
-                width={40} 
-                height={40}
-                className="w-8 h-8 md:w-10 md:h-10"
-              />
-              <h1 className="text-xl md:text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                Kinect B2B
-              </h1>
-            </div>
+            <Link href="/" className="flex items-center gap-2">
+              <Image src="/my-logo.png" alt="Kinect B2B" width={32} height={32} className="w-8 h-8" />
+              <span className="text-white font-bold text-lg">Kinect B2B</span>
+            </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex gap-6 items-center">
-              <a href="/" className="text-white hover:text-cyan-400 transition font-bold">Home</a>
-              <a href="/about" className="text-gray-300 hover:text-cyan-400 transition">About</a>
-              
-              {/* Services Dropdown */}
-              <div className="relative">
-                <button 
-                  onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-                  className="text-gray-300 hover:text-cyan-400 transition font-bold flex items-center gap-1 py-2 px-2"
-                >
-                  Our Services
-                  <span className="text-sm">{servicesDropdownOpen ? '▲' : '▼'}</span>
-                </button>
-                {servicesDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-slate-800/95 backdrop-blur-xl border border-cyan-500/30 rounded-xl shadow-2xl z-[200]">
-                    <a href="/plans" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-cyan-500/20 transition rounded-t-xl">Plans</a>
-                    <a href="/services/websites" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-cyan-500/20 transition">Websites</a>
-                    <a href="/services/automations" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-cyan-500/20 transition">Automations</a>
-                    <a href="/services/portals" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-cyan-500/20 transition rounded-b-xl">Portals</a>
-                  </div>
-                )}
-              </div>
-
-              <a href="/affiliate" className="text-gray-300 hover:text-cyan-400 transition">Affiliate Program</a>
-              <a href="/portal" className="text-gray-300 hover:text-cyan-400 transition">Client Login</a>
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center gap-8">
+              <Link href="/services/appointment-setting" className="text-gray-300 hover:text-white text-sm font-medium transition">Services</Link>
+              <Link href="/plans" className="text-gray-300 hover:text-white text-sm font-medium transition">Pricing</Link>
+              <Link href="/about" className="text-gray-300 hover:text-white text-sm font-medium transition">About</Link>
+              <button
+                onClick={() => setShowApplicationForm(true)}
+                className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
+              >
+                Apply Now
+              </button>
             </nav>
 
-            {/* Mobile Hamburger Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-white p-2 hover:bg-white/10 rounded-lg transition"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
+            {/* Mobile Menu Button */}
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white p-2">
+              {mobileMenuOpen ? Icons.x : Icons.menu}
             </button>
           </div>
 
-          {/* Mobile Menu */}
+          {/* Mobile Nav */}
           {mobileMenuOpen && (
-            <div className="lg:hidden mt-4 pb-4 space-y-2 animate-fadeIn">
-              <a href="/" className="block px-4 py-3 text-white hover:bg-cyan-500/20 rounded-lg transition font-bold">Home</a>
-              <a href="/about" className="block px-4 py-3 text-gray-300 hover:bg-cyan-500/20 rounded-lg transition">About</a>
-              
-              {/* Mobile Services Submenu */}
-              <div>
-                <button 
-                  onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-                  className="w-full text-left px-4 py-3 text-gray-300 hover:bg-cyan-500/20 rounded-lg transition font-bold flex items-center justify-between"
+            <div className="md:hidden py-4 border-t border-slate-800">
+              <div className="flex flex-col gap-4">
+                <Link href="/services/appointment-setting" className="text-gray-300 hover:text-white text-sm font-medium">Services</Link>
+                <Link href="/plans" className="text-gray-300 hover:text-white text-sm font-medium">Pricing</Link>
+                <Link href="/about" className="text-gray-300 hover:text-white text-sm font-medium">About</Link>
+                <button
+                  onClick={() => { setShowApplicationForm(true); setMobileMenuOpen(false); }}
+                  className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold w-full"
                 >
-                  Our Services
-                  <span className="text-sm">{servicesDropdownOpen ? '▲' : '▼'}</span>
+                  Apply Now
                 </button>
-                {servicesDropdownOpen && (
-                  <div className="ml-4 mt-2 space-y-2">
-                    <a href="/plans" className="block px-4 py-2 text-gray-300 hover:bg-cyan-500/20 rounded-lg transition text-sm">Plans</a>
-                    <a href="/services/websites" className="block px-4 py-2 text-gray-300 hover:bg-cyan-500/20 rounded-lg transition text-sm">Websites</a>
-                    <a href="/services/automations" className="block px-4 py-2 text-gray-300 hover:bg-cyan-500/20 rounded-lg transition text-sm">Automations</a>
-                    <a href="/services/portals" className="block px-4 py-2 text-gray-300 hover:bg-cyan-500/20 rounded-lg transition text-sm">Portals</a>
-                  </div>
-                )}
               </div>
-
-              <a href="/affiliate" className="block px-4 py-3 text-gray-300 hover:bg-cyan-500/20 rounded-lg transition">Affiliate Program</a>
-              <a href="/portal" className="block px-4 py-3 text-gray-300 hover:bg-cyan-500/20 rounded-lg transition">Client Login</a>
             </div>
           )}
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-16 md:py-32">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8">
-            <span className="text-white">Grow Your Business.</span>
+      <section className="bg-slate-900 pt-16 pb-24 md:pt-24 md:pb-32">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+            We Book Qualified Appointments.
             <br />
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-              We Handle The Rest.
-            </span>
+            <span className="text-teal-400">You Close Deals.</span>
           </h1>
 
-          <p className="text-lg md:text-2xl lg:text-3xl text-gray-300 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed">
-            From appointment setting to automations - we provide the tools and team to scale your business without the overhead.
+          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Boutique appointment setting for service businesses.
+            <br className="hidden sm:block" />
+            Founder-led campaigns. Performance guaranteed.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button
-              onClick={() => setShowGrowthCallForm(true)}
-              className="w-full sm:w-auto group relative px-8 md:px-12 py-4 md:py-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 rounded-full text-white font-black text-lg md:text-2xl transition-all duration-300 shadow-2xl hover:shadow-cyan-500/50 hover:scale-105"
+              onClick={() => setShowApplicationForm(true)}
+              className="w-full sm:w-auto bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition shadow-lg shadow-teal-500/25"
             >
-              <span className="relative z-10">Book a Free Growth Call 📞</span>
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 blur-xl opacity-0 group-hover:opacity-75 transition-opacity"></div>
+              Apply to Work With Us
             </button>
-
             <a
-              href="/plans"
-              className="w-full sm:w-auto px-8 md:px-12 py-4 md:py-6 border-2 border-cyan-500 hover:bg-cyan-500/10 rounded-full text-cyan-400 font-black text-lg md:text-2xl transition-all duration-300 hover:scale-105"
+              href="#how-it-works"
+              className="w-full sm:w-auto text-gray-400 hover:text-white px-6 py-4 font-medium text-lg transition flex items-center justify-center gap-2"
             >
-              View Our Plans 📊
+              See How It Works
+              {Icons.arrowRight}
             </a>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="relative py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl md:text-6xl font-black text-center mb-12 md:mb-20">
-            <span className="text-white">Our </span>
-            <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">Services</span>
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {services.map((service, index) => (
-              <a
-                key={service.id}
-                href={service.id === 'appointment' ? '/plans' : `/services/${service.id}`}
-                className="group relative overflow-hidden"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500"></div>
-                <div className={`relative h-full bg-gradient-to-br ${service.color} p-1 rounded-3xl hover:scale-105 transition-all duration-300`}>
-                  <div className="h-full bg-slate-900 rounded-3xl p-6 md:p-8 flex flex-col items-center text-center">
-                    <div className="text-5xl md:text-6xl mb-4 md:mb-6 transform group-hover:scale-110 transition-transform duration-300">
-                      {service.icon}
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-black text-white mb-3 md:mb-4">{service.name}</h3>
-                    <p className="text-sm md:text-base text-gray-400 group-hover:text-gray-300 transition">
-                      {service.id === 'appointment' && 'Fill your calendar with qualified leads'}
-                      {service.id === 'websites' && 'Modern, conversion-focused websites'}
-                      {service.id === 'automations' && 'Save time with smart workflows'}
-                      {service.id === 'portals' && 'Streamline client communication'}
-                    </p>
-                    <div className="mt-auto pt-4 md:pt-6">
-                      <span className="text-cyan-400 font-bold group-hover:underline">Learn More →</span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            ))}
+      {/* How It Works */}
+      <section id="how-it-works" className="py-20 md:py-28 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">How It Works</h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              A proven process that delivers qualified appointments to your calendar.
+            </p>
           </div>
-        </div>
-      </section>
 
-      {/* Social Proof Section */}
-      <section className="relative py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl md:text-6xl font-black text-center mb-12 md:mb-20">
-            <span className="text-white">What Our </span>
-            <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">Clients Say</span>
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="group relative"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl blur-xl opacity-0 group-hover:opacity-75 transition-opacity duration-500"></div>
-                <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 rounded-3xl p-6 md:p-8 hover:border-cyan-500/50 transition-all duration-300">
-                  <div className="flex items-center gap-4 mb-4 md:mb-6">
-                    <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center text-white font-black text-lg md:text-xl">
-                      {testimonial.initials}
-                    </div>
-                    <div>
-                      <div className="font-black text-white text-base md:text-lg">{testimonial.name}</div>
-                      <div className="text-xs md:text-sm text-gray-400">{testimonial.company}</div>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <span key={i} className="text-yellow-400 text-lg md:text-xl">⭐</span>
-                    ))}
-                  </div>
-
-                  <p className="text-sm md:text-base text-gray-300 leading-relaxed">"{testimonial.text}"</p>
+          <div className="grid md:grid-cols-4 gap-8 md:gap-6">
+            {[
+              { icon: Icons.target, step: '1', title: 'Strategy Call', desc: 'We learn your ideal customer, market, and goals.' },
+              { icon: Icons.settings, step: '2', title: 'Campaign Build', desc: 'Custom outreach sequences, targeting, and messaging.' },
+              { icon: Icons.send, step: '3', title: 'Outreach Launch', desc: 'We contact prospects daily via email, phone, and LinkedIn.' },
+              { icon: Icons.calendar, step: '4', title: 'Appointments Booked', desc: 'Qualified meetings land directly on your calendar.' }
+            ].map((item, idx) => (
+              <div key={idx} className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 text-teal-600 mb-5">
+                  {item.icon}
                 </div>
+                <div className="text-xs font-bold text-teal-600 tracking-wider mb-2">STEP {item.step}</div>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative py-16 md:py-20">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-3xl blur-2xl opacity-75 group-hover:opacity-100 transition-opacity"></div>
-            <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-cyan-500/50 rounded-3xl p-8 md:p-16 text-center">
-              <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 md:mb-6">
-                <span className="text-white">Ready to </span>
-                <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">Scale?</span>
+      {/* Who We Work With */}
+      <section className="py-20 md:py-28 bg-slate-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Who We Work With</h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              We specialize in service businesses ready to scale.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
+            {industries.map((industry, idx) => (
+              <div
+                key={idx}
+                className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:border-teal-300 hover:shadow-md transition"
+              >
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 text-slate-600 mb-3">
+                  <IndustryIcon type={industry.icon} />
+                </div>
+                <div className="text-slate-900 font-medium text-sm">{industry.name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The Guarantee */}
+      <section className="py-20 md:py-28 bg-slate-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-teal-500/10 text-teal-400 mb-8">
+            {Icons.shield}
+          </div>
+
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Results or You Don't Pay
+          </h2>
+
+          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+            We're so confident in our process that we guarantee qualified appointments within 90 days — or we work for free until you get them.
+          </p>
+
+          <p className="text-gray-500 mb-10">
+            No long-term contracts. No setup fees. Just results.
+          </p>
+
+          <Link
+            href="/plans"
+            className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-slate-900 px-6 py-3 rounded-lg font-semibold transition"
+          >
+            See Pricing
+            {Icons.arrowRight}
+          </Link>
+        </div>
+      </section>
+
+      {/* Tools We Use */}
+      <section className="py-16 md:py-20 bg-white border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-gray-500 text-sm font-medium tracking-wider uppercase mb-10">
+            Powered by industry-leading tools
+          </p>
+
+          <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-6">
+            {tools.map((tool, idx) => (
+              <div key={idx} className="text-gray-400 font-semibold text-sm md:text-base">
+                {tool}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About the Founder */}
+      <section className="py-20 md:py-28 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Photo Placeholder */}
+            <div className="flex justify-center md:justify-start">
+              <div className="w-64 h-64 md:w-80 md:h-80 bg-slate-100 rounded-2xl flex items-center justify-center">
+                <span className="text-gray-400 text-sm">Photo Coming Soon</span>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+                Founder-Led.
+                <br />
+                Hands-On.
+                <br />
+                Accountable.
               </h2>
 
-              <p className="text-lg md:text-2xl text-gray-300 mb-8 md:mb-12 max-w-3xl mx-auto">
-                Join hundreds of businesses that trust Kinect B2B to handle their growth.
-              </p>
+              <blockquote className="text-gray-600 text-lg leading-relaxed mb-6">
+                "I started Kinect B2B because I saw service businesses getting burned by agencies that overpromise and underdeliver. Every campaign I take on gets my direct oversight. Your growth is my reputation."
+              </blockquote>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button
-                  onClick={() => setShowGrowthCallForm(true)}
-                  className="w-full sm:w-auto px-8 md:px-12 py-4 md:py-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 rounded-full text-white font-black text-lg md:text-2xl transition-all duration-300 shadow-2xl hover:shadow-cyan-500/50 hover:scale-105"
-                >
-                  Get Started Today 🚀
-                </button>
-
+              <div className="flex items-center gap-4">
+                <div>
+                  <div className="text-slate-900 font-semibold">Robert Cole</div>
+                  <div className="text-gray-500 text-sm">Founder, Kinect B2B</div>
+                </div>
                 <a
-                  href="tel:219-270-7863"
-                  className="w-full sm:w-auto px-8 md:px-12 py-4 md:py-6 border-2 border-cyan-500 hover:bg-cyan-500/10 rounded-full text-cyan-400 font-black text-lg md:text-2xl transition-all duration-300 hover:scale-105"
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-teal-600 transition"
                 >
-                  Call: 219-270-7863 📞
+                  {Icons.linkedin}
                 </a>
               </div>
             </div>
@@ -411,407 +396,184 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Chatbot Window */}
-      {chatOpen && (
-        <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 animate-slideUp">
-          <div className="relative">
-            {/* Glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl blur-xl opacity-75 animate-pulse"></div>
-            
-            {/* Chat Container */}
-            <div className="relative w-[90vw] max-w-[420px] bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-blue-500/50 rounded-3xl shadow-2xl flex flex-col max-h-[80vh] md:max-h-[600px]">
-              {/* Header */}
-              <div className="flex items-center justify-between p-4 md:p-6 border-b border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-xl md:text-2xl">
-                    🤖
-                  </div>
-                  <div>
-                    <h3 className="text-base md:text-lg font-black text-white">Kinect Assistant</h3>
-                    <p className="text-xs md:text-sm text-green-400">● Online</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setChatOpen(false)}
-                  className="text-gray-400 hover:text-white hover:bg-white/10 rounded-full p-2 transition-all hover:rotate-90"
-                  title="Close chat"
-                >
-                  ✕
-                </button>
-              </div>
+      {/* CTA Banner */}
+      <section className="py-20 md:py-24 bg-slate-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready to Fill Your Calendar?
+          </h2>
 
-              {/* Chat Content - Scrollable */}
-              <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
-                {chatStep === 'initial' && (
-                  <div className="space-y-4 animate-fadeIn">
-                    <div className="bg-blue-600/20 border border-blue-500/30 rounded-2xl p-4 md:p-6">
-                      <h3 className="text-xl md:text-2xl font-black text-white mb-3 md:mb-4">
-                        👋 Welcome to Kinect B2B!
-                      </h3>
-                      <p className="text-sm md:text-base text-gray-300 mb-4">
-                        Let's find the perfect solution for your business. Which service interests you most?
-                      </p>
-                    </div>
+          <p className="text-gray-400 text-lg mb-10 max-w-xl mx-auto">
+            We take on 3-5 new clients per quarter. Apply now to see if we're a fit.
+          </p>
 
-                    <div className="space-y-3">
-                      {services.map((service) => (
-                        <button
-                          key={service.id}
-                          onClick={() => handleServiceSelect(service.id)}
-                          className="w-full bg-gradient-to-r from-slate-700 to-slate-800 hover:from-blue-600 hover:to-purple-600 border border-white/10 rounded-2xl p-4 text-left transition-all duration-300 hover:scale-105 group"
-                        >
-                          <div className="flex items-center gap-3 md:gap-4">
-                            <span className="text-2xl md:text-3xl">{service.icon}</span>
-                            <div className="flex-1">
-                              <div className="font-black text-white text-sm md:text-base group-hover:text-cyan-300">{service.name}</div>
-                              <div className="text-xs md:text-sm text-gray-400 group-hover:text-gray-300">Click to learn more</div>
-                            </div>
-                            <span className="text-cyan-400 opacity-0 group-hover:opacity-100 transition">→</span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {chatStep === 'budget' && (
-                  <div className="space-y-4 animate-fadeIn">
-                    <div className="bg-blue-600/20 border border-blue-500/30 rounded-2xl p-4 md:p-6">
-                      <h3 className="text-xl md:text-2xl font-black text-white mb-2 md:mb-3">Great choice! 🎯</h3>
-                      <p className="text-sm md:text-base text-gray-300">What's your approximate monthly budget?</p>
-                    </div>
-
-                    <div className="space-y-3">
-                      {budgets.map((budget) => (
-                        <button
-                          key={budget.value}
-                          onClick={() => handleBudgetSelect(budget.value)}
-                          className="w-full bg-gradient-to-r from-slate-700 to-slate-800 hover:from-green-600 hover:to-emerald-600 border border-white/10 rounded-2xl p-4 text-left transition-all duration-300 hover:scale-105 group"
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-white text-sm md:text-base group-hover:text-cyan-300">{budget.label}</span>
-                            <span className="text-cyan-400 opacity-0 group-hover:opacity-100 transition">→</span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-
-                    <button
-                      onClick={() => setChatStep('initial')}
-                      className="w-full py-3 text-gray-400 hover:text-white text-sm font-medium transition flex items-center justify-center gap-2"
-                    >
-                      ← Go Back
-                    </button>
-                  </div>
-                )}
-
-                {chatStep === 'timeline' && (
-                  <div className="space-y-4 animate-fadeIn">
-                    <div className="bg-blue-600/20 border border-blue-500/30 rounded-2xl p-4 md:p-6">
-                      <h3 className="text-xl md:text-2xl font-black text-white mb-2 md:mb-3">Perfect! ⏰</h3>
-                      <p className="text-sm md:text-base text-gray-300">When would you like to get started?</p>
-                    </div>
-
-                    <div className="space-y-3">
-                      {timelines.map((timeline) => (
-                        <button
-                          key={timeline.value}
-                          onClick={() => handleTimelineSelect(timeline.value)}
-                          className="w-full bg-gradient-to-r from-slate-700 to-slate-800 hover:from-purple-600 hover:to-pink-600 border border-white/10 rounded-2xl p-4 text-left transition-all duration-300 hover:scale-105 group"
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-white text-sm md:text-base group-hover:text-cyan-300">{timeline.label}</span>
-                            <span className="text-cyan-400 opacity-0 group-hover:opacity-100 transition">→</span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-
-                    <button
-                      onClick={() => setChatStep('budget')}
-                      className="w-full py-3 text-gray-400 hover:text-white text-sm font-medium transition flex items-center justify-center gap-2"
-                    >
-                      ← Go Back
-                    </button>
-                  </div>
-                )}
-
-                {chatStep === 'form' && (
-                  <div className="animate-fadeIn">
-                    <div className="bg-blue-600/20 border border-blue-500/30 rounded-2xl p-4 md:p-6 mb-4">
-                      <h3 className="text-xl md:text-2xl font-black text-white mb-2 md:mb-3">Almost there! 📝</h3>
-                      <p className="text-sm md:text-base text-gray-300">Tell us about your business</p>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-3">
-                      <input
-                        type="text"
-                        placeholder="Business Name *"
-                        required
-                        value={formData.businessName}
-                        onChange={(e) => setFormData({...formData, businessName: e.target.value})}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm md:text-base placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition"
-                      />
-
-                      <input
-                        type="text"
-                        placeholder="Your Name *"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm md:text-base placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition"
-                      />
-
-                      <input
-                        type="tel"
-                        placeholder="Phone Number *"
-                        required
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm md:text-base placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition"
-                      />
-
-                      <input
-                        type="email"
-                        placeholder="Email Address *"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm md:text-base placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition"
-                      />
-
-                      <div className="grid grid-cols-2 gap-3">
-                        <input
-                          type="text"
-                          placeholder="City"
-                          value={formData.city}
-                          onChange={(e) => setFormData({...formData, city: e.target.value})}
-                          className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm md:text-base placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition"
-                        />
-                        <input
-                          type="text"
-                          placeholder="State"
-                          value={formData.state}
-                          onChange={(e) => setFormData({...formData, state: e.target.value})}
-                          className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm md:text-base placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition"
-                        />
-                      </div>
-
-                      <textarea
-                        placeholder="What challenges are you facing? (Optional)"
-                        rows={3}
-                        value={formData.painPoint}
-                        onChange={(e) => setFormData({...formData, painPoint: e.target.value})}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm md:text-base placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition resize-none"
-                      />
-
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-600 disabled:to-gray-700 rounded-xl text-white font-black text-base md:text-lg transition-all duration-300 hover:scale-105 disabled:scale-100"
-                      >
-                        {isSubmitting ? 'Submitting...' : 'Get Started 🚀'}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setChatStep('timeline')}
-                        className="w-full py-3 text-gray-400 hover:text-white text-sm font-medium transition flex items-center justify-center gap-2"
-                      >
-                        ← Go Back
-                      </button>
-                    </form>
-                  </div>
-                )}
-
-                {chatStep === 'success' && (
-                  <div className="text-center py-6 md:py-8 animate-fadeIn">
-                    <div className="text-5xl md:text-6xl mb-4">🎉</div>
-                    <h3 className="text-xl md:text-2xl font-black text-white mb-2">Thank You!</h3>
-                    <p className="text-sm md:text-base text-gray-300 mb-4">We'll contact you within 24 hours to discuss your needs.</p>
-                    <div className="bg-green-600/20 border border-green-500/30 rounded-2xl p-4 mb-6">
-                      <p className="text-green-300 font-bold text-sm md:text-base">✅ Your information has been received</p>
-                      <p className="text-gray-300 text-xs md:text-sm mt-2">Check your email for confirmation</p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setChatStep('initial');
-                        setFormData({});
-                      }}
-                      className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full text-white font-bold text-sm md:text-base hover:scale-110 transition"
-                    >
-                      Start Over
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <button
+            onClick={() => setShowApplicationForm(true)}
+            className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition shadow-lg shadow-teal-500/25"
+          >
+            Apply to Work With Us
+          </button>
         </div>
-      )}
-
-      {/* Floating Chat Button (when closed) */}
-      {!chatOpen && (
-        <button
-          onClick={() => setChatOpen(true)}
-          className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 group animate-gentleBounce"
-        >
-          {/* Notification badge */}
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></div>
-          
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition-opacity"></div>
-          <div className="relative w-16 h-16 md:w-18 md:h-18 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-3xl md:text-4xl hover:scale-110 transition-all duration-300 shadow-2xl">
-            💬
-          </div>
-          
-          {/* Tooltip */}
-          <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-slate-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            Chat with us! 👋
-          </div>
-        </button>
-      )}
-
-      {/* Growth Call Form Modal */}
-      {showGrowthCallForm && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-3xl blur-xl opacity-75"></div>
-            <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-blue-500/50 rounded-3xl p-6 md:p-10">
-              <button
-                onClick={() => setShowGrowthCallForm(false)}
-                className="absolute top-4 right-4 md:top-6 md:right-6 text-white hover:bg-white/20 rounded-full p-2 transition"
-              >
-                ✕
-              </button>
-
-              <h3 className="text-3xl md:text-4xl font-black text-white mb-6 text-center">
-                Book Your <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Growth Call</span>
-              </h3>
-
-              <form onSubmit={async (e) => {
-                e.preventDefault();
-                try {
-                  const response = await fetch('/api/leads', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      full_name: growthCallForm.name,
-                      business_name: growthCallForm.businessName,
-                      phone: growthCallForm.phone,
-                      email: growthCallForm.email,
-                      questions: growthCallForm.painPoint,
-                      selected_plan: 'Growth Call',
-                      lead_type: 'growth_call'
-                    })
-                  });
-
-                  if (response.ok) {
-                    alert('Thank you! We will contact you within 24 hours to schedule your growth call.');
-                    setShowGrowthCallForm(false);
-                    setGrowthCallForm({ businessName: '', name: '', phone: '', email: '', painPoint: '' });
-                  } else {
-                    throw new Error('Failed to submit');
-                  }
-                } catch (error) {
-                  alert('Something went wrong. Please try again or call us at 219-270-7863.');
-                }
-              }} className="space-y-4">
-                
-                <input
-                  type="text"
-                  placeholder="Your Name *"
-                  required
-                  value={growthCallForm.name}
-                  onChange={(e) => setGrowthCallForm({...growthCallForm, name: e.target.value})}
-                  className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition text-sm md:text-base"
-                />
-
-                <input
-                  type="text"
-                  placeholder="Business Name *"
-                  required
-                  value={growthCallForm.businessName}
-                  onChange={(e) => setGrowthCallForm({...growthCallForm, businessName: e.target.value})}
-                  className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition text-sm md:text-base"
-                />
-
-                <input
-                  type="tel"
-                  placeholder="Phone Number *"
-                  required
-                  value={growthCallForm.phone}
-                  onChange={(e) => setGrowthCallForm({...growthCallForm, phone: e.target.value})}
-                  className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition text-sm md:text-base"
-                />
-
-                <input
-                  type="email"
-                  placeholder="Email Address *"
-                  required
-                  value={growthCallForm.email}
-                  onChange={(e) => setGrowthCallForm({...growthCallForm, email: e.target.value})}
-                  className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition text-sm md:text-base"
-                />
-
-                <textarea
-                  placeholder="What challenges are you facing? (Optional)"
-                  rows={4}
-                  value={growthCallForm.painPoint}
-                  onChange={(e) => setGrowthCallForm({...growthCallForm, painPoint: e.target.value})}
-                  className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition resize-none text-sm md:text-base"
-                />
-
-                <button
-                  type="submit"
-                  className="w-full py-4 md:py-5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:scale-105 transition duration-300 rounded-xl text-white font-black text-lg md:text-xl shadow-lg"
-                >
-                  Book My Call 📞
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
+      </section>
 
       {/* Footer */}
-      <footer className="relative border-t border-white/10 bg-black/50 backdrop-blur-xl py-8 md:py-12 mt-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Image 
-              src="/my-logo.png" 
-              alt="Kinect B2B Logo" 
-              width={32} 
-              height={32}
-              className="w-8 h-8"
-            />
-            <div className="text-2xl md:text-3xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              KINECT B2B
+      <footer className="bg-slate-950 py-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            {/* Logo */}
+            <div className="flex items-center gap-2">
+              <Image src="/my-logo.png" alt="Kinect B2B" width={24} height={24} className="w-6 h-6" />
+              <span className="text-white font-semibold">Kinect B2B</span>
+            </div>
+
+            {/* Links */}
+            <nav className="flex flex-wrap justify-center gap-6 text-sm">
+              <Link href="/" className="text-gray-400 hover:text-white transition">Home</Link>
+              <Link href="/services/appointment-setting" className="text-gray-400 hover:text-white transition">Services</Link>
+              <Link href="/plans" className="text-gray-400 hover:text-white transition">Pricing</Link>
+              <Link href="/about" className="text-gray-400 hover:text-white transition">About</Link>
+              <a href="tel:2192707863" className="text-gray-400 hover:text-white transition">Contact</a>
+            </nav>
+
+            {/* Copyright */}
+            <div className="text-gray-500 text-sm">
+              © 2025 Kinect B2B
             </div>
           </div>
-          <p className="text-gray-500 text-sm md:text-base">© 2018 Kinect B2B. All rights reserved.</p>
         </div>
       </footer>
 
-      <style jsx>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateX(100px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        .animate-blob { animation: blob 7s infinite; }
-        .animation-delay-2000 { animation-delay: 2s; }
-        .animation-delay-4000 { animation-delay: 4s; }
-        .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-        .animate-slideIn { animation: slideIn 0.5s ease-out; }
-      `}</style>
+      {/* Application Form Modal */}
+      {showApplicationForm && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div>
+                <h3 className="text-xl font-bold text-slate-900">Apply to Work With Us</h3>
+                <p className="text-gray-500 text-sm mt-1">Tell us about your business</p>
+              </div>
+              <button
+                onClick={() => setShowApplicationForm(false)}
+                className="text-gray-400 hover:text-gray-600 p-2 transition"
+              >
+                {Icons.x}
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleFormSubmit} className="p-6 space-y-4">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Business Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.businessName}
+                    onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                    placeholder="Acme HVAC"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Your Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                    placeholder="John Smith"
+                  />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Phone *</label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Email *</label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                    placeholder="john@acmehvac.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Industry *</label>
+                <select
+                  required
+                  value={formData.industry}
+                  onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition bg-white"
+                >
+                  <option value="">Select your industry</option>
+                  <option value="HVAC">HVAC & Mechanical</option>
+                  <option value="Plumbing">Plumbing</option>
+                  <option value="Roofing">Roofing & Exteriors</option>
+                  <option value="Electrical">Electrical</option>
+                  <option value="Landscaping">Landscaping & Lawn Care</option>
+                  <option value="Cleaning">Commercial Cleaning</option>
+                  <option value="Other">Other Service Business</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Annual Revenue</label>
+                <select
+                  value={formData.revenue}
+                  onChange={(e) => setFormData({ ...formData, revenue: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition bg-white"
+                >
+                  <option value="">Select range</option>
+                  <option value="Under $500K">Under $500K</option>
+                  <option value="$500K - $1M">$500K - $1M</option>
+                  <option value="$1M - $3M">$1M - $3M</option>
+                  <option value="$3M - $5M">$3M - $5M</option>
+                  <option value="$5M+">$5M+</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">What are your growth goals?</label>
+                <textarea
+                  rows={3}
+                  value={formData.goals}
+                  onChange={(e) => setFormData({ ...formData, goals: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition resize-none"
+                  placeholder="Tell us about your ideal customer and what you're hoping to achieve..."
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={formStatus === 'sending'}
+                className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-teal-300 text-white py-4 rounded-lg font-semibold text-lg transition"
+              >
+                {formStatus === 'sending' ? 'Submitting...' : 'Submit Application'}
+              </button>
+
+              <p className="text-center text-gray-500 text-xs">
+                We'll respond within 24 hours to schedule a strategy call.
+              </p>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

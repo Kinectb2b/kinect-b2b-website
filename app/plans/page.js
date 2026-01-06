@@ -100,26 +100,32 @@ export default function Plans() {
   const tiers = [
     {
       name: 'Starter',
-      revenue: 'Under $250K',
-      description: 'Launch your growth engine with guaranteed appointments and dedicated support',
+      priceRange: '$2,000 - $3,000',
+      priceNote: '/month',
+      appointments: '8-12 appointments/month',
+      bestFor: 'Solo operators and small teams starting to scale',
+      description: 'Launch your growth engine with guaranteed qualified appointments',
       trim: '#CD7F32',
       glowColor: 'rgba(205, 127, 50, 0.4)',
       gradientFrom: 'from-amber-600',
       gradientTo: 'to-orange-700',
       stars: 2,
       benefits: [
-        'Guaranteed Appointments',
-        'Client Facing Portal',
-        '1-2 Sales Reps',
-        'Support Email',
-        '1 Account Manager',
-        'Territory/Industry Specific'
+        'Guaranteed Qualified Appointments',
+        'Dedicated Account Manager',
+        'Client Portal Access',
+        'Weekly Performance Reports',
+        'Territory-Specific Targeting',
+        'Email Support'
       ]
     },
     {
       name: 'Growth',
-      revenue: '$250K - $1M',
-      description: 'Accelerate your pipeline with expanded outreach and strategic guidance',
+      priceRange: '$4,000 - $6,000',
+      priceNote: '/month',
+      appointments: '15-25 appointments/month',
+      bestFor: 'Growing businesses ready to scale aggressively',
+      description: 'Accelerate your pipeline with expanded outreach and strategy',
       trim: '#C0C0C0',
       glowColor: 'rgba(192, 192, 192, 0.4)',
       gradientFrom: 'from-gray-400',
@@ -127,52 +133,54 @@ export default function Plans() {
       stars: 3,
       popular: true,
       benefits: [
-        'All Starter Benefits',
-        '3-4 Sales Reps',
-        'Monthly Lead List',
-        '10% off Websites',
-        '10% off Automations',
-        'Monthly Strategy Call'
+        'Everything in Starter',
+        'Multi-Channel Outreach',
+        'Monthly Strategy Calls',
+        'Lead List Included',
+        '10% off Website & Automations',
+        'Priority Support'
       ]
     },
     {
       name: 'Scale',
-      revenue: '$1M - $5M',
-      description: 'Dominate your market with white glove service and premium support',
+      priceRange: '$7,000 - $10,000',
+      priceNote: '/month',
+      appointments: '30-50 appointments/month',
+      bestFor: 'Established companies with aggressive growth goals',
+      description: 'Dominate your market with white glove service',
       trim: '#FFD700',
       glowColor: 'rgba(255, 215, 0, 0.4)',
       gradientFrom: 'from-yellow-400',
       gradientTo: 'to-amber-600',
       stars: 4,
       benefits: [
-        'All Starter & Growth Benefits',
-        '2 Account Managers',
-        '5-6 Sales Reps',
-        '15% off Websites',
-        '15% off Automations',
-        '10% off Client Portals',
-        'Bi-weekly Strategy Calls',
-        'White Glove Service'
+        'Everything in Growth',
+        'Dedicated Team of Reps',
+        'Bi-Weekly Strategy Calls',
+        '15% off All Services',
+        'White Glove Service',
+        'Direct Founder Access'
       ]
     }
   ];
 
   const premiumTier = {
-    name: 'Premium',
-    revenue: '$5M+',
-    description: 'Enterprise-level partnership for maximum growth. Dedicated teams, priority service, and comprehensive support for industry leaders.',
+    name: 'Enterprise',
+    priceRange: 'Custom',
+    priceNote: 'pricing',
+    appointments: '50+ appointments/month',
+    bestFor: 'Large organizations with complex requirements',
+    description: 'Enterprise-level partnership for maximum growth. Custom solutions, dedicated teams, and comprehensive support.',
     trim: '#B9F2FF',
     glowColor: 'rgba(185, 242, 255, 0.5)',
     stars: 5,
     benefits: [
-      'All Starter, Growth & Scale Benefits',
-      '7+ Sales Reps',
-      '3+ Account Managers',
-      '25% off Websites',
-      '25% off Automations',
-      '25% off Client Portals',
-      'Quarterly Business Review',
-      'Monthly Sales Meeting'
+      'Everything in Scale',
+      'Custom Appointment Volume',
+      'Multiple Account Managers',
+      '25% off All Services',
+      'Quarterly Business Reviews',
+      'Custom Integrations'
     ]
   };
 
@@ -324,7 +332,7 @@ export default function Plans() {
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full blur-md opacity-75"></div>
                   <div className="relative bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 text-slate-900 text-sm font-black px-6 py-2 rounded-full flex items-center gap-2">
-                    <span>💎</span> PREMIUM PARTNER <span>💎</span>
+                    ENTERPRISE PARTNER
                   </div>
                 </div>
               </div>
@@ -332,11 +340,13 @@ export default function Plans() {
                 <div>
                   <div className="flex items-center gap-4 mb-4">
                     {renderStars(premiumTier.stars, premiumTier.trim)}
-                    <span className="text-sm font-bold px-3 py-1 rounded-full" style={{ backgroundColor: `${premiumTier.trim}20`, color: premiumTier.trim }}>{premiumTier.revenue}</span>
+                    <span className="text-sm font-bold px-3 py-1 rounded-full" style={{ backgroundColor: `${premiumTier.trim}20`, color: premiumTier.trim }}>{premiumTier.appointments}</span>
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-black text-white mb-4">{premiumTier.name}</h2>
-                  <p className="text-gray-300 text-lg mb-6">{premiumTier.description}</p>
-                  <button onClick={() => handleOpenForm(premiumTier.name)} className="px-8 py-4 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-white font-black text-lg rounded-xl hover:scale-105 transition-transform duration-300 shadow-lg shadow-cyan-500/25">Partner With Us →</button>
+                  <h2 className="text-4xl md:text-5xl font-black text-white mb-2">{premiumTier.name}</h2>
+                  <div className="text-2xl font-bold text-cyan-400 mb-2">{premiumTier.priceRange} {premiumTier.priceNote}</div>
+                  <p className="text-gray-300 text-base mb-4">{premiumTier.description}</p>
+                  <p className="text-cyan-400 text-sm mb-6">Best for: {premiumTier.bestFor}</p>
+                  <button onClick={() => handleOpenForm(premiumTier.name)} className="px-8 py-4 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-white font-black text-lg rounded-xl hover:scale-105 transition-transform duration-300 shadow-lg shadow-cyan-500/25">Contact Us</button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {premiumTier.benefits.map((benefit, i) => (
@@ -378,7 +388,7 @@ export default function Plans() {
                     <div className="relative">
                       <div className="absolute inset-0 bg-gradient-to-r from-gray-300 to-gray-500 rounded-full blur-md opacity-75"></div>
                       <span className="relative bg-gradient-to-r from-gray-200 to-gray-400 text-slate-900 text-xs font-black px-5 py-2 rounded-full flex items-center gap-1">
-                        ⭐ MOST POPULAR ⭐
+                        MOST POPULAR
                       </span>
                     </div>
                   </div>
@@ -406,17 +416,22 @@ export default function Plans() {
                     {tier.name}
                   </h3>
                   
-                  {/* Revenue Badge */}
+                  {/* Pricing */}
                   <div className="text-center mb-4">
-                    <span 
-                      className="inline-block text-sm font-bold px-4 py-2 rounded-full border"
-                      style={{ borderColor: tier.trim, color: tier.trim, backgroundColor: `${tier.trim}15` }}
+                    <div className="text-3xl md:text-4xl font-black text-white mb-1">
+                      {tier.priceRange}
+                      <span className="text-lg text-gray-400 font-normal">{tier.priceNote}</span>
+                    </div>
+                    <div
+                      className="text-sm font-bold"
+                      style={{ color: tier.trim }}
                     >
-                      {tier.revenue}
-                    </span>
+                      {tier.appointments}
+                    </div>
                   </div>
 
-                  <p className="text-gray-400 text-center mb-6">{tier.description}</p>
+                  <p className="text-gray-400 text-center text-sm mb-2">{tier.description}</p>
+                  <p className="text-cyan-400 text-center text-xs mb-6">Best for: {tier.bestFor}</p>
                   
                   {/* Benefits */}
                   <ul className="space-y-3 mb-8">
@@ -498,7 +513,7 @@ export default function Plans() {
             <Image src="/my-logo.png" alt="Kinect B2B Logo" width={32} height={32} className="w-8 h-8" />
             <div className="text-2xl md:text-3xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">KINECT B2B</div>
           </div>
-          <p className="text-gray-500 text-sm md:text-base">© 2018 Kinect B2B. All rights reserved.</p>
+          <p className="text-gray-500 text-sm md:text-base">© 2025 Kinect B2B. All rights reserved.</p>
         </div>
       </footer>
 
@@ -716,7 +731,7 @@ export default function Plans() {
                       disabled={!chatFormData.marketing_budget}
                       className={`w-full py-3 rounded-xl font-bold text-sm md:text-base transition ${chatFormData.timeline === "I'm ready to grow!" ? 'bg-purple-600 text-white' : 'bg-white/10 border border-white/20 text-white hover:bg-white/20'} disabled:opacity-50`}
                     >
-                      🚀 I'm ready to grow!
+                      I'm ready to grow
                     </button>
                     <button
                       onClick={() => { setChatFormData({ ...chatFormData, timeline: 'Within 3 months' }); showTypingThenNext('askZipCode'); }}
@@ -800,8 +815,8 @@ export default function Plans() {
                     <p className="text-white font-bold text-sm md:text-base mb-4">Excellent! Someone from our team will be in touch shortly!</p>
                     <p className="text-gray-300 text-sm">In the meantime if you have any questions please reach out to us at:</p>
                     <div className="mt-3 space-y-2 text-purple-400 text-sm">
-                      <div>📞 <a href="tel:2192707863" className="font-bold hover:text-purple-300">219-270-7863</a></div>
-                      <div>📧 <a href="mailto:accounts@kinectb2b.com" className="font-bold hover:text-purple-300">accounts@kinectb2b.com</a></div>
+                      <div><a href="tel:2192707863" className="font-bold hover:text-purple-300">(219) 270-7863</a></div>
+                      <div><a href="mailto:accounts@kinectb2b.com" className="font-bold hover:text-purple-300">accounts@kinectb2b.com</a></div>
                     </div>
                   </div>
                   <button
