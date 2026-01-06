@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 
 export default function AffiliateLogin() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function AffiliateLogin() {
 
       if (response.ok && data.success) {
         localStorage.setItem('affiliate', JSON.stringify(data.affiliate));
-        
+
         if (data.affiliate.role === 'admin') {
           router.push('/affiliate/admin');
         } else {
@@ -48,6 +49,10 @@ export default function AffiliateLogin() {
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
+          <a href="/" className="inline-flex items-center text-slate-400 hover:text-white transition mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </a>
           <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-10">
             {/* Logo */}
             <div className="flex justify-center mb-6">

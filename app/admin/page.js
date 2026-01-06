@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { ArrowLeft, Users, Handshake, BarChart3 } from 'lucide-react';
 
 export default function AdminDirectory() {
   const router = useRouter();
@@ -9,21 +10,21 @@ export default function AdminDirectory() {
     {
       name: 'Client Portal',
       description: 'Manage clients, appointments, and subscriptions',
-      icon: '👥',
+      icon: Users,
       color: 'from-blue-600 to-blue-700',
       path: '/portal/admin/login'
     },
     {
       name: 'Affiliate Portal',
       description: 'Manage affiliates, referrals, and commissions',
-      icon: '🤝',
+      icon: Handshake,
       color: 'from-purple-600 to-purple-700',
       path: '/affiliate/admin/login'
     },
     {
       name: 'Sales Portal',
       description: 'Manage sales team, leads, and pipeline',
-      icon: '📊',
+      icon: BarChart3,
       color: 'from-emerald-600 to-emerald-700',
       path: '/sales/admin/login'
     }
@@ -34,6 +35,11 @@ export default function AdminDirectory() {
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-4 md:p-6">
         <div className="max-w-5xl w-full">
+          {/* Back Link */}
+          <a href="/" className="inline-flex items-center text-slate-400 hover:text-white transition mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </a>
           {/* Header */}
           <div className="text-center mb-8 md:mb-12">
             <div className="flex justify-center mb-4">
@@ -52,8 +58,8 @@ export default function AdminDirectory() {
                 className="bg-white rounded-2xl p-6 md:p-8 hover:scale-105 transition-all duration-300 hover:shadow-2xl group text-left"
               >
                 {/* Icon */}
-                <div className="text-5xl md:text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {portal.icon}
+                <div className="w-14 h-14 md:w-16 md:h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <portal.icon className="w-7 h-7 md:w-8 md:h-8 text-slate-700" />
                 </div>
 
                 {/* Portal Name */}

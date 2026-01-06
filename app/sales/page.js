@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 
 export default function SalesLogin() {
   const router = useRouter();
@@ -16,14 +17,14 @@ export default function SalesLogin() {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-    
+
     try {
       const response = await fetch('/api/sales/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          ...formData, 
-          rememberMe 
+        body: JSON.stringify({
+          ...formData,
+          rememberMe
         }),
       });
 
@@ -37,7 +38,7 @@ export default function SalesLogin() {
           full_name: data.salesUser.full_name,
           role: data.salesUser.role
         }));
-        
+
         router.push('/sales/dashboard');
       } else {
         setError(data.error || 'Login failed');
@@ -61,6 +62,10 @@ export default function SalesLogin() {
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
+          <a href="/" className="inline-flex items-center text-slate-400 hover:text-white transition mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </a>
           <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-10">
             {/* Logo */}
             <div className="flex justify-center mb-6">
