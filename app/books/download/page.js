@@ -44,7 +44,7 @@ export default function BookDownloadPage() {
           </div>
 
           <h1 className="text-4xl font-black text-gray-900 mb-4">
-            🎉 Success! Your Book is Ready
+            Success! Your Book is Ready
           </h1>
 
           <p className="text-xl text-gray-600 mb-8">
@@ -68,7 +68,7 @@ export default function BookDownloadPage() {
             onClick={handleDownload}
             className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg mb-8"
           >
-            📥 Click Here if Download Doesn't Start
+            Click Here if Download Doesn't Start
           </button>
 
           {/* Next Steps */}

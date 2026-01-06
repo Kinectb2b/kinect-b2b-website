@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
+import { DollarSign, Rocket, Target, Zap, ArrowUp } from 'lucide-react';
 
 export default function Affiliate() {
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -31,10 +32,10 @@ export default function Affiliate() {
         <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Image 
-                src="/my-logo.png" 
-                alt="Kinect B2B Logo" 
-                width={40} 
+              <Image
+                src="/my-logo.png"
+                alt="Kinect B2B Logo"
+                width={40}
                 height={40}
                 className="w-8 h-8 md:w-10 md:h-10"
               />
@@ -42,7 +43,7 @@ export default function Affiliate() {
             </div>
             <div className="flex gap-2 md:gap-4">
               <a href="/" className="px-3 md:px-6 py-2 md:py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full text-white hover:bg-white/20 transition text-sm md:text-base">
-                ← Home
+                Home
               </a>
               <a href="/affiliate/login" className="px-3 md:px-6 py-2 md:py-3 bg-blue-600 hover:bg-blue-700 rounded-full text-white font-bold transition text-sm md:text-base">
                 Login
@@ -76,7 +77,7 @@ export default function Affiliate() {
             <a href="#signup" className="w-full sm:w-auto group relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur-xl opacity-75 group-hover:opacity-100 transition duration-500 animate-pulse"></div>
               <div className="relative px-8 md:px-12 py-4 md:py-6 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl text-white font-black text-lg md:text-2xl hover:scale-110 transition-all duration-300 text-center">
-                Start Earning Now →
+                Start Earning Now
               </div>
             </a>
 
@@ -110,7 +111,9 @@ export default function Affiliate() {
             <div className="group relative">
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-600/20 to-orange-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
               <div className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-2xl border border-yellow-500/30 p-6 md:p-10 rounded-3xl">
-                <div className="text-5xl md:text-7xl mb-4 md:mb-6">💰</div>
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-yellow-500/20 rounded-2xl flex items-center justify-center mb-4 md:mb-6">
+                  <DollarSign className="w-8 h-8 md:w-10 md:h-10 text-yellow-400" />
+                </div>
                 <h3 className="text-2xl md:text-3xl font-black text-white mb-3 md:mb-4">High Commissions</h3>
                 <p className="text-base md:text-xl text-gray-300 leading-relaxed">
                   Earn 10% of your referral's monthly payment for up to 12 months. That's up to <span className="text-green-400 font-bold">$3,600</span> per high-value referral!
@@ -121,7 +124,9 @@ export default function Affiliate() {
             <div className="group relative">
               <div className="absolute inset-0 bg-gradient-to-br from-pink-600/20 to-red-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
               <div className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-2xl border border-pink-500/30 p-6 md:p-10 rounded-3xl">
-                <div className="text-5xl md:text-7xl mb-4 md:mb-6">🚀</div>
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-pink-500/20 rounded-2xl flex items-center justify-center mb-4 md:mb-6">
+                  <Rocket className="w-8 h-8 md:w-10 md:h-10 text-pink-400" />
+                </div>
                 <h3 className="text-2xl md:text-3xl font-black text-white mb-3 md:mb-4">No Sales Experience Required</h3>
                 <p className="text-base md:text-xl text-gray-300 leading-relaxed">
                   Simply refer businesses that need more leads. We handle all the sales and onboarding!
@@ -132,10 +137,12 @@ export default function Affiliate() {
             <div className="group relative">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
               <div className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-2xl border border-purple-500/30 p-6 md:p-10 rounded-3xl">
-                <div className="text-5xl md:text-7xl mb-4 md:mb-6">🎯</div>
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-4 md:mb-6">
+                  <Target className="w-8 h-8 md:w-10 md:h-10 text-purple-400" />
+                </div>
                 <h3 className="text-2xl md:text-3xl font-black text-white mb-3 md:mb-4">Proven Results</h3>
                 <p className="text-base md:text-xl text-gray-300 leading-relaxed">
-                  KinectB2B has generated millions in revenue for clients with our guaranteed lead generation system.
+                  KinectB2B helps service businesses book more qualified appointments with our proven lead generation system.
                 </p>
               </div>
             </div>
@@ -143,7 +150,9 @@ export default function Affiliate() {
             <div className="group relative">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/20 to-blue-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
               <div className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-2xl border border-cyan-500/30 p-6 md:p-10 rounded-3xl">
-                <div className="text-5xl md:text-7xl mb-4 md:mb-6">⚡</div>
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-cyan-500/20 rounded-2xl flex items-center justify-center mb-4 md:mb-6">
+                  <Zap className="w-8 h-8 md:w-10 md:h-10 text-cyan-400" />
+                </div>
                 <h3 className="text-2xl md:text-3xl font-black text-white mb-3 md:mb-4">Quick Payouts</h3>
                 <p className="text-base md:text-xl text-gray-300 leading-relaxed">
                   Get paid within 30 days of your referral becoming a client. Fast, reliable, monthly payments.
@@ -167,7 +176,7 @@ export default function Affiliate() {
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/30 to-purple-600/30 rounded-3xl blur-2xl group-hover:blur-3xl transition duration-500"></div>
             <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border-2 border-blue-500/50 p-6 md:p-12 rounded-3xl">
-              
+
               <div className="mb-6 md:mb-8">
                 <label className="text-base md:text-xl font-bold text-white mb-3 md:mb-4 block">
                   Select a Pro Plan to see your commission:
@@ -213,7 +222,9 @@ export default function Affiliate() {
 
               {!selectedPlan && (
                 <div className="text-center py-8 md:py-12">
-                  <div className="text-5xl md:text-6xl mb-4">👆</div>
+                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-500/20 rounded-2xl flex items-center justify-center">
+                    <ArrowUp className="w-8 h-8 text-blue-400" />
+                  </div>
                   <p className="text-lg md:text-2xl text-gray-400 font-bold">Select a plan above to calculate earnings</p>
                 </div>
               )}
@@ -229,20 +240,20 @@ export default function Affiliate() {
             Ready to <span className="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">Start Earning?</span>
           </h2>
           <p className="text-lg md:text-2xl text-gray-300 mb-8 md:mb-12">
-            Join hundreds of affiliates already earning with KinectB2B
+            Join affiliates already earning with KinectB2B
           </p>
 
           <a href="/affiliate/signup" className="group relative inline-block">
             <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl blur-xl opacity-75 group-hover:opacity-100 transition duration-500 animate-pulse"></div>
             <div className="relative px-8 md:px-16 py-5 md:py-8 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl text-white font-black text-xl md:text-3xl hover:scale-110 transition-all duration-300">
-              Sign Up Now - It's Free! 🚀
+              Sign Up Now - It's Free
             </div>
           </a>
 
           <div className="mt-8 md:mt-12 text-gray-400 text-sm md:text-base">
             Already an affiliate?{' '}
             <a href="/affiliate/login" className="text-cyan-400 hover:text-cyan-300 font-bold transition">
-              Login here →
+              Login here
             </a>
           </div>
         </div>
@@ -252,10 +263,10 @@ export default function Affiliate() {
       <footer className="relative border-t border-white/10 bg-black/50 backdrop-blur-xl py-8 md:py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Image 
-              src="/my-logo.png" 
-              alt="Kinect B2B Logo" 
-              width={32} 
+            <Image
+              src="/my-logo.png"
+              alt="Kinect B2B Logo"
+              width={32}
               height={32}
               className="w-8 h-8"
             />

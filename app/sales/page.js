@@ -145,12 +145,12 @@ export default function SalesLogin() {
             <div className="mt-6 pt-6 border-t border-slate-100">
               <p className="text-slate-500 text-sm text-center mb-3">Need Help?</p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-                <a href="mailto:sales@kinectb2b.com" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1.5">
-                  <span>📧</span> sales@kinectb2b.com
+                <a href="mailto:sales@kinectb2b.com" className="text-blue-600 hover:text-blue-700 font-medium">
+                  sales@kinectb2b.com
                 </a>
                 <span className="hidden sm:inline text-slate-300">|</span>
-                <a href="tel:2192707863" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1.5">
-                  <span>📞</span> (219) 270-7863
+                <a href="tel:2192707863" className="text-blue-600 hover:text-blue-700 font-medium">
+                  (219) 270-7863
                 </a>
               </div>
             </div>
