@@ -1,18 +1,16 @@
 'use client';
+
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import {
-  Menu, X, Phone, Mail, Linkedin, ChevronDown, ChevronRight,
-  Search, Database, Send, CheckCircle, Calendar, Shield, Users,
-  Flame, Droplets, Zap, Home, Trees, Sparkles, HardHat, Key,
+  Phone, ChevronRight, Search, Database, Send, CheckCircle, Calendar,
+  Shield, Users, Flame, Droplets, Zap, Home, Trees, Sparkles, HardHat, Key,
   UserCheck, MapPin, Target
 } from 'lucide-react';
 
 export default function AppointmentSettingPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
-
   const processSteps = [
     {
       step: '01',
@@ -47,22 +45,10 @@ export default function AppointmentSettingPage() {
   ];
 
   const differentiators = [
-    {
-      icon: UserCheck,
-      title: 'Founder-led, not outsourced overseas'
-    },
-    {
-      icon: MapPin,
-      title: "Territory exclusive - we won't work with your competitors"
-    },
-    {
-      icon: Shield,
-      title: "Results guaranteed or you don't pay"
-    },
-    {
-      icon: Users,
-      title: 'Real humans, not just automated sequences'
-    }
+    { icon: UserCheck, title: 'Founder-led, not outsourced overseas' },
+    { icon: MapPin, title: "Territory exclusive - we won't work with your competitors" },
+    { icon: Shield, title: "Results guaranteed or you don't pay" },
+    { icon: Users, title: 'Real humans, not just automated sequences' }
   ];
 
   const industries = [
@@ -78,83 +64,7 @@ export default function AppointmentSettingPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <Link href="/" className="flex items-center gap-2">
-              <Image src="/my-logo.png" alt="Kinect B2B" width={40} height={40} className="w-8 h-8 md:w-10 md:h-10" />
-              <span className="text-xl md:text-2xl font-bold text-slate-900">Kinect B2B</span>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-8">
-              <Link href="/" className="text-slate-600 hover:text-slate-900 font-medium transition">Home</Link>
-              <Link href="/about" className="text-slate-600 hover:text-slate-900 font-medium transition">About</Link>
-              <div className="relative">
-                <button
-                  onClick={() => setServicesOpen(!servicesOpen)}
-                  className="flex items-center gap-1 text-slate-900 font-medium transition"
-                >
-                  Services <ChevronDown className={`w-4 h-4 transition-transform ${servicesOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {servicesOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-lg py-2">
-                    <Link href="/services/appointment-setting" className="block px-4 py-2 text-teal-600 font-medium bg-teal-50">Appointment Setting</Link>
-                    <Link href="/plans" className="block px-4 py-2 text-slate-600 hover:bg-gray-50 hover:text-slate-900">Plans & Pricing</Link>
-                    <Link href="/services/websites" className="block px-4 py-2 text-slate-600 hover:bg-gray-50 hover:text-slate-900">Websites</Link>
-                    <Link href="/services/automations" className="block px-4 py-2 text-slate-600 hover:bg-gray-50 hover:text-slate-900">Automations</Link>
-                    <Link href="/services/portals" className="block px-4 py-2 text-slate-600 hover:bg-gray-50 hover:text-slate-900">Client Portals</Link>
-                  </div>
-                )}
-              </div>
-              <Link href="/affiliate" className="text-slate-600 hover:text-slate-900 font-medium transition">Affiliates</Link>
-              <Link href="/portal" className="text-slate-600 hover:text-slate-900 font-medium transition">Client Login</Link>
-            </nav>
-
-            <div className="hidden lg:flex items-center gap-4">
-              <a href="tel:2192707863" className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium">
-                <Phone className="w-4 h-4" />
-                (219) 270-7863
-              </a>
-              <Link
-                href="/plans"
-                className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2.5 rounded-lg font-semibold transition"
-              >
-                See Pricing
-              </Link>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden p-2">
-              {mobileMenuOpen ? <X className="w-6 h-6 text-slate-900" /> : <Menu className="w-6 h-6 text-slate-900" />}
-            </button>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden py-4 border-t border-gray-100">
-              <nav className="flex flex-col gap-2">
-                <Link href="/" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">Home</Link>
-                <Link href="/about" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">About</Link>
-                <Link href="/services/appointment-setting" className="px-4 py-2 text-teal-600 font-medium bg-teal-50 rounded-lg">Appointment Setting</Link>
-                <Link href="/plans" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">Plans & Pricing</Link>
-                <Link href="/affiliate" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">Affiliates</Link>
-                <Link href="/portal" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">Client Login</Link>
-                <a href="tel:2192707863" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg flex items-center gap-2">
-                  <Phone className="w-4 h-4" /> (219) 270-7863
-                </a>
-                <Link
-                  href="/plans"
-                  className="mx-4 mt-2 bg-teal-500 hover:bg-teal-600 text-white px-5 py-2.5 rounded-lg font-semibold transition text-center"
-                >
-                  See Pricing
-                </Link>
-              </nav>
-            </div>
-          )}
-        </div>
-      </header>
+      <Header currentPage="/services/appointment-setting" />
 
       {/* Hero Section */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
@@ -304,59 +214,7 @@ export default function AppointmentSettingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-800 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <Image src="/my-logo.png" alt="Kinect B2B" width={32} height={32} className="w-8 h-8" />
-                <span className="text-xl font-bold text-white">Kinect B2B</span>
-              </div>
-              <p className="text-slate-400 mb-4 max-w-md">
-                Boutique appointment setting for service businesses. We fill your calendar with qualified appointments so you can focus on closing deals.
-              </p>
-              <div className="flex items-center gap-4">
-                <a href="https://linkedin.com/company/kinectb2b" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition">
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-4">Services</h4>
-              <ul className="space-y-2">
-                <li><Link href="/services/appointment-setting" className="text-slate-400 hover:text-white transition">Appointment Setting</Link></li>
-                <li><Link href="/plans" className="text-slate-400 hover:text-white transition">Plans & Pricing</Link></li>
-                <li><Link href="/services/websites" className="text-slate-400 hover:text-white transition">Websites</Link></li>
-                <li><Link href="/services/automations" className="text-slate-400 hover:text-white transition">Automations</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a href="tel:2192707863" className="text-slate-400 hover:text-white transition flex items-center gap-2">
-                    <Phone className="w-4 h-4" /> (219) 270-7863
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:accounts@kinectb2b.com" className="text-slate-400 hover:text-white transition flex items-center gap-2">
-                    <Mail className="w-4 h-4" /> accounts@kinectb2b.com
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center">
-            <p className="text-slate-500 text-sm">
-              © 2025 Kinect B2B. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

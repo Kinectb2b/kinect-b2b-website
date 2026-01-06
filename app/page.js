@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import {
   Search,
   Users,
@@ -10,11 +12,6 @@ import {
   Calendar,
   Shield,
   ChevronRight,
-  Menu,
-  X,
-  Phone,
-  Mail,
-  Linkedin,
   Building2,
   Flame,
   Droplets,
@@ -24,14 +21,10 @@ import {
   Sparkles,
   HardHat,
   Key,
-  Target,
-  CheckCircle2,
   ArrowRight
 } from 'lucide-react';
 
 export default function HomePage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -88,102 +81,10 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3">
-              <Image
-                src="/my-logo.png"
-                alt="Kinect B2B"
-                width={40}
-                height={40}
-                className="w-8 h-8 md:w-10 md:h-10"
-              />
-              <span className="text-white font-bold text-lg md:text-xl tracking-tight">
-                Kinect B2B
-              </span>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
-              <Link
-                href="/services/appointment-setting"
-                className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
-              >
-                Services
-              </Link>
-              <Link
-                href="/plans"
-                className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
-              >
-                Plans
-              </Link>
-              <Link
-                href="/about"
-                className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                href="/plans"
-                className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
-              >
-                Apply Now
-              </Link>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-white p-2 -mr-2"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-slate-800">
-              <nav className="flex flex-col gap-4">
-                <Link
-                  href="/services/appointment-setting"
-                  className="text-gray-300 hover:text-white text-base font-medium transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Services
-                </Link>
-                <Link
-                  href="/plans"
-                  className="text-gray-300 hover:text-white text-base font-medium transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Plans
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-gray-300 hover:text-white text-base font-medium transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  About
-                </Link>
-                <Link
-                  href="/plans"
-                  className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-3 rounded-lg text-base font-semibold transition-colors text-center mt-2"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Apply Now
-                </Link>
-              </nav>
-            </div>
-          )}
-        </div>
-      </header>
+      <Header currentPage="/" />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 pt-32 pb-20 md:pt-40 md:pb-32">
+      <section className="relative bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 pt-16 pb-20 md:pt-24 md:pb-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
@@ -414,76 +315,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-950 py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 md:gap-12">
-            {/* Brand */}
-            <div className="md:col-span-2">
-              <Link href="/" className="flex items-center gap-3">
-                <Image
-                  src="/my-logo.png"
-                  alt="Kinect B2B"
-                  width={32}
-                  height={32}
-                  className="w-8 h-8"
-                />
-                <span className="text-white font-bold text-lg">Kinect B2B</span>
-              </Link>
-              <p className="mt-4 text-gray-400 text-sm max-w-xs">
-                Boutique B2B lead generation for service businesses. Founder-led campaigns that deliver results.
-              </p>
-            </div>
-
-            {/* Links */}
-            <div>
-              <h4 className="text-white font-semibold mb-4">Company</h4>
-              <nav className="space-y-3">
-                <Link href="/" className="block text-gray-400 hover:text-white text-sm transition-colors">
-                  Home
-                </Link>
-                <Link href="/services/appointment-setting" className="block text-gray-400 hover:text-white text-sm transition-colors">
-                  Services
-                </Link>
-                <Link href="/plans" className="block text-gray-400 hover:text-white text-sm transition-colors">
-                  Plans
-                </Link>
-                <Link href="/about" className="block text-gray-400 hover:text-white text-sm transition-colors">
-                  About
-                </Link>
-              </nav>
-            </div>
-
-            {/* Contact */}
-            <div>
-              <h4 className="text-white font-semibold mb-4">Contact</h4>
-              <div className="space-y-3">
-                <a
-                  href="tel:2192707863"
-                  className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors"
-                >
-                  <Phone className="w-4 h-4" />
-                  (219) 270-7863
-                </a>
-                <a
-                  href="mailto:accounts@kinectb2b.com"
-                  className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors"
-                >
-                  <Mail className="w-4 h-4" />
-                  accounts@kinectb2b.com
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Bar */}
-          <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-sm">
-              © 2025 Kinect B2B. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

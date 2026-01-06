@@ -1,14 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import {
-  Menu,
-  X,
   Phone,
-  Mail,
-  Linkedin,
-  ChevronDown,
+  X,
   ChevronRight,
   Check,
   Lock,
@@ -18,10 +15,7 @@ import {
   Calendar,
   Bell,
   Smartphone,
-  Palette,
-  Users,
-  Settings,
-  Zap
+  Palette
 } from 'lucide-react';
 
 export default function PortalsPage() {
@@ -29,8 +23,6 @@ export default function PortalsPage() {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [referralCode, setReferralCode] = useState('');
   const [formStatus, setFormStatus] = useState('');
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     business_name: '',
     name: '',
@@ -183,92 +175,7 @@ export default function PortalsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <a href="/" className="flex items-center gap-3">
-              <Image
-                src="/my-logo.png"
-                alt="Kinect B2B Logo"
-                width={40}
-                height={40}
-                className="w-8 h-8 md:w-10 md:h-10"
-              />
-              <span className="text-xl md:text-2xl font-bold text-white">
-                Kinect B2B
-              </span>
-            </a>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-8">
-              <a href="/" className="text-slate-300 hover:text-white transition font-medium">Home</a>
-              <a href="/about" className="text-slate-300 hover:text-white transition font-medium">About</a>
-
-              <div className="relative">
-                <button
-                  onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-                  className="text-white hover:text-teal-400 transition font-medium flex items-center gap-1"
-                >
-                  Services
-                  <ChevronDown className={`w-4 h-4 transition-transform ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {servicesDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-slate-800 border border-slate-700 rounded-lg shadow-xl py-2">
-                    <a href="/services/appointment-setting" className="block px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-700 transition">Appointment Setting</a>
-                    <a href="/services/websites" className="block px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-700 transition">Website Development</a>
-                    <a href="/services/automations" className="block px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-700 transition">Automations</a>
-                    <a href="/services/portals" className="block px-4 py-2 text-teal-400 hover:bg-slate-700 transition font-medium">Client Portals</a>
-                    <div className="border-t border-slate-700 my-2"></div>
-                    <a href="/plans" className="block px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-700 transition">View All Plans</a>
-                  </div>
-                )}
-              </div>
-
-              <a href="/portal" className="text-slate-300 hover:text-white transition font-medium">Client Portal</a>
-
-              <a
-                href="tel:2192707863"
-                className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg font-medium transition"
-              >
-                <Phone className="w-4 h-4" />
-                (219) 270-7863
-              </a>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-white p-2"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden mt-4 pb-4 border-t border-slate-800 pt-4">
-              <nav className="flex flex-col gap-4">
-                <a href="/" className="text-slate-300 hover:text-white transition">Home</a>
-                <a href="/about" className="text-slate-300 hover:text-white transition">About</a>
-                <a href="/services/appointment-setting" className="text-slate-300 hover:text-white transition">Appointment Setting</a>
-                <a href="/services/websites" className="text-slate-300 hover:text-white transition">Website Development</a>
-                <a href="/services/automations" className="text-slate-300 hover:text-white transition">Automations</a>
-                <a href="/services/portals" className="text-teal-400 transition font-medium">Client Portals</a>
-                <a href="/plans" className="text-slate-300 hover:text-white transition">View All Plans</a>
-                <a href="/portal" className="text-slate-300 hover:text-white transition">Client Portal</a>
-                <a
-                  href="tel:2192707863"
-                  className="flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg font-medium w-fit"
-                >
-                  <Phone className="w-4 h-4" />
-                  (219) 270-7863
-                </a>
-              </nav>
-            </div>
-          )}
-        </div>
-      </header>
+      <Header currentPage="/services/portals" />
 
       {/* Hero Section */}
       <section className="bg-slate-900 py-16 md:py-24">
@@ -452,40 +359,7 @@ export default function PortalsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-800 py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <Image
-                src="/my-logo.png"
-                alt="Kinect B2B Logo"
-                width={32}
-                height={32}
-                className="w-8 h-8"
-              />
-              <span className="text-xl font-bold text-white">Kinect B2B</span>
-            </div>
-
-            <div className="flex items-center gap-6">
-              <a href="tel:2192707863" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
-                <Phone className="w-4 h-4" />
-                (219) 270-7863
-              </a>
-              <a href="mailto:accounts@kinectb2b.com" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
-                <Mail className="w-4 h-4" />
-                accounts@kinectb2b.com
-              </a>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center">
-            <p className="text-slate-500">
-              &copy; 2025 Kinect B2B. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Contact Form Modal */}
       {showContactForm && (
