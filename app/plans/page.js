@@ -164,11 +164,11 @@ export default function Plans() {
       {/* Pricing Cards */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative bg-white rounded-2xl p-8 ${
+                className={`relative bg-white rounded-2xl p-6 sm:p-8 ${
                   plan.popular
                     ? 'border-2 border-teal-500 shadow-xl'
                     : 'border border-gray-200 shadow-lg'
@@ -185,11 +185,11 @@ export default function Plans() {
                 <div className="text-center mb-6">
                   <h3 className="text-2xl font-bold text-slate-900 mb-2">{plan.name}</h3>
                   <p className="text-slate-500 text-sm mb-4">{plan.description}</p>
-                  <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-4xl md:text-5xl font-bold text-slate-900">{plan.price}</span>
-                    <span className="text-slate-500">{plan.period}</span>
+                  <div className="flex items-baseline justify-center gap-1 overflow-hidden">
+                    <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 whitespace-nowrap">{plan.price}</span>
+                    <span className="text-slate-500 text-sm sm:text-base">{plan.period}</span>
                   </div>
-                  <p className="text-teal-600 font-semibold mt-3">{plan.appointments}</p>
+                  <p className="text-teal-600 font-semibold mt-3 text-sm sm:text-base">{plan.appointments}</p>
                 </div>
 
                 <ul className="space-y-4 mb-8">
