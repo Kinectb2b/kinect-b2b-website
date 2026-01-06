@@ -1,113 +1,51 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import {
+  Menu, X, Phone, Mail, Linkedin, ChevronDown, ChevronRight,
+  Check, Mail as MailIcon, MessageSquare, FileText, BarChart3,
+  Calendar, DollarSign, FolderOpen, Bell, Zap, Settings, Clock
+} from 'lucide-react';
 
 export default function AutomationsPage() {
-  const [showContactForm, setShowContactForm] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [referralCode, setReferralCode] = useState('');
   const [formStatus, setFormStatus] = useState('');
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     business_name: '',
     name: '',
     phone: '',
     email: '',
-    city: '',
-    state: '',
     industry: '',
     questions: '',
-    selected_plan: '',
-  });
-
-  // Chatbot States
-  const [chatOpen, setChatOpen] = useState(false);
-  const [chatStep, setChatStep] = useState('greeting');
-  const [isTyping, setIsTyping] = useState(false);
-  const [chatFormData, setChatFormData] = useState({
-    name: '',
-    business_name: '',
-    phone: '',
-    email: '',
   });
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const refCode = params.get('ref');
-    
     if (refCode) {
       localStorage.setItem('referral_code', refCode);
-      localStorage.setItem('referral_code_date', Date.now().toString());
       setReferralCode(refCode);
     } else {
       const storedCode = localStorage.getItem('referral_code');
-      const storedDate = localStorage.getItem('referral_code_date');
-      
-      if (storedCode && storedDate) {
-        const daysSince = (Date.now() - parseInt(storedDate)) / (1000 * 60 * 60 * 24);
-        if (daysSince < 30) {
-          setReferralCode(storedCode);
-        } else {
-          localStorage.removeItem('referral_code');
-          localStorage.removeItem('referral_code_date');
-        }
-      }
+      if (storedCode) setReferralCode(storedCode);
     }
   }, []);
 
-  // Auto-open chatbot after 3 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setChatOpen(true);
-      setIsTyping(true);
-      setTimeout(() => {
-        setIsTyping(false);
-        setChatStep('greeting');
-      }, 2000);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Handle chatbot form submission (for call scheduling)
-  const handleChatCallSubmit = async () => {
-    try {
-      const response = await fetch('/api/leads/service-inquiry', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: chatFormData.name,
-          business_name: chatFormData.business_name,
-          phone: chatFormData.phone,
-          email: chatFormData.email,
-          service_type: 'Automations',
-          lead_source: 'Chatbot - Ryan - Call Request',
-          referral_code: referralCode
-        }),
-      });
-
-      if (response.ok) {
-        setChatStep('callSuccess');
-      } else {
-        throw new Error('Failed to submit');
-      }
-    } catch (error) {
-      console.error('Error submitting lead:', error);
-      alert('Something went wrong. Please try again or call us at (219) 270-7863');
-    }
-  };
-
-  // Typing animation helper
-  const showTypingThenNext = (nextStep, delay = 2000) => {
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      setChatStep(nextStep);
-    }, delay);
-  };
+  const automationTypes = [
+    { icon: MailIcon, name: 'Email Sequences', desc: 'Automated follow-ups and nurture campaigns' },
+    { icon: MessageSquare, name: 'SMS Automation', desc: 'Text message triggers and responses' },
+    { icon: FileText, name: 'Form Processing', desc: 'Automatic lead capture and routing' },
+    { icon: BarChart3, name: 'CRM Integration', desc: 'Sync data across platforms automatically' },
+    { icon: Calendar, name: 'Appointment Booking', desc: 'Automated scheduling and reminders' },
+    { icon: DollarSign, name: 'Payment Processing', desc: 'Invoice generation and payment tracking' },
+    { icon: FolderOpen, name: 'Document Generation', desc: 'Auto-create proposals and contracts' },
+    { icon: Bell, name: 'Notifications', desc: 'Real-time alerts for your team' },
+  ];
 
   const packages = [
     {
@@ -124,10 +62,9 @@ export default function AutomationsPage() {
       ],
       examples: 'Lead notification, welcome email sequence, form to CRM',
       popular: false,
-      color: 'from-red-500 to-orange-500',
     },
     {
-      name: 'Professional Automation Pack',
+      name: 'Professional Automation',
       price: 1500,
       description: 'Best for growing businesses',
       features: [
@@ -140,250 +77,160 @@ export default function AutomationsPage() {
       ],
       examples: 'Lead nurturing, appointment reminders, follow-up sequences',
       popular: true,
-      color: 'from-orange-500 to-red-500',
     },
     {
-      name: 'Enterprise Automation Suite',
+      name: 'Enterprise Automation',
       price: 3500,
       description: 'Complete business process automation',
       features: [
         'Unlimited workflows',
         'Full business process automation',
-        'Multi-platform integrations (unlimited)',
+        'Multi-platform integrations',
         'Custom API connections',
         'Dashboard & reporting',
         '90-day support + monthly optimization',
       ],
       examples: 'Complete sales funnel, client onboarding, internal workflows',
       popular: false,
-      color: 'from-red-600 to-orange-600',
     },
   ];
 
   const monthlyPlans = [
-    {
-      name: 'Bronze',
-      price: 250,
-      workflows: 'Up to 5 workflows',
-      features: ['Monthly updates', 'Email support', 'Basic optimizations'],
-      color: 'from-red-500 to-orange-500',
-    },
-    {
-      name: 'Silver',
-      price: 500,
-      workflows: 'Up to 15 workflows',
-      features: ['Bi-weekly optimization', 'Priority support', 'Performance reporting'],
-      color: 'from-orange-500 to-red-500',
-    },
-    {
-      name: 'Gold',
-      price: 1000,
-      workflows: 'Unlimited workflows',
-      features: ['Weekly optimization', 'Dedicated support', 'Advanced analytics', 'Custom integrations'],
-      color: 'from-red-600 to-orange-600',
-    },
+    { name: 'Bronze', price: 250, workflows: 'Up to 5 workflows', features: ['Monthly updates', 'Email support', 'Basic optimizations'] },
+    { name: 'Silver', price: 500, workflows: 'Up to 15 workflows', features: ['Bi-weekly optimization', 'Priority support', 'Performance reporting'] },
+    { name: 'Gold', price: 1000, workflows: 'Unlimited workflows', features: ['Weekly optimization', 'Dedicated support', 'Advanced analytics', 'Custom integrations'] },
   ];
 
-  const automationTypes = [
-    { icon: '📧', name: 'Email Sequences', desc: 'Automated follow-ups and nurture campaigns' },
-    { icon: '📱', name: 'SMS Automation', desc: 'Text message triggers and responses' },
-    { icon: '📝', name: 'Form Processing', desc: 'Automatic lead capture and routing' },
-    { icon: '📊', name: 'CRM Integration', desc: 'Sync data across platforms automatically' },
-    { icon: '📅', name: 'Appointment Booking', desc: 'Automated scheduling and reminders' },
-    { icon: '💰', name: 'Payment Processing', desc: 'Invoice generation and payment tracking' },
-    { icon: '📂', name: 'Document Generation', desc: 'Auto-create proposals and contracts' },
-    { icon: '🔔', name: 'Notifications', desc: 'Real-time alerts for your team' },
-  ];
-
-  const handleLearnMore = (pkg) => {
+  const handleOpenForm = (pkg = null) => {
     setSelectedPackage(pkg);
-    setFormData({ ...formData, selected_plan: pkg.name });
-    setShowContactForm(true);
+    setShowForm(true);
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormStatus('sending');
-    
     try {
       const response = await fetch('/api/leads/service-inquiry', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          selected_plan: selectedPackage?.name || '',
           service_type: 'Automations',
           referral_code: referralCode
         }),
       });
-
       if (response.ok) {
         setFormStatus('success');
-        alert('Thank you! We will contact you shortly to discuss your automation needs.');
-        setShowContactForm(false);
-        setFormData({
-          business_name: '',
-          name: '',
-          phone: '',
-          email: '',
-          city: '',
-          state: '',
-          industry: '',
-          questions: '',
-          selected_plan: '',
-        });
+        setShowForm(false);
+        setFormData({ business_name: '', name: '', phone: '', email: '', industry: '', questions: '' });
+        alert('Thank you! We will contact you shortly.');
       } else {
-        setFormStatus('error');
-        alert('Something went wrong. Please try again or call us at (219) 270-7863');
+        throw new Error('Failed');
       }
     } catch (error) {
-      console.error('Error:', error);
       setFormStatus('error');
-      alert('Something went wrong. Please try again or call us at (219) 270-7863');
+      alert('Something went wrong. Please call us at (219) 270-7863');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-950 to-slate-900">
-      {/* Background Blobs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-40 right-20 w-96 h-96 bg-orange-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 w-96 h-96 bg-red-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="relative bg-gradient-to-r from-slate-900/80 to-red-900/80 backdrop-blur-xl border-b border-white/10 z-[100]">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Image 
-                src="/my-logo.png" 
-                alt="Kinect B2B Logo" 
-                width={40} 
-                height={40}
-                className="w-8 h-8 md:w-10 md:h-10"
-              />
-              <h1 className="text-xl md:text-3xl font-black bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
-                Kinect B2B
-              </h1>
-            </div>
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            <Link href="/" className="flex items-center gap-2">
+              <Image src="/my-logo.png" alt="Kinect B2B" width={40} height={40} className="w-8 h-8 md:w-10 md:h-10" />
+              <span className="text-xl md:text-2xl font-bold text-slate-900">Kinect B2B</span>
+            </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex gap-6 items-center">
-              <a href="/" className="text-gray-300 hover:text-orange-400 transition">Home</a>
-              <a href="/about" className="text-gray-300 hover:text-orange-400 transition">About</a>
-              
+            <nav className="hidden lg:flex items-center gap-8">
+              <Link href="/" className="text-slate-600 hover:text-slate-900 font-medium transition">Home</Link>
+              <Link href="/about" className="text-slate-600 hover:text-slate-900 font-medium transition">About</Link>
               <div className="relative">
-                <button 
-                  onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-                  className="text-white hover:text-orange-400 transition font-bold flex items-center gap-1 py-2 px-2"
-                >
-                  Our Services
-                  <span className="text-sm">{servicesDropdownOpen ? '▲' : '▼'}</span>
+                <button onClick={() => setServicesOpen(!servicesOpen)} className="flex items-center gap-1 text-slate-900 font-medium transition">
+                  Services <ChevronDown className={`w-4 h-4 transition-transform ${servicesOpen ? 'rotate-180' : ''}`} />
                 </button>
-                {servicesDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-slate-800/95 backdrop-blur-xl border border-orange-500/30 rounded-xl shadow-2xl z-[200]">
-                    <a href="/plans" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-orange-500/20 transition rounded-t-xl">Plans</a>
-                    <a href="/services/websites" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-orange-500/20 transition">Websites</a>
-                    <a href="/services/automations" className="block px-4 py-3 text-white hover:text-orange-400 hover:bg-orange-500/20 transition font-bold">Automations</a>
-                    <a href="/services/portals" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-orange-500/20 transition rounded-b-xl">Portals</a>
+                {servicesOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-lg py-2">
+                    <Link href="/services/appointment-setting" className="block px-4 py-2 text-slate-600 hover:bg-gray-50">Appointment Setting</Link>
+                    <Link href="/plans" className="block px-4 py-2 text-slate-600 hover:bg-gray-50">Plans & Pricing</Link>
+                    <Link href="/services/websites" className="block px-4 py-2 text-slate-600 hover:bg-gray-50">Websites</Link>
+                    <Link href="/services/automations" className="block px-4 py-2 text-teal-600 font-medium bg-teal-50">Automations</Link>
+                    <Link href="/services/portals" className="block px-4 py-2 text-slate-600 hover:bg-gray-50">Client Portals</Link>
                   </div>
                 )}
               </div>
-
-              <a href="/affiliate" className="text-gray-300 hover:text-orange-400 transition">Affiliate Program</a>
-              <a href="/portal" className="text-gray-300 hover:text-orange-400 transition">Client Login</a>
+              <Link href="/affiliate" className="text-slate-600 hover:text-slate-900 font-medium transition">Affiliates</Link>
+              <Link href="/portal" className="text-slate-600 hover:text-slate-900 font-medium transition">Client Login</Link>
             </nav>
 
-            {/* Mobile Hamburger */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-white p-2 hover:bg-white/10 rounded-lg transition"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
+            <div className="hidden lg:flex items-center gap-4">
+              <a href="tel:2192707863" className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium">
+                <Phone className="w-4 h-4" /> (219) 270-7863
+              </a>
+              <button onClick={() => handleOpenForm()} className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2.5 rounded-lg font-semibold transition">
+                Get Started
+              </button>
+            </div>
+
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden p-2">
+              {mobileMenuOpen ? <X className="w-6 h-6 text-slate-900" /> : <Menu className="w-6 h-6 text-slate-900" />}
             </button>
           </div>
 
-          {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="lg:hidden mt-4 pb-4 space-y-2 animate-fadeIn">
-              <a href="/" className="block px-4 py-3 text-gray-300 hover:bg-orange-500/20 rounded-lg transition">Home</a>
-              <a href="/about" className="block px-4 py-3 text-gray-300 hover:bg-orange-500/20 rounded-lg transition">About</a>
-              
-              <div>
-                <button 
-                  onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-                  className="w-full text-left px-4 py-3 text-white hover:bg-orange-500/20 rounded-lg transition font-bold flex items-center justify-between"
-                >
-                  Our Services
-                  <span className="text-sm">{servicesDropdownOpen ? '▲' : '▼'}</span>
+            <div className="lg:hidden py-4 border-t border-gray-100">
+              <nav className="flex flex-col gap-2">
+                <Link href="/" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">Home</Link>
+                <Link href="/about" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">About</Link>
+                <Link href="/services/appointment-setting" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">Appointment Setting</Link>
+                <Link href="/plans" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">Plans & Pricing</Link>
+                <Link href="/services/automations" className="px-4 py-2 text-teal-600 font-medium bg-teal-50 rounded-lg">Automations</Link>
+                <Link href="/services/portals" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg">Client Portals</Link>
+                <a href="tel:2192707863" className="px-4 py-2 text-slate-600 hover:bg-gray-50 rounded-lg flex items-center gap-2">
+                  <Phone className="w-4 h-4" /> (219) 270-7863
+                </a>
+                <button onClick={() => { setMobileMenuOpen(false); handleOpenForm(); }} className="mx-4 mt-2 bg-teal-500 text-white px-5 py-2.5 rounded-lg font-semibold">
+                  Get Started
                 </button>
-                {servicesDropdownOpen && (
-                  <div className="ml-4 mt-2 space-y-2">
-                    <a href="/plans" className="block px-4 py-2 text-gray-300 hover:bg-orange-500/20 rounded-lg transition text-sm">Plans</a>
-                    <a href="/services/websites" className="block px-4 py-2 text-gray-300 hover:bg-orange-500/20 rounded-lg transition text-sm">Websites</a>
-                    <a href="/services/automations" className="block px-4 py-2 text-white hover:bg-orange-500/20 rounded-lg transition text-sm font-bold">Automations</a>
-                    <a href="/services/portals" className="block px-4 py-2 text-gray-300 hover:bg-orange-500/20 rounded-lg transition text-sm">Portals</a>
-                  </div>
-                )}
-              </div>
-
-              <a href="/affiliate" className="block px-4 py-3 text-gray-300 hover:bg-orange-500/20 rounded-lg transition">Affiliate Program</a>
-              <a href="/portal" className="block px-4 py-3 text-gray-300 hover:bg-orange-500/20 rounded-lg transition">Client Login</a>
+              </nav>
             </div>
           )}
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative py-16 md:py-32">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-7xl lg:text-8xl font-black mb-6 md:mb-8">
-            <span className="text-white">Automate Your Business.</span>
-            <br />
-            <span className="bg-gradient-to-r from-orange-400 via-red-500 to-orange-600 bg-clip-text text-transparent">
-              Work Smarter, Not Harder.
-            </span>
+      {/* Hero */}
+      <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6">
+            Automate Your Business. Work Smarter.
           </h1>
-
-          <p className="text-lg md:text-2xl lg:text-3xl text-gray-300 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-slate-600 mb-8">
             Save time, reduce errors, and scale faster with custom automation workflows designed for your business.
           </p>
-
-          <button
-            onClick={() => setChatOpen(true)}
-            className="w-full sm:w-auto px-6 md:px-12 py-4 md:py-6 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 rounded-full text-white font-black text-base md:text-2xl transition-all duration-300 shadow-2xl hover:shadow-orange-500/50 hover:scale-105"
-          >
-            Schedule a Growth Call 🚀
+          <button onClick={() => handleOpenForm()} className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition">
+            Get Started <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       </section>
 
-      {/* Automation Types Grid */}
-      <section className="relative py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-center mb-12 md:mb-20">
-            <span className="text-white">What We </span>
-            <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Automate</span>
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      {/* What We Automate */}
+      <section className="py-16 md:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">What We Automate</h2>
+            <p className="text-lg text-slate-600">Streamline your operations with custom automation solutions.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {automationTypes.map((type, idx) => (
-              <div key={idx} className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-orange-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 rounded-3xl p-6 md:p-8 hover:border-orange-500/50 transition-all duration-300 text-center">
-                  <div className="text-5xl md:text-6xl mb-4 md:mb-6">{type.icon}</div>
-                  <h3 className="text-lg md:text-xl font-black text-white mb-2 md:mb-3">{type.name}</h3>
-                  <p className="text-sm md:text-base text-gray-400">{type.desc}</p>
+              <div key={idx} className="bg-white rounded-xl p-6 border border-gray-200 text-center hover:border-teal-300 hover:shadow-md transition">
+                <div className="w-12 h-12 bg-teal-50 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <type.icon className="w-6 h-6 text-teal-600" />
                 </div>
+                <h3 className="font-semibold text-slate-900 mb-1">{type.name}</h3>
+                <p className="text-sm text-slate-500">{type.desc}</p>
               </div>
             ))}
           </div>
@@ -391,102 +238,73 @@ export default function AutomationsPage() {
       </section>
 
       {/* One-Time Packages */}
-      <section className="relative py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-center mb-12 md:mb-20">
-            <span className="text-white">One-Time </span>
-            <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Build Packages</span>
-          </h2>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">One-Time Build Packages</h2>
+            <p className="text-lg text-slate-600">Get your automations built and deployed.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
             {packages.map((pkg, idx) => (
-              <div key={idx} className="group relative">
+              <div key={idx} className={`relative bg-white rounded-2xl p-8 ${pkg.popular ? 'border-2 border-teal-500 shadow-xl' : 'border border-gray-200 shadow-lg'}`}>
                 {pkg.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 md:px-6 py-1 md:py-2 rounded-full text-xs md:text-sm font-black">
-                      MOST POPULAR
-                    </span>
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <span className="bg-teal-500 text-white px-4 py-1 rounded-full text-sm font-semibold">Most Popular</span>
                   </div>
                 )}
-
-                <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 rounded-3xl"></div>
-                
-                <div className={`relative bg-gradient-to-br ${pkg.color} p-1 rounded-3xl h-full`}>
-                  <div className="bg-slate-900 rounded-3xl p-6 md:p-8 h-full flex flex-col">
-                    <div className="text-center mb-6 md:mb-8">
-                      <h3 className="text-2xl md:text-3xl font-black text-white mb-2 md:mb-3">{pkg.name}</h3>
-                      <p className="text-gray-400 text-sm md:text-base mb-4 md:mb-6">{pkg.description}</p>
-                      <p className="text-sm md:text-base font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-2">STARTING AT</p>
-                      <div className="text-4xl md:text-5xl font-black text-white">
-                        ${pkg.price.toLocaleString()}<span className="text-base md:text-lg text-gray-400">/one-time</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3 md:space-y-4 mb-6 md:mb-8 flex-1">
-                      {pkg.features.map((feature, fidx) => (
-                        <div key={fidx} className="flex items-center gap-3 text-gray-300">
-                          <span className="text-orange-400 text-lg md:text-xl">✓</span>
-                          <span className="text-sm md:text-base">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="bg-red-950/50 border border-red-500/20 rounded-xl p-3 md:p-4 mb-6 md:mb-8">
-                      <p className="text-orange-400 font-bold text-xs md:text-sm mb-2">Example Use Cases:</p>
-                      <p className="text-gray-300 text-xs md:text-sm">{pkg.examples}</p>
-                    </div>
-
-                    <button
-                      onClick={() => handleLearnMore(pkg)}
-                      className="w-full py-3 md:py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 rounded-xl text-white font-black text-base md:text-lg transition-all duration-300 hover:scale-105"
-                    >
-                      Learn More
-                    </button>
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">{pkg.name}</h3>
+                  <p className="text-slate-500 text-sm mb-4">{pkg.description}</p>
+                  <div className="flex items-baseline justify-center gap-1">
+                    <span className="text-sm text-slate-500">Starting at</span>
                   </div>
+                  <div className="text-4xl font-bold text-slate-900">${pkg.price.toLocaleString()}<span className="text-lg text-slate-500">/one-time</span></div>
                 </div>
+                <ul className="space-y-3 mb-6">
+                  {pkg.features.map((feature, fidx) => (
+                    <li key={fidx} className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-slate-600">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="bg-gray-50 rounded-lg p-3 mb-6">
+                  <p className="text-xs text-slate-500 font-medium mb-1">Example Use Cases:</p>
+                  <p className="text-sm text-slate-600">{pkg.examples}</p>
+                </div>
+                <button onClick={() => handleOpenForm(pkg)} className={`w-full py-3 rounded-xl font-semibold transition ${pkg.popular ? 'bg-teal-500 hover:bg-teal-600 text-white' : 'bg-slate-900 hover:bg-slate-800 text-white'}`}>
+                  Learn More
+                </button>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Monthly Maintenance Plans */}
-      <section className="relative py-12 md:py-20 bg-gradient-to-r from-red-950/50 to-orange-950/50 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-center mb-6 md:mb-8">
-            <span className="text-white">Ongoing </span>
-            <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Maintenance Plans</span>
-          </h2>
-          <p className="text-center text-gray-300 text-base md:text-xl mb-12 md:mb-16 max-w-3xl mx-auto">
-            Keep your automations running smoothly with monthly updates, optimization, and support.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+      {/* Monthly Maintenance */}
+      <section className="py-16 md:py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Ongoing Maintenance Plans</h2>
+            <p className="text-lg text-slate-600">Keep your automations running smoothly with monthly updates and support.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
             {monthlyPlans.map((plan, idx) => (
-              <div key={idx} className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 rounded-3xl"></div>
-                
-                <div className={`relative bg-gradient-to-br ${plan.color} p-1 rounded-3xl`}>
-                  <div className="bg-slate-900 rounded-3xl p-6 md:p-8">
-                    <div className="text-center mb-6 md:mb-8">
-                      <h3 className="text-2xl md:text-3xl font-black text-white mb-2 md:mb-3">{plan.name}</h3>
-                      <p className="text-sm md:text-base font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-2">STARTING AT</p>
-                      <div className="text-3xl md:text-4xl font-black text-white">
-                        ${plan.price}<span className="text-base md:text-lg text-gray-400">/mo</span>
-                      </div>
-                      <p className="text-orange-400 font-bold mt-2 md:mt-3 text-sm md:text-base">{plan.workflows}</p>
-                    </div>
-
-                    <div className="space-y-3 md:space-y-4">
-                      {plan.features.map((feature, fidx) => (
-                        <div key={fidx} className="flex items-center gap-3 text-gray-300">
-                          <span className="text-orange-400 text-lg md:text-xl">✓</span>
-                          <span className="text-sm md:text-base">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+              <div key={idx} className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                <div className="text-center mb-4">
+                  <h3 className="text-xl font-bold text-slate-900 mb-1">{plan.name}</h3>
+                  <p className="text-sm text-slate-500">Starting at</p>
+                  <div className="text-3xl font-bold text-slate-900">${plan.price}<span className="text-base text-slate-500">/mo</span></div>
+                  <p className="text-teal-600 font-medium text-sm mt-2">{plan.workflows}</p>
                 </div>
+                <ul className="space-y-2">
+                  {plan.features.map((feature, fidx) => (
+                    <li key={fidx} className="flex items-center gap-2 text-sm text-slate-600">
+                      <Check className="w-4 h-4 text-teal-500" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -494,353 +312,102 @@ export default function AutomationsPage() {
       </section>
 
       {/* How It Works */}
-      <section className="relative py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-center mb-12 md:mb-20">
-            <span className="text-white">How It </span>
-            <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Works</span>
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">How It Works</h2>
+          </div>
+          <div className="grid md:grid-cols-4 gap-6">
             {[
-              { step: '1', title: 'Discovery Call', desc: 'We learn about your workflows and pain points' },
-              { step: '2', title: 'Strategy Session', desc: 'We identify automation opportunities' },
-              { step: '3', title: 'Build & Test', desc: 'We create and thoroughly test your automations' },
-              { step: '4', title: 'Launch & Support', desc: 'We deploy and provide ongoing optimization' },
+              { step: '1', title: 'Discovery Call', desc: 'We learn about your workflows and pain points', icon: Phone },
+              { step: '2', title: 'Strategy Session', desc: 'We identify automation opportunities', icon: Settings },
+              { step: '3', title: 'Build & Test', desc: 'We create and thoroughly test your automations', icon: Zap },
+              { step: '4', title: 'Launch & Support', desc: 'We deploy and provide ongoing optimization', icon: Clock },
             ].map((item, idx) => (
-              <div key={idx} className="group relative text-center">
-                <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-orange-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition duration-300"></div>
-                
-                <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-red-500/20 p-6 md:p-8 rounded-2xl hover:border-red-500/50 transition duration-300">
-                  <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-red-600 to-orange-600 rounded-full flex items-center justify-center text-white text-xl md:text-2xl font-black mx-auto mb-4">
-                    {item.step}
-                  </div>
-                  <h3 className="text-lg md:text-xl font-bold text-white mb-2">{item.title}</h3>
-                  <p className="text-gray-400 text-sm md:text-base">{item.desc}</p>
+              <div key={idx} className="bg-white rounded-xl p-6 border border-gray-200 text-center">
+                <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">
+                  {item.step}
                 </div>
+                <h3 className="font-semibold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-sm text-slate-500">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative py-12 md:py-20">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-orange-600/20 rounded-3xl blur-2xl"></div>
-            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-2xl border border-red-500/30 p-6 md:p-12 rounded-3xl text-center">
-              <h2 className="text-3xl md:text-5xl font-black text-white mb-4 md:mb-6">
-                Ready to <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Automate</span> Your Business?
-              </h2>
-              <p className="text-base md:text-xl text-gray-300 mb-6 md:mb-8">
-                Stop wasting time on repetitive tasks. Let's build custom automations that work for you 24/7.
-              </p>
-              <button
-                onClick={() => setChatOpen(true)}
-                className="group relative inline-block"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur-xl opacity-75 group-hover:opacity-100 transition duration-500 animate-pulse"></div>
-                <div className="relative px-8 md:px-12 py-4 md:py-6 bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl text-white font-black text-lg md:text-2xl hover:scale-110 transition-all duration-300">
-                  Talk to Ryan (Our AI) →
-                </div>
-              </button>
-            </div>
-          </div>
+      {/* CTA */}
+      <section className="py-16 md:py-20 bg-slate-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Automate Your Business?</h2>
+          <p className="text-xl text-slate-300 mb-8">Stop wasting time on repetitive tasks. Let's build custom automations that work for you 24/7.</p>
+          <button onClick={() => handleOpenForm()} className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition">
+            Get Started <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="relative border-t border-white/10 bg-black/50 backdrop-blur-xl py-8 md:py-12 mt-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Image 
-              src="/my-logo.png" 
-              alt="Kinect B2B Logo" 
-              width={32} 
-              height={32}
-              className="w-8 h-8"
-            />
-            <div className="text-2xl md:text-3xl font-black bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
-              KINECT B2B
+      <footer className="bg-slate-900 border-t border-slate-800 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-2 mb-4">
+                <Image src="/my-logo.png" alt="Kinect B2B" width={32} height={32} className="w-8 h-8" />
+                <span className="text-xl font-bold text-white">Kinect B2B</span>
+              </div>
+              <p className="text-slate-400 mb-4 max-w-md">Boutique appointment setting for service businesses. We fill your calendar with qualified appointments.</p>
+              <a href="https://linkedin.com/company/kinectb2b" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition">
+                <Linkedin className="w-5 h-5" />
+              </a>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Services</h4>
+              <ul className="space-y-2">
+                <li><Link href="/services/appointment-setting" className="text-slate-400 hover:text-white transition">Appointment Setting</Link></li>
+                <li><Link href="/plans" className="text-slate-400 hover:text-white transition">Plans & Pricing</Link></li>
+                <li><Link href="/services/websites" className="text-slate-400 hover:text-white transition">Websites</Link></li>
+                <li><Link href="/services/automations" className="text-slate-400 hover:text-white transition">Automations</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Contact</h4>
+              <ul className="space-y-2">
+                <li><a href="tel:2192707863" className="text-slate-400 hover:text-white transition flex items-center gap-2"><Phone className="w-4 h-4" /> (219) 270-7863</a></li>
+                <li><a href="mailto:accounts@kinectb2b.com" className="text-slate-400 hover:text-white transition flex items-center gap-2"><Mail className="w-4 h-4" /> accounts@kinectb2b.com</a></li>
+              </ul>
             </div>
           </div>
-          <p className="text-gray-500 text-sm md:text-base">© 2025 Kinect B2B. All rights reserved.</p>
+          <div className="border-t border-slate-800 mt-8 pt-8 text-center">
+            <p className="text-slate-500 text-sm">© 2025 Kinect B2B. All rights reserved.</p>
+          </div>
         </div>
       </footer>
 
-      {/* Contact Form Modal */}
-      {showContactForm && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="relative max-w-2xl w-full my-8">
-            <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-600 rounded-3xl blur-xl opacity-75"></div>
-            <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-red-500/50 rounded-3xl p-6 md:p-10 max-h-[90vh] overflow-y-auto">
-              <button
-                onClick={() => {
-                  setShowContactForm(false);
-                  setSelectedPackage(null);
-                }}
-                className="absolute top-4 right-4 md:top-6 md:right-6 text-white hover:bg-white/20 rounded-full p-2 transition"
-              >
-                ✕
+      {/* Form Modal */}
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg bg-white rounded-2xl p-6 md:p-8 max-h-[90vh] overflow-y-auto shadow-2xl">
+            <button onClick={() => setShowForm(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition">
+              <X className="w-6 h-6" />
+            </button>
+            <h3 className="text-2xl font-bold text-slate-900 mb-2">Get Started with Automations</h3>
+            {selectedPackage && <p className="text-slate-600 mb-6">Selected: <span className="text-teal-600 font-semibold">{selectedPackage.name}</span></p>}
+            {!selectedPackage && <p className="text-slate-600 mb-6">Tell us about your automation needs.</p>}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input type="text" placeholder="Business Name *" required value={formData.business_name} onChange={(e) => setFormData({ ...formData, business_name: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+              <input type="text" placeholder="Your Name *" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+              <input type="tel" placeholder="Phone *" required value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+              <input type="email" placeholder="Email *" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+              <input type="text" placeholder="Industry *" required value={formData.industry} onChange={(e) => setFormData({ ...formData, industry: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+              <textarea placeholder="What workflows do you want to automate?" rows={3} value={formData.questions} onChange={(e) => setFormData({ ...formData, questions: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none" />
+              <button type="submit" disabled={formStatus === 'sending'} className="w-full py-4 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-xl transition disabled:opacity-50">
+                {formStatus === 'sending' ? 'Submitting...' : 'Request Consultation'}
               </button>
-
-              <h3 className="text-2xl md:text-4xl font-black text-white mb-6 text-center">
-                {selectedPackage ? `Learn More: ${selectedPackage.name}` : 'Get Started with'} <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Automations</span>
-              </h3>
-
-              <form onSubmit={handleFormSubmit} className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Business Name *"
-                    required
-                    value={formData.business_name}
-                    onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
-                    className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Your Name *"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Phone Number *"
-                    required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Email *"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                  <input
-                    type="text"
-                    placeholder="City *"
-                    required
-                    value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                  <input
-                    type="text"
-                    placeholder="State *"
-                    required
-                    value={formData.state}
-                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                </div>
-                
-                <input
-                  type="text"
-                  placeholder="Industry *"
-                  required
-                  value={formData.industry}
-                  onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                  className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                />
-
-                <textarea
-                  placeholder="What workflows do you want to automate?"
-                  rows={4}
-                  value={formData.questions}
-                  onChange={(e) => setFormData({ ...formData, questions: e.target.value })}
-                  className="w-full px-4 md:px-6 py-3 md:py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition resize-none text-sm md:text-base"
-                />
-
-                <button
-                  type="submit"
-                  disabled={formStatus === 'sending'}
-                  className="w-full py-4 md:py-5 bg-gradient-to-r from-red-600 to-orange-600 hover:scale-105 transition duration-300 rounded-xl text-white font-black text-lg md:text-xl shadow-lg disabled:opacity-50"
-                >
-                  {formStatus === 'sending' ? 'Sending...' : 'Request Consultation'}
-                </button>
-              </form>
-            </div>
+            </form>
           </div>
         </div>
       )}
-
-      {/* Ryan Chatbot */}
-      {chatOpen && (
-        <div className="fixed inset-0 md:inset-auto md:bottom-8 md:right-8 z-50 md:w-[420px]">
-          <div 
-            className="hidden md:block fixed inset-0 bg-transparent"
-            onClick={() => setChatOpen(false)}
-          ></div>
-
-          <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-red-500 to-orange-600 rounded-3xl blur-xl opacity-75"></div>
-          
-          <div className="relative h-full md:h-auto bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-red-500/50 rounded-3xl shadow-2xl flex flex-col max-h-screen md:max-h-[600px]">
-            <div className="flex items-center justify-between p-4 md:p-6 border-b border-white/10">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-red-600 to-orange-600 rounded-full flex items-center justify-center text-xl md:text-2xl">
-                  🤖
-                </div>
-                <div>
-                  <h3 className="text-base md:text-lg font-black text-white">Ryan (AI)</h3>
-                  <p className="text-xs md:text-sm text-orange-400">● Online</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setChatOpen(false)}
-                className="text-gray-400 hover:text-white hover:bg-white/10 rounded-full p-2 transition"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4 md:p-6">
-              {/* Typing Animation */}
-              {isTyping && (
-                <div className="bg-red-600/20 border border-red-500/30 rounded-2xl p-4 mb-4 animate-fadeIn">
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    </div>
-                    <span className="text-white text-sm">Ryan is typing...</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Greeting */}
-              {chatStep === 'greeting' && !isTyping && (
-                <div className="animate-fadeIn space-y-4">
-                  <div className="bg-red-600/20 border border-red-500/30 rounded-2xl p-4 md:p-6">
-                    <h3 className="text-xl md:text-2xl font-black text-white mb-3 md:mb-4">
-                      👋 Hey there! I'm Ryan!
-                    </h3>
-                    <p className="text-sm md:text-base text-gray-300 mb-4">
-                      I'm here to help you automate your business and save hours every week. Ready to streamline your workflows?
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => showTypingThenNext('wantCall')}
-                    className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:scale-105 transition duration-300 rounded-2xl p-4 text-left"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl md:text-3xl">📞</span>
-                      <div>
-                        <div className="font-black text-white text-sm md:text-base">Schedule a Growth Call</div>
-                        <div className="text-xs md:text-sm text-gray-300">Let's discuss your automation needs (15 mins)</div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              )}
-
-              {/* Want Call Form */}
-              {chatStep === 'wantCall' && !isTyping && (
-                <div className="animate-fadeIn space-y-3">
-                  <div className="bg-red-600/20 border border-red-500/30 rounded-2xl p-4 mb-4">
-                    <p className="text-white font-bold text-sm md:text-base">📋 Awesome! Let me grab your details:</p>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    value={chatFormData.name}
-                    onChange={(e) => setChatFormData({ ...chatFormData, name: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Business Name"
-                    value={chatFormData.business_name}
-                    onChange={(e) => setChatFormData({ ...chatFormData, business_name: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    value={chatFormData.phone}
-                    onChange={(e) => setChatFormData({ ...chatFormData, phone: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={chatFormData.email}
-                    onChange={(e) => setChatFormData({ ...chatFormData, email: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-400 transition text-sm md:text-base"
-                  />
-                  <button
-                    onClick={handleChatCallSubmit}
-                    disabled={!chatFormData.name || !chatFormData.business_name || !chatFormData.phone || !chatFormData.email}
-                    className="w-full py-4 bg-gradient-to-r from-red-600 to-orange-600 hover:scale-105 transition duration-300 rounded-xl text-white font-black text-sm md:text-base disabled:opacity-50"
-                  >
-                    Schedule My Call! 🚀
-                  </button>
-                </div>
-              )}
-
-              {/* Call Scheduled Success */}
-              {chatStep === 'callSuccess' && (
-                <div className="text-center animate-fadeIn">
-                  <div className="text-5xl md:text-6xl mb-4">🎉</div>
-                  <div className="bg-red-600/30 border-2 border-red-500/50 rounded-2xl p-4 md:p-6 mb-4">
-                    <p className="text-orange-400 font-black text-xl md:text-2xl mb-3">Perfect!</p>
-                    <p className="text-white font-bold mb-4 text-sm md:text-base">We'll be reaching out shortly to schedule your automation consultation!</p>
-                    <div className="space-y-2 text-orange-400 text-xs md:text-sm">
-                      <div>📞 <a href="tel:2192707863" className="font-bold hover:text-orange-300">219-270-7863</a></div>
-                      <div>📧 <a href="mailto:accounts@kinectb2b.com" className="font-bold hover:text-orange-300">accounts@kinectb2b.com</a></div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      setChatStep('greeting');
-                      setChatFormData({ name: '', business_name: '', phone: '', email: '' });
-                    }}
-                    className="px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 rounded-xl text-white font-bold hover:scale-105 transition text-sm md:text-base"
-                  >
-                    Start Over
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Floating Chat Button */}
-      {!chatOpen && (
-        <button
-          onClick={() => setChatOpen(true)}
-          className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 group"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-600 rounded-full blur-xl opacity-75 group-hover:opacity-100 animate-pulse"></div>
-          <div className="relative w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-red-600 to-orange-600 rounded-full flex items-center justify-center text-2xl md:text-3xl hover:scale-110 transition duration-300 shadow-2xl">
-            💬
-          </div>
-        </button>
-      )}
-
-      <style jsx>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-blob { animation: blob 7s infinite; }
-        .animation-delay-2000 { animation-delay: 2s; }
-        .animation-delay-4000 { animation-delay: 4s; }
-      `}</style>
     </div>
   );
 }
