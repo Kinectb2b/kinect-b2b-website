@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Menu, X, Phone, ChevronDown } from 'lucide-react';
 
@@ -25,17 +24,7 @@ export default function Header({ currentPage = '' }) {
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
-            <Image
-              src="/my-logo.png"
-              alt="Kinect B2B Logo"
-              width={40}
-              height={40}
-              className="w-8 h-8 md:w-10 md:h-10"
-              onError={(e) => {
-                e.target.style.display = 'none';
-              }}
-            />
+          <Link href="/" className="flex items-center gap-2">
             <span className="text-xl md:text-2xl font-bold text-white">
               Kinect B2B
             </span>
