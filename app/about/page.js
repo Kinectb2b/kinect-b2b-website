@@ -211,25 +211,32 @@ export default function About() {
       {/* Our Story Section */}
       <section className="py-16 md:py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-8 md:p-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Our Story</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8">Built From the Ground Up</h2>
+
+          <div className="border-l-4 border-cyan-500 pl-6 md:pl-8">
             <div className="space-y-6 text-lg text-slate-600 leading-relaxed">
               <p>
-                Kinect B2B was founded with one simple mission: help service-based businesses scale
-                predictably and profitably. After years of building and selling successful companies,
-                our founder saw a massive gap in the market and set out to fill it.
+                I've had my car repossessed. I've had the power shut off. I've sold my own belongings just to make payroll.
               </p>
               <p>
-                Most agencies promised the world but delivered mediocre results. Business owners were
-                drowning in sales calls, manual processes, and inconsistent lead flow. We knew there
-                had to be a better way - a company built on integrity, excellence, and genuine care
-                for our clients' success.
+                Those struggles gave me perspective—and a relentless drive to make sure other business owners don't have to go through the same thing.
               </p>
               <p>
-                Today, we've helped hundreds of companies generate millions in revenue through our proven
-                systems for appointment setting, web development, automation, and client management.
-                We don't just work for you - we work with you as your dedicated growth partner.
+                Because when businesses succeed, they hire more workers. They support more families. They give back to their communities.
               </p>
+              <p>
+                Kinect B2B isn't just about booking appointments. It's about giving service business owners the chance to grow, to win, and to breathe a little easier.
+              </p>
+            </div>
+
+            <div className="mt-8 flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                RC
+              </div>
+              <div>
+                <div className="font-bold text-slate-900">Robert Cole</div>
+                <div className="text-sm text-slate-500">Founder, Kinect B2B</div>
+              </div>
             </div>
           </div>
         </div>
