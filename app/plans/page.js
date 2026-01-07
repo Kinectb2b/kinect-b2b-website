@@ -6,7 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
   ChevronDown, ChevronRight, Check, Calendar, Users, BarChart3,
-  Headphones, Target, MessageSquare, Star, X
+  Headphones, Target, MessageSquare, Star, X, Loader2
 } from 'lucide-react';
 
 export default function Plans() {
@@ -410,8 +410,17 @@ export default function Plans() {
                 disabled={isSubmitting}
                 className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Application'}
-                {!isSubmitting && <ChevronRight className="w-5 h-5" />}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    Submit Application
+                    <ChevronRight className="w-5 h-5" />
+                  </>
+                )}
               </button>
             </form>
           </div>

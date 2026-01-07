@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
   X, ChevronRight, Check, Mail as MailIcon, MessageSquare, FileText, BarChart3,
-  Calendar, DollarSign, FolderOpen, Bell, Zap, Settings, Clock, Headphones
+  Calendar, DollarSign, FolderOpen, Bell, Zap, Settings, Clock, Headphones, Loader2
 } from 'lucide-react';
 
 export default function AutomationsPage() {
@@ -301,8 +301,15 @@ export default function AutomationsPage() {
               <input type="email" placeholder="Email *" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
               <input type="text" placeholder="Industry *" required value={formData.industry} onChange={(e) => setFormData({ ...formData, industry: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
               <textarea placeholder="What workflows do you want to automate?" rows={3} value={formData.questions} onChange={(e) => setFormData({ ...formData, questions: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none" />
-              <button type="submit" disabled={formStatus === 'sending'} className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-xl transition disabled:opacity-50">
-                {formStatus === 'sending' ? 'Submitting...' : 'Request Consultation'}
+              <button type="submit" disabled={formStatus === 'sending'} className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                {formStatus === 'sending' ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  'Request Consultation'
+                )}
               </button>
             </form>
           </div>
