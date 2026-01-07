@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
-  Phone,
+  Mail,
   X,
   Target,
   Zap,
@@ -249,14 +249,14 @@ export default function About() {
               onClick={() => setShowLeadForm(true)}
               className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center justify-center gap-2"
             >
-              <Phone className="w-5 h-5" />
+              <Mail className="w-5 h-5" />
               Book Your Growth Call
             </button>
             <a
-              href="tel:2192707863"
+              href="mailto:accounts@kinectb2b.com"
               className="bg-white hover:bg-slate-100 text-slate-900 px-8 py-4 rounded-lg font-semibold text-lg transition"
             >
-              Call (219) 270-7863
+              accounts@kinectb2b.com
             </a>
           </div>
         </div>

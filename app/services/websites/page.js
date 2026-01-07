@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
-  Phone,
+  Mail,
   X,
   ChevronRight,
   Check,
@@ -183,7 +183,7 @@ export default function WebsitesPage() {
     } catch (error) {
       console.error('Error:', error);
       setFormStatus('error');
-      alert('Something went wrong. Please try again or call us at (219) 270-7863');
+      alert('Something went wrong. Please try again or email us at accounts@kinectb2b.com');
     }
   };
 
@@ -207,8 +207,8 @@ export default function WebsitesPage() {
                 onClick={() => setShowContactForm(true)}
                 className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center justify-center gap-2"
               >
-                <Phone className="w-5 h-5" />
-                Schedule a Call
+                <Mail className="w-5 h-5" />
+                Contact Us
               </button>
               <a
                 href="#packages"
@@ -388,14 +388,14 @@ export default function WebsitesPage() {
               onClick={() => setShowContactForm(true)}
               className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center justify-center gap-2"
             >
-              <Phone className="w-5 h-5" />
-              Schedule a Call
+              <Mail className="w-5 h-5" />
+              Contact Us
             </button>
             <a
-              href="tel:2192707863"
+              href="mailto:accounts@kinectb2b.com"
               className="bg-white hover:bg-slate-100 text-slate-900 px-8 py-4 rounded-lg font-semibold text-lg transition"
             >
-              Call (219) 270-7863
+              accounts@kinectb2b.com
             </a>
           </div>
         </div>

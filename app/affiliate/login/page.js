@@ -146,13 +146,9 @@ export default function AffiliateLogin() {
             {/* Help Section */}
             <div className="mt-6 pt-6 border-t border-slate-100">
               <p className="text-slate-500 text-sm text-center mb-3">Need Help?</p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
+              <div className="flex justify-center text-sm">
                 <a href="mailto:affiliates@kinectb2b.com" className="text-purple-600 hover:text-purple-700 font-medium">
                   affiliates@kinectb2b.com
-                </a>
-                <span className="hidden sm:inline text-slate-300">|</span>
-                <a href="tel:2192707863" className="text-purple-600 hover:text-purple-700 font-medium">
-                  (219) 270-7863
                 </a>
               </div>
             </div>

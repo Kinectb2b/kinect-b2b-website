@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Phone, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 
 export default function Header({ currentPage = '' }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -77,14 +77,6 @@ export default function Header({ currentPage = '' }) {
               Plans
             </Link>
 
-            <a
-              href="tel:2192707863"
-              className="flex items-center gap-2 text-slate-300 hover:text-white transition font-medium"
-            >
-              <Phone className="w-4 h-4" />
-              (219) 270-7863
-            </a>
-
             <Link
               href="/plans"
               className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2.5 rounded-lg font-semibold transition"
@@ -142,14 +134,6 @@ export default function Header({ currentPage = '' }) {
               >
                 Plans
               </Link>
-
-              <a
-                href="tel:2192707863"
-                className="flex items-center gap-2 text-slate-300 hover:text-white transition"
-              >
-                <Phone className="w-4 h-4" />
-                (219) 270-7863
-              </a>
 
               <Link
                 href="/plans"

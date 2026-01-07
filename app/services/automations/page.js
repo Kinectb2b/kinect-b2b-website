@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
   X, ChevronRight, Check, Mail as MailIcon, MessageSquare, FileText, BarChart3,
-  Calendar, DollarSign, FolderOpen, Bell, Zap, Settings, Clock, Phone
+  Calendar, DollarSign, FolderOpen, Bell, Zap, Settings, Clock, Headphones
 } from 'lucide-react';
 
 export default function AutomationsPage() {
@@ -128,7 +128,7 @@ export default function AutomationsPage() {
       }
     } catch (error) {
       setFormStatus('error');
-      alert('Something went wrong. Please call us at (219) 270-7863');
+      alert('Something went wrong. Please email us at accounts@kinectb2b.com');
     }
   };
 
@@ -254,7 +254,7 @@ export default function AutomationsPage() {
           </div>
           <div className="grid md:grid-cols-4 gap-6">
             {[
-              { step: '1', title: 'Discovery Call', desc: 'We learn about your workflows and pain points', icon: Phone },
+              { step: '1', title: 'Discovery Call', desc: 'We learn about your workflows and pain points', icon: Headphones },
               { step: '2', title: 'Strategy Session', desc: 'We identify automation opportunities', icon: Settings },
               { step: '3', title: 'Build & Test', desc: 'We create and thoroughly test your automations', icon: Zap },
               { step: '4', title: 'Launch & Support', desc: 'We deploy and provide ongoing optimization', icon: Clock },

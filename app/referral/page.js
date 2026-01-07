@@ -63,12 +63,12 @@ function ReferralContent() {
         setShowSignupForm(false);
       } else {
         setFormStatus('error');
-        alert('Something went wrong. Please try again or call us at (219) 270-7863');
+        alert('Something went wrong. Please try again or email us at accounts@kinectb2b.com');
       }
     } catch (error) {
       console.error('Error:', error);
       setFormStatus('error');
-      alert('Something went wrong. Please try again or call us at (219) 270-7863');
+      alert('Something went wrong. Please try again or email us at accounts@kinectb2b.com');
     }
   };
 
@@ -254,12 +254,9 @@ function ReferralContent() {
             Kinect B2B
           </div>
           <p className="text-slate-400 mb-6">Connecting service providers with qualified leads.</p>
-          <div className="flex justify-center gap-8 text-slate-400">
+          <div className="flex justify-center text-slate-400">
             <a href="mailto:accounts@kinectb2b.com" className="hover:text-white transition">
               accounts@kinectb2b.com
-            </a>
-            <a href="tel:2192707863" className="hover:text-white transition">
-              (219) 270-7863
             </a>
           </div>
           <div className="mt-8 pt-8 border-t border-slate-800">

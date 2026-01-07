@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Phone, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -43,13 +43,6 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <div className="flex flex-col gap-3">
-              <a
-                href="tel:2192707863"
-                className="flex items-center gap-2 text-slate-400 hover:text-white transition text-sm"
-              >
-                <Phone className="w-4 h-4" />
-                (219) 270-7863
-              </a>
               <a
                 href="mailto:accounts@kinectb2b.com"
                 className="flex items-center gap-2 text-slate-400 hover:text-white transition text-sm"

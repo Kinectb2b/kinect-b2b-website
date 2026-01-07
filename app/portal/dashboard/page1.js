@@ -889,7 +889,6 @@ export default function ClientDashboard() {
                     <div>
                       <p className="font-bold text-lg">Robert Cole</p>
                       <a href="mailto:Robert@kinectb2b.com" className="text-teal-600 text-sm hover:underline">Robert@kinectb2b.com</a>
-                      <p className="text-slate-500 text-sm">(219) 270-7863</p>
                     </div>
                   </div>
                 </div>

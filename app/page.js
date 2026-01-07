@@ -254,11 +254,15 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-              {/* Photo Placeholder */}
+              {/* Founder Photo */}
               <div className="flex justify-center md:justify-start order-2 md:order-1">
-                <div className="w-48 h-48 md:w-64 md:h-64 bg-slate-100 rounded-2xl flex items-center justify-center">
-                  <span className="text-gray-400 text-sm font-medium">Photo</span>
-                </div>
+                <Image
+                  src="/robert-cole.jpg"
+                  alt="Robert Cole, Founder of Kinect B2B"
+                  width={400}
+                  height={500}
+                  className="rounded-2xl object-cover shadow-lg"
+                />
               </div>
 
               {/* Content */}

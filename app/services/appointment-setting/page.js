@@ -5,9 +5,9 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
-  Phone, ChevronRight, Search, Database, Send, CheckCircle, Calendar,
+  ChevronRight, Search, Database, Send, CheckCircle, Calendar,
   Shield, Users, Flame, Droplets, Zap, Home, Trees, Sparkles, HardHat, Key,
-  UserCheck, MapPin, Target
+  UserCheck, MapPin, Mail
 } from 'lucide-react';
 
 export default function AppointmentSettingPage() {
@@ -84,11 +84,11 @@ export default function AppointmentSettingPage() {
               <ChevronRight className="w-5 h-5" />
             </Link>
             <a
-              href="tel:2192707863"
+              href="mailto:accounts@kinectb2b.com"
               className="inline-flex items-center justify-center gap-2 border-2 border-slate-600 hover:border-slate-500 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
             >
-              <Phone className="w-5 h-5" />
-              (219) 270-7863
+              <Mail className="w-5 h-5" />
+              Contact Us
             </a>
           </div>
         </div>
@@ -212,9 +212,9 @@ export default function AppointmentSettingPage() {
             <ChevronRight className="w-5 h-5" />
           </Link>
           <p className="text-slate-400">
-            Or call{' '}
-            <a href="tel:2192707863" className="text-white hover:text-teal-400 transition">
-              (219) 270-7863
+            Or email{' '}
+            <a href="mailto:accounts@kinectb2b.com" className="text-white hover:text-teal-400 transition">
+              accounts@kinectb2b.com
             </a>
           </p>
         </div>
