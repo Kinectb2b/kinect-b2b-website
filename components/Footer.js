@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Mail } from 'lucide-react';
 
 export default function Footer() {
@@ -11,6 +12,13 @@ export default function Footer() {
           {/* Logo & Description */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
+              <Image
+                src="/my-logo.png"
+                alt="Kinect B2B"
+                width={36}
+                height={36}
+                className="rounded-lg"
+              />
               <span className="text-xl font-bold text-white">Kinect B2B</span>
             </Link>
             <p className="text-slate-400 text-sm">

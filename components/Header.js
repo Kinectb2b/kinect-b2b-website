@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
 export default function Header({ currentPage = '' }) {
@@ -25,6 +26,13 @@ export default function Header({ currentPage = '' }) {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/my-logo.png"
+              alt="Kinect B2B"
+              width={40}
+              height={40}
+              className="rounded-lg"
+            />
             <span className="text-xl md:text-2xl font-bold text-white">
               Kinect B2B
             </span>
