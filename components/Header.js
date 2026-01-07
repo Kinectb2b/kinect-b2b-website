@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, ChevronDown } from 'lucide-react';
@@ -8,6 +8,19 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 export default function Header({ currentPage = '' }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setServicesDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const isActive = (path) => currentPage === path;
 
@@ -54,10 +67,9 @@ export default function Header({ currentPage = '' }) {
             </Link>
 
             {/* Services Dropdown */}
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-                onBlur={() => setTimeout(() => setServicesDropdownOpen(false), 150)}
                 className={`${isServicePage ? 'text-cyan-400' : 'text-slate-300'} hover:text-white transition font-medium flex items-center gap-1`}
               >
                 Services
@@ -69,6 +81,7 @@ export default function Header({ currentPage = '' }) {
                     <Link
                       key={service.href}
                       href={service.href}
+                      onClick={() => setServicesDropdownOpen(false)}
                       className={`block px-4 py-2 ${isActive(service.href) ? 'text-cyan-400' : 'text-slate-300'} hover:text-white hover:bg-slate-700 transition`}
                     >
                       {service.name}
