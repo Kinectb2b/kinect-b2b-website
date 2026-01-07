@@ -78,7 +78,7 @@ export default function AppointmentSettingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/plans"
-              className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
+              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
             >
               See Pricing
               <ChevronRight className="w-5 h-5" />
@@ -127,11 +127,11 @@ export default function AppointmentSettingPage() {
                 className="bg-white rounded-xl p-6 md:p-8 border border-gray-200 shadow-sm flex flex-col md:flex-row gap-6 items-start"
               >
                 <div className="flex items-center gap-4 md:w-64 flex-shrink-0">
-                  <div className="w-14 h-14 bg-teal-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <step.icon className="w-7 h-7 text-teal-600" />
+                  <div className="w-14 h-14 bg-cyan-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <step.icon className="w-7 h-7 text-cyan-600" />
                   </div>
                   <div>
-                    <span className="text-teal-500 font-bold text-sm">STEP {step.step}</span>
+                    <span className="text-cyan-500 font-bold text-sm">STEP {step.step}</span>
                     <h3 className="text-xl font-bold text-slate-900">{step.title}</h3>
                   </div>
                 </div>
@@ -157,8 +157,8 @@ export default function AppointmentSettingPage() {
                 key={idx}
                 className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm flex items-center gap-4"
               >
-                <div className="w-12 h-12 bg-teal-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <item.icon className="w-6 h-6 text-teal-600" />
+                <div className="w-12 h-12 bg-cyan-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <item.icon className="w-6 h-6 text-cyan-600" />
                 </div>
                 <span className="text-slate-700 font-medium text-lg">{item.title}</span>
               </div>
@@ -183,10 +183,10 @@ export default function AppointmentSettingPage() {
             {industries.map((industry, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-xl p-6 border border-gray-200 text-center hover:border-teal-300 hover:shadow-md transition"
+                className="bg-white rounded-xl p-6 border border-gray-200 text-center hover:border-cyan-300 hover:shadow-md transition"
               >
-                <div className="w-12 h-12 bg-teal-50 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <industry.icon className="w-6 h-6 text-teal-600" />
+                <div className="w-12 h-12 bg-cyan-50 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <industry.icon className="w-6 h-6 text-cyan-600" />
                 </div>
                 <span className="text-slate-700 font-semibold">{industry.name}</span>
               </div>
@@ -206,14 +206,14 @@ export default function AppointmentSettingPage() {
           </p>
           <Link
             href="/plans"
-            className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition mb-4"
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-8 py-4 rounded-xl font-semibold text-lg transition mb-4"
           >
             View Pricing
             <ChevronRight className="w-5 h-5" />
           </Link>
           <p className="text-slate-400">
             Or email{' '}
-            <a href="mailto:accounts@kinectb2b.com" className="text-white hover:text-teal-400 transition">
+            <a href="mailto:accounts@kinectb2b.com" className="text-white hover:text-cyan-400 transition">
               accounts@kinectb2b.com
             </a>
           </p>

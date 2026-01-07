@@ -90,7 +90,7 @@ export default function HomePage() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
               We Book Qualified Appointments.
               <br />
-              <span className="text-teal-400">You Close Deals.</span>
+              <span className="text-cyan-400">You Close Deals.</span>
             </h1>
 
             <p className="mt-6 md:mt-8 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
@@ -102,7 +102,7 @@ export default function HomePage() {
             <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/plans"
-                className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-lg text-base md:text-lg font-semibold transition-all hover:shadow-lg hover:shadow-teal-500/25"
+                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-8 py-4 rounded-lg text-base md:text-lg font-semibold transition-all hover:shadow-lg hover:shadow-cyan-500/25"
               >
                 Apply to Work With Us
                 <ArrowRight className="w-5 h-5" />
@@ -141,11 +141,11 @@ export default function HomePage() {
                 className="relative bg-slate-50 rounded-2xl p-8 hover:bg-slate-100 transition-colors group"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <span className="text-4xl font-bold text-slate-200 group-hover:text-teal-200 transition-colors">
+                  <span className="text-4xl font-bold text-slate-200 group-hover:text-cyan-200 transition-colors">
                     {step.number}
                   </span>
-                  <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center">
-                    <step.icon className="w-6 h-6 text-teal-600" />
+                  <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center">
+                    <step.icon className="w-6 h-6 text-cyan-600" />
                   </div>
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">
@@ -176,10 +176,10 @@ export default function HomePage() {
             {industries.map((industry) => (
               <div
                 key={industry.name}
-                className="bg-white rounded-xl p-5 md:p-6 text-center border border-gray-100 hover:border-teal-200 hover:shadow-md transition-all group"
+                className="bg-white rounded-xl p-5 md:p-6 text-center border border-gray-100 hover:border-cyan-200 hover:shadow-md transition-all group"
               >
-                <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-slate-100 group-hover:bg-teal-50 flex items-center justify-center transition-colors">
-                  <industry.icon className="w-5 h-5 text-slate-600 group-hover:text-teal-600 transition-colors" />
+                <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-slate-100 group-hover:bg-cyan-50 flex items-center justify-center transition-colors">
+                  <industry.icon className="w-5 h-5 text-slate-600 group-hover:text-cyan-600 transition-colors" />
                 </div>
                 <span className="text-slate-900 font-medium text-sm">
                   {industry.name}
@@ -193,12 +193,12 @@ export default function HomePage() {
       {/* The Guarantee */}
       <section className="py-20 md:py-28 bg-slate-900 relative overflow-hidden">
         {/* Accent border */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 via-cyan-500 to-teal-500" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="w-16 h-16 mx-auto mb-8 rounded-2xl bg-teal-500/10 flex items-center justify-center">
-              <Shield className="w-8 h-8 text-teal-400" />
+            <div className="w-16 h-16 mx-auto mb-8 rounded-2xl bg-cyan-500/10 flex items-center justify-center">
+              <Shield className="w-8 h-8 text-cyan-400" />
             </div>
 
             <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
@@ -309,7 +309,7 @@ export default function HomePage() {
             <div className="mt-10">
               <Link
                 href="/plans"
-                className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:shadow-lg hover:shadow-teal-500/25"
+                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:shadow-lg hover:shadow-cyan-500/25"
               >
                 Apply Now
                 <ArrowRight className="w-5 h-5" />

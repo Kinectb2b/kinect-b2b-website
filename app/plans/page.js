@@ -170,13 +170,13 @@ export default function Plans() {
                 key={plan.name}
                 className={`relative bg-white rounded-2xl p-6 sm:p-8 max-w-md mx-auto lg:max-w-none ${
                   plan.popular
-                    ? 'border-2 border-teal-500 shadow-xl'
+                    ? 'border-2 border-cyan-500 shadow-xl'
                     : 'border border-gray-200 shadow-lg'
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <div className="bg-teal-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                    <div className="bg-cyan-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
                       <Star className="w-4 h-4" /> Most Popular
                     </div>
                   </div>
@@ -189,13 +189,13 @@ export default function Plans() {
                     <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 whitespace-nowrap">{plan.price}</span>
                     <span className="text-slate-500 text-sm sm:text-base">{plan.period}</span>
                   </div>
-                  <p className="text-teal-600 font-semibold mt-3 text-sm sm:text-base">{plan.appointments}</p>
+                  <p className="text-cyan-600 font-semibold mt-3 text-sm sm:text-base">{plan.appointments}</p>
                 </div>
 
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
+                      <Check className="w-5 h-5 text-cyan-500 flex-shrink-0 mt-0.5" />
                       <span className="text-slate-600">{feature}</span>
                     </li>
                   ))}
@@ -205,7 +205,7 @@ export default function Plans() {
                   onClick={() => handleOpenForm(plan.name)}
                   className={`w-full py-4 rounded-xl font-semibold transition flex items-center justify-center gap-2 ${
                     plan.popular
-                      ? 'bg-teal-500 hover:bg-teal-600 text-white'
+                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white'
                       : 'bg-slate-900 hover:bg-slate-800 text-white'
                   }`}
                 >
@@ -233,8 +233,8 @@ export default function Plans() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {includedFeatures.map((feature, idx) => (
               <div key={idx} className="bg-white rounded-xl p-6 flex items-center gap-4 shadow-sm border border-gray-100">
-                <div className="w-12 h-12 bg-teal-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <feature.icon className="w-6 h-6 text-teal-600" />
+                <div className="w-12 h-12 bg-cyan-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <feature.icon className="w-6 h-6 text-cyan-600" />
                 </div>
                 <span className="text-slate-700 font-medium">{feature.text}</span>
               </div>
@@ -290,7 +290,7 @@ export default function Plans() {
             href="https://calendly.com/kinectb2b/discovery"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-8 py-4 rounded-xl font-semibold text-lg transition"
           >
             <Calendar className="w-5 h-5" />
             Schedule a Call
@@ -314,7 +314,7 @@ export default function Plans() {
             <h3 className="text-2xl font-bold text-slate-900 mb-2">Apply Now</h3>
             {selectedPlan && (
               <p className="text-slate-600 mb-6">
-                Selected plan: <span className="text-teal-600 font-semibold">{selectedPlan}</span>
+                Selected plan: <span className="text-cyan-600 font-semibold">{selectedPlan}</span>
               </p>
             )}
             {!selectedPlan && (
@@ -330,7 +330,7 @@ export default function Plans() {
                   value={formData.businessName}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                   placeholder="Your Company Name"
                 />
               </div>
@@ -343,7 +343,7 @@ export default function Plans() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                   placeholder="John Smith"
                 />
               </div>
@@ -356,7 +356,7 @@ export default function Plans() {
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                   placeholder="(555) 123-4567"
                 />
               </div>
@@ -369,7 +369,7 @@ export default function Plans() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                   placeholder="john@company.com"
                 />
               </div>
@@ -382,7 +382,7 @@ export default function Plans() {
                   value={formData.industry}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                   placeholder="HVAC, Plumbing, Roofing, etc."
                 />
               </div>
@@ -394,7 +394,7 @@ export default function Plans() {
                   value={formData.revenue}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                 >
                   <option value="">Select your revenue range</option>
                   <option value="Under $500K">Under $500K</option>
@@ -408,7 +408,7 @@ export default function Plans() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Application'}
                 {!isSubmitting && <ChevronRight className="w-5 h-5" />}
@@ -420,11 +420,11 @@ export default function Plans() {
 
       {/* Success Message */}
       {showSuccess && (
-        <div className="fixed bottom-8 right-8 z-50 bg-teal-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+        <div className="fixed bottom-8 right-8 z-50 bg-cyan-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
           <Check className="w-6 h-6" />
           <div>
             <p className="font-semibold">Application Submitted</p>
-            <p className="text-sm text-teal-100">We'll be in touch within 24 hours.</p>
+            <p className="text-sm text-cyan-100">We'll be in touch within 24 hours.</p>
           </div>
         </div>
       )}

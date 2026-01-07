@@ -183,7 +183,7 @@ export default function PortalsPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               Client Portals That{' '}
-              <span className="text-teal-400">Impress</span>
+              <span className="text-cyan-400">Impress</span>
             </h1>
             <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto">
               Give your clients 24/7 access to their campaign data, reports, and documents through a beautiful branded portal.
@@ -191,7 +191,7 @@ export default function PortalsPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => setShowContactForm(true)}
-                className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center justify-center gap-2"
+                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center justify-center gap-2"
               >
                 <Mail className="w-5 h-5" />
                 Contact Us
@@ -225,8 +225,8 @@ export default function PortalsPage() {
               const IconComponent = feature.icon;
               return (
                 <div key={idx} className="bg-slate-50 border border-slate-200 rounded-xl p-6 hover:shadow-lg transition">
-                  <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                    <IconComponent className="w-6 h-6 text-teal-600" />
+                  <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center mb-4">
+                    <IconComponent className="w-6 h-6 text-cyan-600" />
                   </div>
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">{feature.name}</h3>
                   <p className="text-slate-600">{feature.desc}</p>
@@ -253,11 +253,11 @@ export default function PortalsPage() {
             {setupPackages.map((pkg, idx) => (
               <div
                 key={idx}
-                className={`relative bg-white rounded-2xl border-2 ${pkg.popular ? 'border-teal-500 shadow-xl' : 'border-slate-200'} p-8 flex flex-col`}
+                className={`relative bg-white rounded-2xl border-2 ${pkg.popular ? 'border-cyan-500 shadow-xl' : 'border-slate-200'} p-8 flex flex-col`}
               >
                 {pkg.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-teal-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                    <span className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
                       Most Popular
                     </span>
                   </div>
@@ -270,7 +270,7 @@ export default function PortalsPage() {
                     ${pkg.price.toLocaleString()}
                     <span className="text-lg font-normal text-slate-500">/setup</span>
                   </div>
-                  <div className="text-teal-600 font-semibold">
+                  <div className="text-cyan-600 font-semibold">
                     + ${pkg.hosting}/mo hosting
                   </div>
                   <p className="text-slate-500 text-sm mt-2">{pkg.clients}</p>
@@ -279,7 +279,7 @@ export default function PortalsPage() {
                 <div className="space-y-3 mb-8 flex-1">
                   {pkg.features.map((feature, fidx) => (
                     <div key={fidx} className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-teal-600 mt-0.5 flex-shrink-0" />
+                      <Check className="w-5 h-5 text-cyan-600 mt-0.5 flex-shrink-0" />
                       <span className="text-slate-700">{feature}</span>
                     </div>
                   ))}
@@ -289,7 +289,7 @@ export default function PortalsPage() {
                   onClick={() => handleLearnMore(pkg)}
                   className={`w-full py-3 rounded-lg font-semibold transition ${
                     pkg.popular
-                      ? 'bg-teal-600 hover:bg-teal-700 text-white'
+                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white'
                       : 'bg-slate-100 hover:bg-slate-200 text-slate-900'
                   }`}
                 >
@@ -321,7 +321,7 @@ export default function PortalsPage() {
               { step: '4', title: 'Launch & Support', desc: 'Go live with ongoing support and updates' },
             ].map((item, idx) => (
               <div key={idx} className="text-center">
-                <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   {item.step}
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">{item.title}</h3>
@@ -344,7 +344,7 @@ export default function PortalsPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => setShowContactForm(true)}
-              className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center justify-center gap-2"
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center justify-center gap-2"
             >
               <Mail className="w-5 h-5" />
               Contact Us
@@ -390,7 +390,7 @@ export default function PortalsPage() {
                   required
                   value={formData.business_name}
                   onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
                 <input
                   type="text"
@@ -398,7 +398,7 @@ export default function PortalsPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
                 <input
                   type="tel"
@@ -406,7 +406,7 @@ export default function PortalsPage() {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
                 <input
                   type="email"
@@ -414,7 +414,7 @@ export default function PortalsPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
                 <input
                   type="text"
@@ -422,7 +422,7 @@ export default function PortalsPage() {
                   required
                   value={formData.city}
                   onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
                 <input
                   type="text"
@@ -430,7 +430,7 @@ export default function PortalsPage() {
                   required
                   value={formData.state}
                   onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
               </div>
 
@@ -440,7 +440,7 @@ export default function PortalsPage() {
                 required
                 value={formData.industry}
                 onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
               />
 
               <textarea
@@ -448,13 +448,13 @@ export default function PortalsPage() {
                 rows={4}
                 value={formData.questions}
                 onChange={(e) => setFormData({ ...formData, questions: e.target.value })}
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
               />
 
               <button
                 type="submit"
                 disabled={formStatus === 'sending'}
-                className="w-full py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg transition disabled:opacity-50"
+                className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-lg transition disabled:opacity-50"
               >
                 {formStatus === 'sending' ? 'Sending...' : 'Request Consultation'}
               </button>

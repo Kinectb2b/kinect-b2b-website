@@ -126,7 +126,7 @@ export default function About() {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               We're{' '}
-              <span className="text-teal-400">Kinect B2B</span>
+              <span className="text-cyan-400">Kinect B2B</span>
             </h1>
             <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto">
               Your growth partner specializing in appointment setting, lead generation,
@@ -160,8 +160,8 @@ export default function About() {
               const IconComponent = value.icon;
               return (
                 <div key={index} className="bg-slate-50 border border-slate-200 rounded-xl p-6 hover:shadow-lg transition">
-                  <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                    <IconComponent className="w-6 h-6 text-teal-600" />
+                  <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center mb-4">
+                    <IconComponent className="w-6 h-6 text-cyan-600" />
                   </div>
                   <h3 className="text-xl font-semibold text-slate-900 mb-2">{value.title}</h3>
                   <p className="text-slate-600">{value.description}</p>
@@ -191,12 +191,12 @@ export default function About() {
                 <div key={index} className="bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg transition">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
-                      <div className="w-14 h-14 bg-teal-600 rounded-lg flex items-center justify-center">
+                      <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
                         <IconComponent className="w-7 h-7 text-white" />
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-teal-600 mb-1">Step {step.number}</div>
+                      <div className="text-sm font-semibold text-cyan-600 mb-1">Step {step.number}</div>
                       <h3 className="text-xl font-semibold text-slate-900 mb-2">{step.title}</h3>
                       <p className="text-slate-600">{step.description}</p>
                     </div>
@@ -247,7 +247,7 @@ export default function About() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => setShowLeadForm(true)}
-              className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center justify-center gap-2"
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center justify-center gap-2"
             >
               <Mail className="w-5 h-5" />
               Book Your Growth Call
@@ -289,7 +289,7 @@ export default function About() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
               </div>
 
@@ -301,7 +301,7 @@ export default function About() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
               </div>
 
@@ -313,7 +313,7 @@ export default function About() {
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
               </div>
 
@@ -324,7 +324,7 @@ export default function About() {
                   name="company"
                   value={formData.company}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
               </div>
 
@@ -335,14 +335,14 @@ export default function About() {
                   value={formData.message}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
                 ></textarea>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg transition disabled:opacity-50"
+                className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-lg transition disabled:opacity-50"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit'}
               </button>

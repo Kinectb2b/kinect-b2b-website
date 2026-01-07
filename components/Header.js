@@ -42,13 +42,13 @@ export default function Header({ currentPage = '' }) {
           <nav className="hidden lg:flex items-center gap-6">
             <Link
               href="/"
-              className={`${isActive('/') ? 'text-teal-400' : 'text-slate-300'} hover:text-white transition font-medium`}
+              className={`${isActive('/') ? 'text-cyan-400' : 'text-slate-300'} hover:text-white transition font-medium`}
             >
               Home
             </Link>
             <Link
               href="/about"
-              className={`${isActive('/about') ? 'text-teal-400' : 'text-slate-300'} hover:text-white transition font-medium`}
+              className={`${isActive('/about') ? 'text-cyan-400' : 'text-slate-300'} hover:text-white transition font-medium`}
             >
               About
             </Link>
@@ -58,7 +58,7 @@ export default function Header({ currentPage = '' }) {
               <button
                 onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
                 onBlur={() => setTimeout(() => setServicesDropdownOpen(false), 150)}
-                className={`${isServicePage ? 'text-teal-400' : 'text-slate-300'} hover:text-white transition font-medium flex items-center gap-1`}
+                className={`${isServicePage ? 'text-cyan-400' : 'text-slate-300'} hover:text-white transition font-medium flex items-center gap-1`}
               >
                 Services
                 <ChevronDown className={`w-4 h-4 transition-transform ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
@@ -69,7 +69,7 @@ export default function Header({ currentPage = '' }) {
                     <Link
                       key={service.href}
                       href={service.href}
-                      className={`block px-4 py-2 ${isActive(service.href) ? 'text-teal-400' : 'text-slate-300'} hover:text-white hover:bg-slate-700 transition`}
+                      className={`block px-4 py-2 ${isActive(service.href) ? 'text-cyan-400' : 'text-slate-300'} hover:text-white hover:bg-slate-700 transition`}
                     >
                       {service.name}
                     </Link>
@@ -80,14 +80,14 @@ export default function Header({ currentPage = '' }) {
 
             <Link
               href="/plans"
-              className={`${isActive('/plans') ? 'text-teal-400' : 'text-slate-300'} hover:text-white transition font-medium`}
+              className={`${isActive('/plans') ? 'text-cyan-400' : 'text-slate-300'} hover:text-white transition font-medium`}
             >
               Plans
             </Link>
 
             <Link
               href="/plans"
-              className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2.5 rounded-lg font-semibold transition"
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-5 py-2.5 rounded-lg font-semibold transition"
             >
               Get Started
             </Link>
@@ -109,14 +109,14 @@ export default function Header({ currentPage = '' }) {
             <nav className="flex flex-col gap-4">
               <Link
                 href="/"
-                className={`${isActive('/') ? 'text-teal-400' : 'text-slate-300'} hover:text-white transition`}
+                className={`${isActive('/') ? 'text-cyan-400' : 'text-slate-300'} hover:text-white transition`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Home
               </Link>
               <Link
                 href="/about"
-                className={`${isActive('/about') ? 'text-teal-400' : 'text-slate-300'} hover:text-white transition`}
+                className={`${isActive('/about') ? 'text-cyan-400' : 'text-slate-300'} hover:text-white transition`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 About
@@ -128,7 +128,7 @@ export default function Header({ currentPage = '' }) {
                 <Link
                   key={service.href}
                   href={service.href}
-                  className={`${isActive(service.href) ? 'text-teal-400' : 'text-slate-300'} hover:text-white transition pl-4`}
+                  className={`${isActive(service.href) ? 'text-cyan-400' : 'text-slate-300'} hover:text-white transition pl-4`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {service.name}
@@ -137,7 +137,7 @@ export default function Header({ currentPage = '' }) {
 
               <Link
                 href="/plans"
-                className={`${isActive('/plans') ? 'text-teal-400' : 'text-slate-300'} hover:text-white transition`}
+                className={`${isActive('/plans') ? 'text-cyan-400' : 'text-slate-300'} hover:text-white transition`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Plans
@@ -145,7 +145,7 @@ export default function Header({ currentPage = '' }) {
 
               <Link
                 href="/plans"
-                className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-3 rounded-lg font-semibold transition text-center"
+                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-4 py-3 rounded-lg font-semibold transition text-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Get Started
