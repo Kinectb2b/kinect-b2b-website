@@ -175,6 +175,62 @@ export default function ClientDashboard() {
     fetchAllData(parsedClient.id, parsedClient);
   }, [router]);
 
+  // Auto-refresh session to prevent idle timeout
+  useEffect(() => {
+    // Only set up refresh after client is loaded
+    if (!client) return;
+
+    const refreshSession = async () => {
+      try {
+        const response = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          // Session expired or invalid - redirect to login
+          console.warn('Session refresh failed, redirecting to login');
+          localStorage.removeItem('client');
+          sessionStorage.removeItem('client');
+          router.push('/portal');
+          return;
+        }
+
+        const data = await response.json();
+        if (data.success && data.user) {
+          // Update stored client data with fresh info
+          const currentClient = JSON.parse(localStorage.getItem('client') || sessionStorage.getItem('client') || '{}');
+          const updatedClient = { ...currentClient, ...data.user, features: data.features };
+          localStorage.setItem('client', JSON.stringify(updatedClient));
+          if (data.features && Array.isArray(data.features)) {
+            setFeatures(prev => ({ ...prev, ...data.features.reduce((acc, f) => ({ ...acc, [f]: true }), {}) }));
+          }
+        }
+      } catch (error) {
+        console.error('Session refresh error:', error);
+      }
+    };
+
+    // Refresh session every 5 minutes to keep it alive
+    const intervalId = setInterval(refreshSession, 5 * 60 * 1000);
+
+    // Also refresh when tab becomes visible (user returns from idle)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        refreshSession();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Initial refresh on mount
+    refreshSession();
+
+    return () => {
+      clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [router, client]);
+
   // Redirect to dashboard if current tab is disabled
   useEffect(() => {
     const featureMap = { dashboard: 'dashboard', pipeline: 'pipeline', crm: 'crm', personal: 'personal_profile', company: 'company_profile' };
