@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-  'https://zsjmqlsnvkbtdhjbtwkr.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpzam1xbHNudmtidGRoamJ0d2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMzcxOTYsImV4cCI6MjA3NzYxMzE5Nn0.vsbFj5m6pCaoVpHKpB3SZ2WzF4yRufOd27NlcEPhHGc'
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://uwwfwrzcbjadqpyuneis.supabase.co',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3d2Z3cnpjYmphZHFweXVuZWlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUzOTY0MzcsImV4cCI6MjA4MDk3MjQzN30.a6-pryjPCYjPwKQW8Xzl3EfYDifIvRXd7oWFtL5ILR8'
 );
 
 const STAGES = [
@@ -173,6 +173,98 @@ export default function ClientDashboard() {
       setFeatures(parsedClient.features);
     }
     fetchAllData(parsedClient.id, parsedClient);
+  }, [router]);
+
+  // Smart session refresh - checks token expiry and refreshes when needed
+  useEffect(() => {
+    let refreshTimeoutId = null;
+
+    const scheduleRefresh = () => {
+      const tokenExpiresAt = localStorage.getItem('tokenExpiresAt');
+      if (!tokenExpiresAt) return;
+
+      const expiresAt = parseInt(tokenExpiresAt, 10);
+      const now = Date.now();
+      const timeUntilExpiry = expiresAt - now;
+
+      // Refresh 5 minutes before expiry
+      const refreshBuffer = 5 * 60 * 1000;
+      const timeUntilRefresh = timeUntilExpiry - refreshBuffer;
+
+      if (timeUntilRefresh <= 0) {
+        // Token is expired or about to expire, refresh now
+        doRefresh();
+      } else {
+        // Schedule refresh for later
+        refreshTimeoutId = setTimeout(doRefresh, timeUntilRefresh);
+      }
+    };
+
+    const doRefresh = async () => {
+      try {
+        const response = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          // Refresh failed - session invalid, redirect to login
+          console.warn('Session refresh failed, redirecting to login');
+          localStorage.removeItem('client');
+          localStorage.removeItem('tokenExpiresAt');
+          sessionStorage.removeItem('client');
+          router.push('/portal');
+          return;
+        }
+
+        const data = await response.json();
+        if (data.success) {
+          // Update stored expiry time and schedule next refresh
+          if (data.tokenExpiresAt) {
+            localStorage.setItem('tokenExpiresAt', data.tokenExpiresAt.toString());
+          }
+          // Update client data if provided
+          if (data.user) {
+            const currentClient = JSON.parse(localStorage.getItem('client') || '{}');
+            const updatedClient = { ...currentClient, ...data.user };
+            localStorage.setItem('client', JSON.stringify(updatedClient));
+          }
+          // Schedule the next refresh
+          scheduleRefresh();
+        }
+      } catch (error) {
+        console.error('Session refresh error:', error);
+        // Don't redirect on network errors - will retry on visibility change
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // Tab became visible - check if refresh is needed
+        const tokenExpiresAt = localStorage.getItem('tokenExpiresAt');
+        if (tokenExpiresAt) {
+          const expiresAt = parseInt(tokenExpiresAt, 10);
+          const now = Date.now();
+          const refreshBuffer = 5 * 60 * 1000;
+          if (expiresAt - now < refreshBuffer) {
+            doRefresh();
+          }
+        }
+      }
+    };
+
+    // Initial schedule
+    scheduleRefresh();
+
+    // Listen for tab visibility changes
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      if (refreshTimeoutId) {
+        clearTimeout(refreshTimeoutId);
+      }
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [router]);
 
   // Redirect to dashboard if current tab is disabled

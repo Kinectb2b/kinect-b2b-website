@@ -1,12 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  'https://zsjmqlsnvkbtdhjbtwkr.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpzam1xbHNudmtidGRoamJ0d2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMzcxOTYsImV4cCI6MjA3NzYxMzE5Nn0.vsbFj5m6pCaoVpHKpB3SZ2WzF4yRufOd27NlcEPhHGc'
-);
 
 export default function ClientPortalLogin() {
   const [email, setEmail] = useState('');
@@ -20,56 +14,37 @@ export default function ClientPortalLogin() {
     setLoading(true);
 
     try {
-      // Check active_clients table for matching credentials
-      const { data, error: fetchError } = await supabase
-        .from('active_clients')
-        .select('*')
-        .ilike('email', email.trim())
-        .single();
+      // Call the login API to set auth cookies
+      const response = await fetch('/api/portal/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email: email.trim(), password })
+      });
 
-      if (fetchError || !data) {
-        setError('Invalid email or password');
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        setError(data.message || 'Invalid email or password');
         setLoading(false);
         return;
       }
 
-      // Check password
-      if (data.password !== password) {
-        // Check if account is paused
-        if (data.password === 'INACTIVE2025') {
-          setError('Your account has been paused. Please contact support.');
-        } else {
-          setError('Invalid email or password');
-        }
-        setLoading(false);
-        return;
-      }
-
-      // Check status
-      if (data.status?.toLowerCase() === 'paused') {
-        setError('Your account has been paused. Please contact support.');
-        setLoading(false);
-        return;
-      }
-
-      if (data.status?.toLowerCase() !== 'active') {
-        setError('Your account is not active. Please contact support.');
-        setLoading(false);
-        return;
-      }
-
-      // Success - store client data and redirect
+      // Success - store client data and token expiry
       localStorage.setItem('client', JSON.stringify({
-        id: data.id,
-        name: data.name,
-        full_name: data.full_name,
-        email: data.email,
-        phone: data.phone,
-        plan: data.plan,
-        plan_price: data.plan_price,
-        industry: data.industry,
-        status: data.status
+        id: data.user.id,
+        email: data.user.email,
+        firstName: data.user.firstName,
+        lastName: data.user.lastName,
+        role: data.user.role,
+        organizationId: data.user.organizationId,
+        features: data.features
       }));
+
+      // Store token expiry for refresh scheduling
+      if (data.tokenExpiresAt) {
+        localStorage.setItem('tokenExpiresAt', data.tokenExpiresAt.toString());
+      }
 
       window.location.href = '/portal/dashboard';
     } catch (err) {

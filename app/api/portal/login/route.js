@@ -1,30 +1,53 @@
 import { NextResponse } from 'next/server';
 import { SignJWT } from 'jose';
 import { createClient } from '@supabase/supabase-js';
+import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 
+// Use service_role key for server-side operations (bypasses RLS)
 const supabase = createClient(
-  'https://zsjmqlsnvkbtdhjbtwkr.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpzam1xbHNudmtidGRoamJ0d2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMzcxOTYsImV4cCI6MjA3NzYxMzE5Nn0.vsbFj5m6pCaoVpHKpB3SZ2WzF4yRufOd27NlcEPhHGc'
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://uwwfwrzcbjadqpyuneis.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
 const SECRET_KEY = new TextEncoder().encode(
   process.env.JWT_SECRET || 'your-super-secret-key-change-this-in-production'
 );
 
+// Hash refresh token for secure storage
+function hashToken(token) {
+  return crypto.createHash('sha256').update(token).digest('hex');
+}
+
 export async function POST(request) {
   try {
     const { email, password } = await request.json();
 
-    // Query portal_users table
+    console.log('Login attempt for:', email);
+
+    // Query portal_users table (without password comparison - do that separately with bcrypt)
     const { data: user, error } = await supabase
       .from('portal_users')
       .select('*')
       .eq('email', email.toLowerCase())
-      .eq('password', password)
       .eq('status', 'active')
       .single();
 
+    console.log('User found:', !!user, 'Error:', error?.message);
+
     if (error || !user) {
+      return NextResponse.json({
+        success: false,
+        message: 'Invalid email or password'
+      }, { status: 401 });
+    }
+
+    // Verify password with bcrypt
+    console.log('Comparing password...');
+    const passwordValid = await bcrypt.compare(password, user.password);
+    console.log('Password valid:', passwordValid);
+
+    if (!passwordValid) {
       return NextResponse.json({
         success: false,
         message: 'Invalid email or password'
@@ -57,8 +80,8 @@ export async function POST(request) {
     }
 
     // Build features object
-    const enabledFeatures = user.role === 'master_admin' 
-      ? allFeatures 
+    const enabledFeatures = user.role === 'master_admin'
+      ? allFeatures
       : [...orgFeatures, ...(userFeatures || [])]
           .filter(f => f.enabled)
           .map(f => f.feature_key);
@@ -69,8 +92,8 @@ export async function POST(request) {
       .update({ last_login: new Date().toISOString() })
       .eq('id', user.id);
 
-    // Create JWT token
-    const token = await new SignJWT({ 
+    // Create JWT access token (short-lived: 1 hour)
+    const accessToken = await new SignJWT({
       userId: user.id,
       email: user.email,
       role: user.role,
@@ -78,10 +101,39 @@ export async function POST(request) {
       features: enabledFeatures
     })
       .setProtectedHeader({ alg: 'HS256' })
-      .setExpirationTime('7d')
+      .setExpirationTime('1h')
       .sign(SECRET_KEY);
 
-    const response = NextResponse.json({ 
+    // Generate refresh token (opaque, long-lived)
+    const refreshToken = crypto.randomUUID() + crypto.randomUUID();
+    const refreshTokenHash = hashToken(refreshToken);
+    const refreshExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+    // Revoke any existing refresh tokens for this user (optional: allows only one active session)
+    // Uncomment the next line if you want single-session enforcement:
+    // await supabase.from('refresh_tokens').delete().eq('user_id', user.id);
+
+    // Store refresh token hash in database
+    // Generate a family_id for token rotation tracking
+    const familyId = crypto.randomUUID();
+    const { error: insertError } = await supabase
+      .from('refresh_tokens')
+      .insert({
+        user_id: user.id,
+        token_hash: refreshTokenHash,
+        family_id: familyId,
+        expires_at: refreshExpiresAt.toISOString()
+      });
+
+    if (insertError) {
+      console.error('Failed to store refresh token:', insertError);
+      // Continue anyway - user can still use the session, just won't get refresh
+    }
+
+    // Calculate token expiry for client-side refresh scheduling
+    const tokenExpiresAt = Date.now() + (60 * 60 * 1000); // 1 hour from now
+
+    const response = NextResponse.json({
       success: true,
       user: {
         id: user.id,
@@ -91,15 +143,25 @@ export async function POST(request) {
         role: user.role,
         organizationId: user.organization_id
       },
-      features: enabledFeatures
+      features: enabledFeatures,
+      tokenExpiresAt // Client stores this to schedule refresh
     });
 
-    // Set HTTP-only cookie
-    response.cookies.set('portal_session', token, {
+    // Set access token cookie (1 hour)
+    response.cookies.set('portal_session', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      sameSite: 'strict',
+      maxAge: 60 * 60, // 1 hour
+      path: '/'
+    });
+
+    // Set refresh token cookie (30 days)
+    response.cookies.set('portal_refresh', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 30, // 30 days
       path: '/'
     });
 
